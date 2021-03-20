@@ -1,6 +1,15 @@
+import os
+import logging
+import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(process)-5d][%(asctime)s][%(filename)-20s][%(levelname)-8s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
 
 
 class Model:
@@ -39,6 +48,10 @@ class Model:
         )
 
         fig, ax = plt.subplots(figsize=(25, 8))
-        ax.plot(predicted)
-        ax.plot(np.array(y_test))
+        ax.plot(self.predicted)
+        ax.plot(np.array(self.y_test))
         plt.show()
+
+
+if __name__ == "__main__":
+    print("teste")
