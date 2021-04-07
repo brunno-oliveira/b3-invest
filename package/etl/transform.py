@@ -28,19 +28,7 @@ class Transform:
         self.subsetor_map: pd.DataFrame = None
         self.segmento_map: pd.DataFrame = None
 
-    def load_data(self):
-        with open(self.setor_path, encoding="utf-8") as json_file:
-            self.setor_map = json.load(json_file)["setor_map"]
-
-        with open(self.subsetor_path, encoding="utf-8") as json_file:
-            self.subsetor_map = json.load(json_file)["subsetor_map"]
-
-        with open(self.segmento_path, encoding="utf-8") as json_file:
-            self.subsetor_map = json.load(json_file)["segmento_map"]
-
-        self.df_setorial = pd.read_csv(
-            self.ticker_setorial_path, sep=";", encoding="latin"
-        )
+        self.output_consolidado_path = os.path.join(data_path, "df_consolidado.parquet")
 
     def transform(self):
         logging.info("Start")
@@ -54,10 +42,35 @@ class Transform:
         logging.info("Finished")
         return self.consolidado
 
+    def clean_data(self):
+        logging.info("Start")
+        for file in os.listdir(self.history_path):
+            if ".parquet" in file:
+                os.remove(os.path.join(self.history_path, file))
+
+        if os.path.exists(self.output_consolidado_path):
+            os.remove(self.output_consolidado_path)
+
+    def load_data(self):
+        logging.info("Start")
+        with open(self.setor_path, encoding="utf-8") as json_file:
+            self.setor_map = json.load(json_file)["setor_map"]
+
+        with open(self.subsetor_path, encoding="utf-8") as json_file:
+            self.subsetor_map = json.load(json_file)["subsetor_map"]
+
+        with open(self.segmento_path, encoding="utf-8") as json_file:
+            self.subsetor_map = json.load(json_file)["segmento_map"]
+
+        self.df_setorial = pd.read_csv(
+            self.ticker_setorial_path, sep=";", encoding="latin"
+        )
+
     def transform_setor(self):
         """
         Criando as colunas dummies para SETOR
         """
+        logging.info("Start")
         self.df_setorial["setor"] = self.df_setorial["setor"].map(self.setor_map)
 
         setor_dummies = pd.get_dummies(
@@ -72,6 +85,7 @@ class Transform:
         """
         Criando as colunas dummies para SUBSETOR
         """
+        logging.info("Start")
         self.df_setorial["subsetor"] = self.df_setorial["subsetor"].map(
             self.subsetor_map
         )
@@ -86,6 +100,7 @@ class Transform:
         """
         Criando as colunas dummies para SEGMENTO
         """
+        logging.info("Start")
         self.df_setorial["segmento"] = self.df_setorial["segmento"].map(self.setor_map)
         setor_dummies = pd.get_dummies(
             self.df_setorial.segmento, prefix="segmento", prefix_sep="."
@@ -97,6 +112,7 @@ class Transform:
         self.df_setorial.drop(columns="listagem_segmento", inplace=True)
 
     def join_files(self) -> pd.DataFrame:
+        logging.info("Start")
         df_list = []
         for file in os.listdir(self.history_path):
             if ".parquet" in file:
@@ -121,8 +137,10 @@ class Transform:
         ].copy()
 
         logging.info(f"self.consolidado.shape: {self.consolidado.shape}")
+        self.consolidado.to_parquet(self.output_consolidado_path)
 
     def merge_setorial_consolidado(self):
+        logging.info("Start")
         self.consolidado = self.consolidado.merge(
             self.df_setorial, how="inner", left_on="codigo", right_on="codigo"
         )
@@ -137,6 +155,7 @@ class Transform:
         logging.info(f"self.consolidado.shape: {self.consolidado.shape}")
 
     def transform_ticker(self):
+        logging.info("Start")
         ticker_dummies = pd.get_dummies(
             self.consolidado.ticker, prefix="ticker", prefix_sep="."
         )
