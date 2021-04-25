@@ -39,17 +39,9 @@ class Transform:
         self.join_files()
         self.merge_setorial_consolidado()
         self.transform_ticker()
+        self.consolidado.to_parquet(self.output_consolidado_path)
         logging.info("Finished")
         return self.consolidado
-
-    def clean_data(self):
-        logging.info("Start")
-        for file in os.listdir(self.history_path):
-            if ".parquet" in file:
-                os.remove(os.path.join(self.history_path, file))
-
-        if os.path.exists(self.output_consolidado_path):
-            os.remove(self.output_consolidado_path)
 
     def load_data(self):
         logging.info("Start")
@@ -137,7 +129,6 @@ class Transform:
         ].copy()
 
         logging.info(f"self.consolidado.shape: {self.consolidado.shape}")
-        self.consolidado.to_parquet(self.output_consolidado_path)
 
     def merge_setorial_consolidado(self):
         logging.info("Start")
