@@ -1,0 +1,436 @@
+setor;subsetor;segmento;codigo;listagem_segmento
+Petróleo, Gás e Biocombustíveis;Petróleo, Gás e Biocombustíveis;Exploração, Refino e Distribuição;RRRP;NM             
+Petróleo, Gás e Biocombustíveis;Petróleo, Gás e Biocombustíveis;Exploração, Refino e Distribuição;CSAN;NM             
+Petróleo, Gás e Biocombustíveis;Petróleo, Gás e Biocombustíveis;Exploração, Refino e Distribuição;DMMO;
+Petróleo, Gás e Biocombustíveis;Petróleo, Gás e Biocombustíveis;Exploração, Refino e Distribuição;ENAT;NM             
+Petróleo, Gás e Biocombustíveis;Petróleo, Gás e Biocombustíveis;Exploração, Refino e Distribuição;RPMG;
+Petróleo, Gás e Biocombustíveis;Petróleo, Gás e Biocombustíveis;Exploração, Refino e Distribuição;PETR;N2
+Petróleo, Gás e Biocombustíveis;Petróleo, Gás e Biocombustíveis;Exploração, Refino e Distribuição;BRDT;NM             
+Petróleo, Gás e Biocombustíveis;Petróleo, Gás e Biocombustíveis;Exploração, Refino e Distribuição;PRIO;NM             
+Petróleo, Gás e Biocombustíveis;Petróleo, Gás e Biocombustíveis;Exploração, Refino e Distribuição;UGPA;NM             
+Petróleo, Gás e Biocombustíveis;Petróleo, Gás e Biocombustíveis;Equipamentos e Serviços;LUPA;NM             
+Petróleo, Gás e Biocombustíveis;Petróleo, Gás e Biocombustíveis;Equipamentos e Serviços;OSXB;NM             
+Materiais Básicos;Mineração;Minerais Metálicos;BRAP;N1             
+Materiais Básicos;Mineração;Minerais Metálicos;LTEL;MB             
+Materiais Básicos;Mineração;Minerais Metálicos;LTLA;MB             
+Materiais Básicos;Mineração;Minerais Metálicos;MMXM;NM             
+Materiais Básicos;Mineração;Minerais Metálicos;VALE;NM             
+Materiais Básicos;Siderurgia e Metalurgia;Siderurgia;FESA;N1             
+Materiais Básicos;Siderurgia e Metalurgia;Siderurgia;GGBR;N1             
+Materiais Básicos;Siderurgia e Metalurgia;Siderurgia;GOAU;N1             
+Materiais Básicos;Siderurgia e Metalurgia;Siderurgia;CSNA;
+Materiais Básicos;Siderurgia e Metalurgia;Siderurgia;USIM;N1             
+Materiais Básicos;Siderurgia e Metalurgia;Artefatos de Ferro e Aço;MGEL;
+Materiais Básicos;Siderurgia e Metalurgia;Artefatos de Ferro e Aço;PATI;
+Materiais Básicos;Siderurgia e Metalurgia;Artefatos de Ferro e Aço;TKNO;
+Materiais Básicos;Siderurgia e Metalurgia;Artefatos de Cobre;PMAM;NM             
+Materiais Básicos;Químicos;Petroquímicos;BRKM;N1             
+Materiais Básicos;Químicos;Petroquímicos;GPCP;
+Materiais Básicos;Químicos;Fertilizantes e Defensivos;FHER;NM             
+Materiais Básicos;Químicos;Fertilizantes e Defensivos;NUTR;MA             
+Materiais Básicos;Químicos;Químicos Diversos;CRPG;
+Materiais Básicos;Químicos;Químicos Diversos;UNIP;
+Materiais Básicos;Madeira e Papel;Madeira;DTEX;NM             
+Materiais Básicos;Madeira e Papel;Madeira;EUCA;N1             
+Materiais Básicos;Madeira e Papel;Papel e Celulose;RANI;
+Materiais Básicos;Madeira e Papel;Papel e Celulose;KLBN;N2
+Materiais Básicos;Madeira e Papel;Papel e Celulose;MSPA;
+Materiais Básicos;Madeira e Papel;Papel e Celulose;NEMO;
+Materiais Básicos;Madeira e Papel;Papel e Celulose;SUZB;NM             
+Materiais Básicos;Embalagens;Embalagens;MTIG;
+Materiais Básicos;Materiais Diversos;Materiais Diversos;SNSY;
+Bens Industriais;Construção e Engenharia;Produtos para Construção;ETER;NM             
+Bens Industriais;Construção e Engenharia;Produtos para Construção;HAGA;
+Bens Industriais;Construção e Engenharia;Produtos para Construção;PTBL;NM             
+Bens Industriais;Construção e Engenharia;Construção Pesada;AZEV;
+Bens Industriais;Construção e Engenharia;Engenharia Consultiva;SOND;
+Bens Industriais;Construção e Engenharia;Engenharia Consultiva;TCNO;
+Bens Industriais;Construção e Engenharia;Serviços Diversos;MILS;NM             
+Bens Industriais;Material de Transporte;Material Aeronáutico e de Defesa;EMBR;NM             
+Bens Industriais;Material de Transporte;Material Rodoviário;FRAS;N1             
+Bens Industriais;Material de Transporte;Material Rodoviário;POMO;N2             
+Bens Industriais;Material de Transporte;Material Rodoviário;RAPT;N1             
+Bens Industriais;Material de Transporte;Material Rodoviário;RCSL;
+Bens Industriais;Material de Transporte;Material Rodoviário;RSUL;
+Bens Industriais;Material de Transporte;Material Rodoviário;TUPY;NM             
+Bens Industriais;Material de Transporte;Material Rodoviário;MWET;
+Bens Industriais;Máquinas e Equipamentos;Motores, Compressores e Outros;SHUL;
+Bens Industriais;Máquinas e Equipamentos;Motores, Compressores e Outros;WEGE;NM             
+Bens Industriais;Máquinas e Equipamentos;Máq. e Equip. Industriais;EALT;
+Bens Industriais;Máquinas e Equipamentos;Máq. e Equip. Industriais;AERI;NM             
+Bens Industriais;Máquinas e Equipamentos;Máq. e Equip. Industriais;BDLL;
+Bens Industriais;Máquinas e Equipamentos;Máq. e Equip. Industriais;ROMI;NM             
+Bens Industriais;Máquinas e Equipamentos;Máq. e Equip. Industriais;INEP;
+Bens Industriais;Máquinas e Equipamentos;Máq. e Equip. Industriais;KEPL;
+Bens Industriais;Máquinas e Equipamentos;Máq. e Equip. Industriais;FRIO;NM             
+Bens Industriais;Máquinas e Equipamentos;Máq. e Equip. Industriais;NORD;
+Bens Industriais;Máquinas e Equipamentos;Máq. e Equip. Industriais;PTCA;M2
+Bens Industriais;Máquinas e Equipamentos;Máq. e Equip. Construção e Agrícolas;MTSA;
+Bens Industriais;Máquinas e Equipamentos;Máq. e Equip. Construção e Agrícolas;STTR;MA
+Bens Industriais;Máquinas e Equipamentos;Armas e Munições;TASA;N2             
+Bens Industriais;Transporte;Transporte Aéreo;AZUL;N2             
+Bens Industriais;Transporte;Transporte Aéreo;GOLL;N2             
+Bens Industriais;Transporte;Transporte Ferroviário;FRRN;MB             
+Bens Industriais;Transporte;Transporte Ferroviário;GASC;MB             
+Bens Industriais;Transporte;Transporte Ferroviário;RLOG;NM             
+Bens Industriais;Transporte;Transporte Ferroviário;VSPT;
+Bens Industriais;Transporte;Transporte Ferroviário;MRSA;MB             
+Bens Industriais;Transporte;Transporte Ferroviário;RAIL;NM             
+Bens Industriais;Transporte;Transporte Hidroviário;HBSA;NM             
+Bens Industriais;Transporte;Transporte Hidroviário;LOGN;NM             
+Bens Industriais;Transporte;Transporte Hidroviário;LUXM;
+Bens Industriais;Transporte;Transporte Rodoviário;JSLG;NM             
+Bens Industriais;Transporte;Transporte Rodoviário;TGMA;NM             
+Bens Industriais;Transporte;Exploração de Rodovias;ANHB;
+Bens Industriais;Transporte;Exploração de Rodovias;CCRO;NM             
+Bens Industriais;Transporte;Exploração de Rodovias;RPTA;
+Bens Industriais;Transporte;Exploração de Rodovias;CRTE;MB             
+Bens Industriais;Transporte;Exploração de Rodovias;ERDV;
+Bens Industriais;Transporte;Exploração de Rodovias;ASCP;
+Bens Industriais;Transporte;Exploração de Rodovias;ECOR;NM             
+Bens Industriais;Transporte;Exploração de Rodovias;ECOV;
+Bens Industriais;Transporte;Exploração de Rodovias;COLN;
+Bens Industriais;Transporte;Exploração de Rodovias;RDVT;
+Bens Industriais;Transporte;Exploração de Rodovias;CRBD;
+Bens Industriais;Transporte;Exploração de Rodovias;TRIA;
+Bens Industriais;Transporte;Exploração de Rodovias;TPIS;NM             
+Bens Industriais;Transporte;Exploração de Rodovias;VOES;
+Bens Industriais;Transporte;Serviços de Apoio e Armazenagem;AGRU;MB             
+Bens Industriais;Transporte;Serviços de Apoio e Armazenagem;PSVM;
+Bens Industriais;Transporte;Serviços de Apoio e Armazenagem;IVPR;MB             
+Bens Industriais;Transporte;Serviços de Apoio e Armazenagem;SAIP;
+Bens Industriais;Transporte;Serviços de Apoio e Armazenagem;STBP;N2             
+Bens Industriais;Transporte;Serviços de Apoio e Armazenagem;WSON;DR3
+Bens Industriais;Serviços Diversos;Serviços Diversos;ATMP;NM             
+Bens Industriais;Serviços Diversos;Serviços Diversos;AMBP;NM             
+Bens Industriais;Serviços Diversos;Serviços Diversos;BBML;MA
+Bens Industriais;Serviços Diversos;Serviços Diversos;CARD;NM             
+Bens Industriais;Serviços Diversos;Serviços Diversos;DTCY;
+Bens Industriais;Serviços Diversos;Serviços Diversos;ALPK;NM             
+Bens Industriais;Serviços Diversos;Serviços Diversos;FLEX;MA
+Bens Industriais;Serviços Diversos;Serviços Diversos;PRNR;MA
+Bens Industriais;Serviços Diversos;Serviços Diversos;SEQL;NM             
+Bens Industriais;Serviços Diversos;Serviços Diversos;VLID;NM             
+Bens Industriais;Comércio;Material de Transporte;BTTL;
+Bens Industriais;Comércio;Material de Transporte;MMAQ;
+Bens Industriais;Comércio;Material de Transporte;WLMM;
+Consumo não Cíclico;Agropecuária;Agricultura;APTI;
+Consumo não Cíclico;Agropecuária;Agricultura;AGRO;NM             
+Consumo não Cíclico;Agropecuária;Agricultura;FRTA;NM             
+Consumo não Cíclico;Agropecuária;Agricultura;SLCE;NM             
+Consumo não Cíclico;Agropecuária;Agricultura;TESA;NM             
+Consumo não Cíclico;Alimentos Processados;Açucar e Alcool;BSEV;NM             
+Consumo não Cíclico;Alimentos Processados;Açucar e Alcool;JALL;NM             
+Consumo não Cíclico;Alimentos Processados;Açucar e Alcool;RESA;
+Consumo não Cíclico;Alimentos Processados;Açucar e Alcool;SMTO;NM             
+Consumo não Cíclico;Alimentos Processados;Carnes e Derivados;BRFS;NM             
+Consumo não Cíclico;Alimentos Processados;Carnes e Derivados;BAUH;
+Consumo não Cíclico;Alimentos Processados;Carnes e Derivados;JBSS;NM             
+Consumo não Cíclico;Alimentos Processados;Carnes e Derivados;MRFG;NM             
+Consumo não Cíclico;Alimentos Processados;Carnes e Derivados;BEEF;NM             
+Consumo não Cíclico;Alimentos Processados;Carnes e Derivados;MNPR;
+Consumo não Cíclico;Alimentos Processados;Alimentos Diversos;CAML;NM             
+Consumo não Cíclico;Alimentos Processados;Alimentos Diversos;JMCD;
+Consumo não Cíclico;Alimentos Processados;Alimentos Diversos;JOPA;
+Consumo não Cíclico;Alimentos Processados;Alimentos Diversos;MDIA;NM             
+Consumo não Cíclico;Alimentos Processados;Alimentos Diversos;ODER;
+Consumo não Cíclico;Bebidas;Cervejas e Refrigerantes;ABEV;
+Consumo não Cíclico;Produtos de Uso Pessoal e de Limpeza;Produtos de Uso Pessoal;NTCO;NM             
+Consumo não Cíclico;Produtos de Uso Pessoal e de Limpeza;Produtos de Limpeza;BOBR;
+Consumo não Cíclico;Comércio e Distribuição;Alimentos;CRFB;NM             
+Consumo não Cíclico;Comércio e Distribuição;Alimentos;GMAT;NM             
+Consumo não Cíclico;Comércio e Distribuição;Alimentos;PCAR;N1             
+Consumo Cíclico;Construção Civil;Incorporações;AVLL;NM             
+Consumo Cíclico;Construção Civil;Incorporações;CALI;
+Consumo Cíclico;Construção Civil;Incorporações;CRDE;NM             
+Consumo Cíclico;Construção Civil;Incorporações;CURY;NM             
+Consumo Cíclico;Construção Civil;Incorporações;CYRE;NM             
+Consumo Cíclico;Construção Civil;Incorporações;DIRR;NM             
+Consumo Cíclico;Construção Civil;Incorporações;EVEN;NM             
+Consumo Cíclico;Construção Civil;Incorporações;EZTC;NM             
+Consumo Cíclico;Construção Civil;Incorporações;GFSA;NM             
+Consumo Cíclico;Construção Civil;Incorporações;HBOR;NM             
+Consumo Cíclico;Construção Civil;Incorporações;INNT;MA
+Consumo Cíclico;Construção Civil;Incorporações;JHSF;NM             
+Consumo Cíclico;Construção Civil;Incorporações;JFEN;
+Consumo Cíclico;Construção Civil;Incorporações;LAVV;NM             
+Consumo Cíclico;Construção Civil;Incorporações;MELK;NM             
+Consumo Cíclico;Construção Civil;Incorporações;MTRE;NM             
+Consumo Cíclico;Construção Civil;Incorporações;MDNE;NM             
+Consumo Cíclico;Construção Civil;Incorporações;MRVE;NM             
+Consumo Cíclico;Construção Civil;Incorporações;PDGR;NM             
+Consumo Cíclico;Construção Civil;Incorporações;PLPL;NM             
+Consumo Cíclico;Construção Civil;Incorporações;RDNI;NM             
+Consumo Cíclico;Construção Civil;Incorporações;RSID;NM             
+Consumo Cíclico;Construção Civil;Incorporações;TCSA;NM             
+Consumo Cíclico;Construção Civil;Incorporações;TEND;NM             
+Consumo Cíclico;Construção Civil;Incorporações;TRIS;NM             
+Consumo Cíclico;Construção Civil;Incorporações;VIVR;NM             
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Fios e Tecidos;CEDO;N1             
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Fios e Tecidos;CTNM;
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Fios e Tecidos;DOHL;
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Fios e Tecidos;ECPR;
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Fios e Tecidos;CATA;
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Fios e Tecidos;CTKA;
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Fios e Tecidos;PTNT;
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Fios e Tecidos;CTSA;
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Fios e Tecidos;SGPS;NM             
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Fios e Tecidos;TEKA;
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Fios e Tecidos;TXRX;
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Vestuário;HGTX;NM             
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Vestuário;TFCO;N2
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Calçados;ALPA;N1             
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Calçados;CAMB;
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Calçados;GRND;NM             
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Calçados;VULC;NM             
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Acessórios;MNDL;
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Acessórios;TECN;NM             
+Consumo Cíclico;Tecidos, Vestuário e Calçados;Acessórios;VIVA;NM             
+Consumo Cíclico;Utilidades Domésticas;Eletrodomésticos;WHRL;
+Consumo Cíclico;Utilidades Domésticas;Móveis;UCAS;NM             
+Consumo Cíclico;Utilidades Domésticas;Utensílios Domésticos;HETA;
+Consumo Cíclico;Automóveis e Motocicletas;Automóveis e Motocicletas;MYPK;NM             
+Consumo Cíclico;Automóveis e Motocicletas;Automóveis e Motocicletas;LEVE;NM             
+Consumo Cíclico;Automóveis e Motocicletas;Automóveis e Motocicletas;PLAS;
+Consumo Cíclico;Hoteis e Restaurantes;Hotelaria;HOOT;
+Consumo Cíclico;Hoteis e Restaurantes;Restaurante e Similares;BKBR;NM             
+Consumo Cíclico;Hoteis e Restaurantes;Restaurante e Similares;MEAL;NM             
+Consumo Cíclico;Viagens e Lazer;Bicicletas;BMKS;
+Consumo Cíclico;Viagens e Lazer;Brinquedos e Jogos;ESTR;
+Consumo Cíclico;Viagens e Lazer;Produção de Eventos e Shows;AHEB;
+Consumo Cíclico;Viagens e Lazer;Produção de Eventos e Shows;SHOW;NM             
+Consumo Cíclico;Viagens e Lazer;Viagens e Turismo;CVCB;NM             
+Consumo Cíclico;Viagens e Lazer;Atividades Esportivas;SMFT;M2
+Consumo Cíclico;Diversos;Serviços Educacionais;ANIM;NM             
+Consumo Cíclico;Diversos;Serviços Educacionais;BAHI;MA
+Consumo Cíclico;Diversos;Serviços Educacionais;COGN;NM             
+Consumo Cíclico;Diversos;Serviços Educacionais;SEER;NM             
+Consumo Cíclico;Diversos;Serviços Educacionais;YDUQ;NM             
+Consumo Cíclico;Diversos;Aluguel de carros;RENT;NM             
+Consumo Cíclico;Diversos;Aluguel de carros;LCAM;NM             
+Consumo Cíclico;Diversos;Aluguel de carros;MSRO;M2
+Consumo Cíclico;Diversos;Aluguel de carros;MOVI;NM             
+Consumo Cíclico;Diversos;Aluguel de carros;UNID;
+Consumo Cíclico;Diversos;Aluguel de carros;VAMO;NM             
+Consumo Cíclico;Diversos;Programas de Fidelização;SMLS;NM             
+Consumo Cíclico;Comércio;Tecidos, Vestuário e Calçados;ARZZ;NM             
+Consumo Cíclico;Comércio;Tecidos, Vestuário e Calçados;CEAB;NM             
+Consumo Cíclico;Comércio;Tecidos, Vestuário e Calçados;CGRA;
+Consumo Cíclico;Comércio;Tecidos, Vestuário e Calçados;SOMA;NM             
+Consumo Cíclico;Comércio;Tecidos, Vestuário e Calçados;GUAR;
+Consumo Cíclico;Comércio;Tecidos, Vestuário e Calçados;LLIS;NM             
+Consumo Cíclico;Comércio;Tecidos, Vestuário e Calçados;AMAR;NM             
+Consumo Cíclico;Comércio;Tecidos, Vestuário e Calçados;LREN;NM             
+Consumo Cíclico;Comércio;Eletrodomésticos;MGLU;NM             
+Consumo Cíclico;Comércio;Eletrodomésticos;VVAR;NM             
+Consumo Cíclico;Comércio;Produtos Diversos;BTOW;NM             
+Consumo Cíclico;Comércio;Produtos Diversos;CNTO;NM             
+Consumo Cíclico;Comércio;Produtos Diversos;ESPA;NM             
+Consumo Cíclico;Comércio;Produtos Diversos;LAME;N1             
+Consumo Cíclico;Comércio;Produtos Diversos;PETZ;NM             
+Consumo Cíclico;Comércio;Produtos Diversos;LJQQ;NM             
+Consumo Cíclico;Comércio;Produtos Diversos;SLED;N2             
+Saúde;Medicamentos e Outros Produtos;Medicamentos e Outros Produtos;BIOM;MA
+Saúde;Medicamentos e Outros Produtos;Medicamentos e Outros Produtos;NRTQ;MA
+Saúde;Medicamentos e Outros Produtos;Medicamentos e Outros Produtos;OFSA;NM             
+Saúde;Serviços Médico - Hospitalares, Análises e Diagnósticos;Serviços Médico - Hospitalares, Análises e Diagnósticos;AALR;NM             
+Saúde;Serviços Médico - Hospitalares, Análises e Diagnósticos;Serviços Médico - Hospitalares, Análises e Diagnósticos;DASA;
+Saúde;Serviços Médico - Hospitalares, Análises e Diagnósticos;Serviços Médico - Hospitalares, Análises e Diagnósticos;FLRY;NM             
+Saúde;Serviços Médico - Hospitalares, Análises e Diagnósticos;Serviços Médico - Hospitalares, Análises e Diagnósticos;HAPV;NM             
+Saúde;Serviços Médico - Hospitalares, Análises e Diagnósticos;Serviços Médico - Hospitalares, Análises e Diagnósticos;PARD;NM             
+Saúde;Serviços Médico - Hospitalares, Análises e Diagnósticos;Serviços Médico - Hospitalares, Análises e Diagnósticos;GNDI;NM             
+Saúde;Serviços Médico - Hospitalares, Análises e Diagnósticos;Serviços Médico - Hospitalares, Análises e Diagnósticos;ODPV;NM             
+Saúde;Serviços Médico - Hospitalares, Análises e Diagnósticos;Serviços Médico - Hospitalares, Análises e Diagnósticos;QUAL;NM             
+Saúde;Serviços Médico - Hospitalares, Análises e Diagnósticos;Serviços Médico - Hospitalares, Análises e Diagnósticos;RDOR;NM             
+Saúde;Equipamentos;Equipamentos;BALM;
+Saúde;Equipamentos;Equipamentos;LMED;MA
+Saúde;Comércio e Distribuição;Medicamentos e Outros Produtos;PNVL;
+Saúde;Comércio e Distribuição;Medicamentos e Outros Produtos;DMVF;NM             
+Saúde;Comércio e Distribuição;Medicamentos e Outros Produtos;HYPE;NM             
+Saúde;Comércio e Distribuição;Medicamentos e Outros Produtos;PGMN;NM             
+Saúde;Comércio e Distribuição;Medicamentos e Outros Produtos;PFRM;NM             
+Saúde;Comércio e Distribuição;Medicamentos e Outros Produtos;RADL;NM             
+Tecnologia da Informação;Computadores e Equipamentos;Computadores e Equipamentos;POSI;NM             
+Tecnologia da Informação;Programas e Serviços;Programas e Serviços;BRQB;MA
+Tecnologia da Informação;Programas e Serviços;Programas e Serviços;ENJU;NM             
+Tecnologia da Informação;Programas e Serviços;Programas e Serviços;LINX;NM             
+Tecnologia da Informação;Programas e Serviços;Programas e Serviços;LWSA;NM             
+Tecnologia da Informação;Programas e Serviços;Programas e Serviços;CASH;NM             
+Tecnologia da Informação;Programas e Serviços;Programas e Serviços;MBLY;NM             
+Tecnologia da Informação;Programas e Serviços;Programas e Serviços;MOSI;NM             
+Tecnologia da Informação;Programas e Serviços;Programas e Serviços;NGRD;NM             
+Tecnologia da Informação;Programas e Serviços;Programas e Serviços;QUSW;MA
+Tecnologia da Informação;Programas e Serviços;Programas e Serviços;SQIA;NM             
+Tecnologia da Informação;Programas e Serviços;Programas e Serviços;TOTS;NM             
+Comunicações;Telecomunicações;Telecomunicações;ALGT;
+Comunicações;Telecomunicações;Telecomunicações;INTB;NM             
+Comunicações;Telecomunicações;Telecomunicações;OIBR;N1
+Comunicações;Telecomunicações;Telecomunicações;TELB;
+Comunicações;Telecomunicações;Telecomunicações;VIVT;
+Comunicações;Telecomunicações;Telecomunicações;TIMS;NM             
+Comunicações;Mídia;Produção e Difusão de Filmes e Programas;CNSY;MA
+Utilidade Pública;Energia Elétrica;Energia Elétrica;AESL;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;TIET;N2             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;AFLT;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;ALUP;N2             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CBEE;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CPTE;MB             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CEBR;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CEED;N1             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;EEEL;N1             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CLSC;N2             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;GPAR;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CEPE;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CMIG;N1             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CMGD;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CMGT;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CESP;N1             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CEEB;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;COCE;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CPLE;N1             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CSRN;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CPFE;NM             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CPFG;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CPFP;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;CPRE;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;EBEN;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;EKTR;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;ELET;N1             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;LIPR;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;EMAE;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;ENBR;NM             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;ENGI;N2             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;ENMT;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;ENER;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;ENEV;NM             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;EGIE;NM             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;EQPA;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;EQMA;MB             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;EQTL;NM             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;ESCE;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;FGEN;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;POWE;NM             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;GEPA;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;ITPB;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;LIGH;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;LIGT;NM             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;NEOE;NM             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;OMGE;NM             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;PALF;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;PRMN;MB             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;REDE;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;RNEW;N2             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;STKF;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;STEN;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;TAEE;N2             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;TMPE;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;TEPE;
+Utilidade Pública;Energia Elétrica;Energia Elétrica;TRPL;N1             
+Utilidade Pública;Energia Elétrica;Energia Elétrica;UPKP;MB             
+Utilidade Pública;Água e Saneamento;Água e Saneamento;CASN;
+Utilidade Pública;Água e Saneamento;Água e Saneamento;CSMG;NM             
+Utilidade Pública;Água e Saneamento;Água e Saneamento;IGSN;MA
+Utilidade Pública;Água e Saneamento;Água e Saneamento;SBSP;NM             
+Utilidade Pública;Água e Saneamento;Água e Saneamento;SAPR;N2             
+Utilidade Pública;Água e Saneamento;Água e Saneamento;SNST;
+Utilidade Pública;Gás;Gás;CEGR;
+Utilidade Pública;Gás;Gás;CGAS;
+Financeiro;Intermediários Financeiros;Bancos;ABCB;N2             
+Financeiro;Intermediários Financeiros;Bancos;RPAD;
+Financeiro;Intermediários Financeiros;Bancos;BRIV;
+Financeiro;Intermediários Financeiros;Bancos;BAZA;
+Financeiro;Intermediários Financeiros;Bancos;BMGB;N1             
+Financeiro;Intermediários Financeiros;Bancos;BIDI;N2             
+Financeiro;Intermediários Financeiros;Bancos;BPAN;N1             
+Financeiro;Intermediários Financeiros;Bancos;BGIP;
+Financeiro;Intermediários Financeiros;Bancos;BEES;
+Financeiro;Intermediários Financeiros;Bancos;BPAR;
+Financeiro;Intermediários Financeiros;Bancos;BRSR;N1             
+Financeiro;Intermediários Financeiros;Bancos;BBDC;N1             
+Financeiro;Intermediários Financeiros;Bancos;BBAS;NM             
+Financeiro;Intermediários Financeiros;Bancos;BSLI;
+Financeiro;Intermediários Financeiros;Bancos;BPAC;
+Financeiro;Intermediários Financeiros;Bancos;IDVL;
+Financeiro;Intermediários Financeiros;Bancos;ITSA;N1             
+Financeiro;Intermediários Financeiros;Bancos;ITUB;N1             
+Financeiro;Intermediários Financeiros;Bancos;BMEB;
+Financeiro;Intermediários Financeiros;Bancos;BMIN;
+Financeiro;Intermediários Financeiros;Bancos;BNBR;
+Financeiro;Intermediários Financeiros;Bancos;PRBC;
+Financeiro;Intermediários Financeiros;Bancos;PINE;N2             
+Financeiro;Intermediários Financeiros;Bancos;SANB;
+Financeiro;Intermediários Financeiros;Soc. Crédito e Financiamento;CRIV;
+Financeiro;Intermediários Financeiros;Soc. Crédito e Financiamento;FNCN;
+Financeiro;Intermediários Financeiros;Soc. Crédito e Financiamento;MERC;
+Financeiro;Intermediários Financeiros;Soc. Arrendamento Mercantil;BDLS;
+Financeiro;Intermediários Financeiros;Soc. Arrendamento Mercantil;DBEN;
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;BZRS;
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;BSCS;
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;WTVR;
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;CBSC;
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;ECOA;MB             
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;GAFL;
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;GAIA;MB             
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;OCTS;
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;PDGS;
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;PLSC;
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;RBRA;MB             
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;APCS;
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;VERT;
+Financeiro;Securitizadoras de Recebíveis;Securitizadoras de Recebíveis;WTPI;
+Financeiro;Serviços Financeiros Diversos;Gestão de Recursos e Investimentos;BNDP;MB             
+Financeiro;Serviços Financeiros Diversos;Gestão de Recursos e Investimentos;BFRE;
+Financeiro;Serviços Financeiros Diversos;Gestão de Recursos e Investimentos;GPIV;DR3
+Financeiro;Serviços Financeiros Diversos;Gestão de Recursos e Investimentos;PDTC;
+Financeiro;Serviços Financeiros Diversos;Gestão de Recursos e Investimentos;PPLA;DR3
+Financeiro;Serviços Financeiros Diversos;Serviços Financeiros Diversos;B3SA;NM             
+Financeiro;Serviços Financeiros Diversos;Serviços Financeiros Diversos;BOAS;NM             
+Financeiro;Serviços Financeiros Diversos;Serviços Financeiros Diversos;CIEL;NM             
+Financeiro;Previdência e Seguros;Seguradoras;BRGE;
+Financeiro;Previdência e Seguros;Seguradoras;BBSE;NM             
+Financeiro;Previdência e Seguros;Seguradoras;IRBR;NM             
+Financeiro;Previdência e Seguros;Seguradoras;PSSA;NM             
+Financeiro;Previdência e Seguros;Seguradoras;CSAB;
+Financeiro;Previdência e Seguros;Seguradoras;SULA;N2             
+Financeiro;Previdência e Seguros;Corretoras de Seguros;APER;NM             
+Financeiro;Previdência e Seguros;Corretoras de Seguros;WIZS;NM             
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;ALSO;NM             
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;BRML;NM             
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;BRPR;NM             
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;CORR;
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;CCPR;NM             
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;GSHP;NM             
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;HBTS;
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;HBRE;NM             
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;IGBR;
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;IGTA;NM             
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;JPSA;
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;LOGG;NM             
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;MNZC;MB             
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;MULT;N2             
+Financeiro;Exploração de Imóveis;Exploração de Imóveis;SCAR;NM             
+Financeiro;Exploração de Imóveis;Intermediação Imobiliária;BBRK;NM             
+Financeiro;Exploração de Imóveis;Intermediação Imobiliária;LPSB;NM             
+Financeiro;Holdings Diversificadas;Holdings Diversificadas;MOAR;
+Financeiro;Holdings Diversificadas;Holdings Diversificadas;PEAB;
+Financeiro;Holdings Diversificadas;Holdings Diversificadas;SIMH;NM             
+Financeiro;Outros Títulos;Outros Títulos;CTBA;MB             
+Financeiro;Outros Títulos;Outros Títulos;MCRJ;MB             
+Financeiro;Outros Títulos;Outros Títulos;PMSP;MB             
+Outros;Outros;Outros;QVQP;MB             
+Outros;Outros;Outros;ALEF;MB             
+Outros;Outros;Outros;ATOM;
+Outros;Outros;Outros;BETP;MB             
+Outros;Outros;Outros;CABI;MB             
+Outros;Outros;Outros;CACO;MB             
+Outros;Outros;Outros;MAPT;
+Outros;Outros;Outros;CMSA;
+Outros;Outros;Outros;OPGM;MB             
+Outros;Outros;Outros;FIGE;
+Outros;Outros;Outros;JBDU;
+Outros;Outros;Outros;MGIP;
+Outros;Outros;Outros;OPHE;MB             
+Outros;Outros;Outros;PPAR;
+Outros;Outros;Outros;PRPT;MB             
+Outros;Outros;Outros;OPSE;MB             
+Outros;Outros;Outros;OPTS;MB             
