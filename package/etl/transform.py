@@ -5,7 +5,7 @@ import pandas as pd
 
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(process)-5d][%(asctime)s][%(filename)-20s][%(levelname)-8s] %(message)s",
+    format="[%(process)-5d][%(asctime)s][%(filename)-10s][%(funcName)-25s][%(levelname)-5s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
@@ -103,7 +103,7 @@ class Transform:
 
         self.df_setorial.drop(columns="listagem_segmento", inplace=True)
 
-    def join_files(self, target: str = 'close') -> pd.DataFrame:
+    def join_files(self, target: str = "close") -> pd.DataFrame:
         logging.info("Start")
         df_list = []
         for file in os.listdir(self.history_path):
@@ -124,9 +124,7 @@ class Transform:
         ]
 
         self.consolidado["codigo"] = self.consolidado["ticker"].str.slice(0, 4)
-        self.consolidado = self.consolidado[
-            [target, "date", "ticker", "codigo"]
-        ].copy()
+        self.consolidado = self.consolidado[[target, "date", "ticker", "codigo"]].copy()
 
         logging.info(f"self.consolidado.shape: {self.consolidado.shape}")
 
