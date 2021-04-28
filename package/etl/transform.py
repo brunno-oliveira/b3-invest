@@ -103,7 +103,7 @@ class Transform:
 
         self.df_setorial.drop(columns="listagem_segmento", inplace=True)
 
-    def join_files(self) -> pd.DataFrame:
+    def join_files(self, target: str = 'close') -> pd.DataFrame:
         logging.info("Start")
         df_list = []
         for file in os.listdir(self.history_path):
@@ -125,7 +125,7 @@ class Transform:
 
         self.consolidado["codigo"] = self.consolidado["ticker"].str.slice(0, 4)
         self.consolidado = self.consolidado[
-            ["adj_close", "date", "ticker", "codigo"]
+            [target, "date", "ticker", "codigo"]
         ].copy()
 
         logging.info(f"self.consolidado.shape: {self.consolidado.shape}")
