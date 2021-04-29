@@ -1,15 +1,15 @@
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import LinearRegression
 from model_base import ModelBase
 import logging
 
 
-class ModelDecisionTreeRegressor(ModelBase):
+class ModelLinearRegression(ModelBase):
     def __init__(self):
         super().__init__()
 
     def set_model(self):
         logging.info("Start")
-        self.model = DecisionTreeRegressor(random_state=42)
+        self.model = LinearRegression()
         return self.model
 
     def fit_and_predict(self):
@@ -24,14 +24,13 @@ class ModelDecisionTreeRegressor(ModelBase):
         return self.model
 
     def predict(self):
-
         logging.info("Start")
         self.predicted = self.model.predict(self.X_test)
         return self.predicted
 
 
 if __name__ == "__main__":
-    model = ModelDecisionTreeRegressor()
+    model = ModelLinearRegression()
     model.set_model()
     model.load_data()
     model.fit_and_predict()
