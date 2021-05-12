@@ -27,7 +27,6 @@
         "AXPB34",
         "BALM3",
         "BALM4",
-        "BALM4",
         "BBAS3",
         "BBDC3",
         "BBDC4",
@@ -179,7 +178,6 @@
         "JHSF3",
         "JNJB34",
         "JPMC34",
-        "JPMC34",
         "JSLG3",
         "KLBN11",
         "KLBN3",
@@ -255,7 +253,6 @@
         "QCOM34",
         "QUAL3",
         "RADL3",
-        "RADL3",
         "RANI3",
         "RAPT3",
         "RDNI3",
@@ -325,6 +322,15 @@
         "XRXB34",
         "YDUQ3",
         "SOMA3",
-        "STBP3"
+        "STBP3",
+        "ESTR4",
+        "VALE3",
+        "ENMT3",
+        "ENMT4",
+        "DMMO3",
+        "AAPL34",
+        "CASN3",
+        "CEBR3",
+        "ABEV3"
     ]
 }
