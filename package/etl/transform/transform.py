@@ -7,6 +7,10 @@ logging.basicConfig(
     level=logging.INFO,
     format="[%(process)-5d][%(asctime)s][%(filename)-10s][%(funcName)-25s][%(levelname)-5s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler(filename="data/log/transform.log"),
+    ],
 )
 
 

@@ -6,19 +6,21 @@ import yfinance as yf
 
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(process)-5d][%(asctime)s][%(filename)-20s][%(levelname)-8s] %(message)s",
+    format="[%(process)-5d][%(asctime)s][%(filename)-10s][%(funcName)-25s][%(levelname)-5s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler(filename='extract.log')
-    ]
+        logging.FileHandler(filename="data/log/extract_tickers.log"),
+    ],
 )
 
 
 class ExtractTickers:
     def __init__(self):
         logging.info("Start")
-        root_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        root_path = os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        )
         data_path = os.path.join(root_path, "data")
 
         tickers_file_name = "tickers.json"
@@ -58,10 +60,10 @@ class ExtractTickers:
             else:
                 low_data.append(ticker)
 
-        logging.info('----------------------')
-        logging.warning('FAILED')
+        logging.info("----------------------")
+        logging.warning("FAILED")
         logging.warning(failed)
-        logging.warning('LOW DATA')
+        logging.warning("LOW DATA")
         logging.warning(low_data)
 
 
