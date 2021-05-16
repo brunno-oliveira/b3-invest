@@ -2,6 +2,7 @@ import os
 import json
 import logging
 import pandas as pd
+from typing import List
 
 logging.basicConfig(
     level=logging.INFO,
@@ -28,6 +29,31 @@ class TransformFundamentalista:
         self.tickers_path = os.path.join(data_path, "tickers.json")
         self.df_consolidado: pd.DataFrame = None
 
+    @staticmethod
+    def get_columns() -> List[str]:
+        """Colunas filtradas a partir dos dados fundamentalisa bruto. """
+        # fmt: off
+        return [
+            "symbol", "asOfDate", "NetIncomeFromContinuingOperations", "ReconciledDepreciation",
+            "ChangeInCashSupplementalAsReported", "ChangeInWorkingCapital",
+            "InvestingCashFlow", "BeginningCashPosition", "FinancingCashFlow",
+            "EndCashPosition", "OperatingCashFlow", "LongTermDebtAndCapitalLeaseObligation",
+            "ChangesInCash", "FreeCashFlow", "SellingGeneralAndAdministration",
+            "TotalDebt", "TaxProvision", "NetPPE", "Payables", "NetInterestIncome",
+            "CommonStock", "CapitalStock", "CashAndCashEquivalents", "InvestedCapital",
+            "TotalCapitalization", "NetIncomeFromContinuingAndDiscontinuedOperation",
+            "NetIncome", "NetIncomeCommonStockholders", "TaxRateForCalcs",
+            "TaxEffectOfUnusualItems", "TotalRevenue", "NetIncomeContinuousOperations",
+            "PretaxIncome", "OrdinarySharesNumber", "OperatingRevenue",
+            "NetIncomeFromContinuingOperationNetMinorityInterest", 
+            "NetIncomeIncludingNoncontrollingInterests",
+            "NormalizedIncome", "DilutedNIAvailtoComStockholders", "ShareIssued",
+            "NetTangibleAssets", "TotalEquityGrossMinorityInterest",
+            "TotalAssets", "TangibleBookValue", "CommonStockEquity",
+            "TotalLiabilitiesNetMinorityInterest", "StockholdersEquity"
+        ]
+        # fmt: on
+
     def load_tickers(self):
         logging.info("Start")
         with open(self.tickers_path, encoding="utf-8") as json_file:
@@ -45,13 +71,21 @@ class TransformFundamentalista:
         self.df_consolidado = pd.concat(dfs)
         del dfs
         self.df_consolidado = self.df_consolidado.reset_index()
-        self.df_consolidado.to_parquet(self.output_consolidado_path)
+        logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
+
+    def remove_duplicates(self):
+        """Ex: AALR3.SA -> AALR"""
+        self.df_consolidado["symbol"] = self.df_consolidado["symbol"].str[0:4]
+        self.df_consolidado = self.df_consolidado.drop_duplicates()
         logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 
     def transform(self):
         logging.info("Start")
-        # self.load_tickers()
+        self.load_tickers()
         self.load_data()
+        self.remove_duplicates()
+        self.df_consolidado.to_parquet(self.output_consolidado_path)
+        logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 
 
 TransformFundamentalista().transform()
