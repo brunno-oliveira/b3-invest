@@ -22,9 +22,11 @@ class TransformFundamentalista:
         )
         data_path = os.path.join(root_path, "data")
         self.data_fundamentalista_path = os.path.join(data_path, "fundamentalista")
-        self.output_consolidado_path = os.path.join(data_path, "df_consolidado.parquet")
+        self.output_consolidado_path = os.path.join(
+            data_path, "df_fundamentalista.parquet"
+        )
         self.tickers_path = os.path.join(data_path, "tickers.json")
-        self.consolidado: pd.DataFrame = None
+        self.df_consolidado: pd.DataFrame = None
 
     def load_tickers(self):
         logging.info("Start")
@@ -40,16 +42,16 @@ class TransformFundamentalista:
             if ".parquet" in file:
                 file_path = os.path.join(self.data_fundamentalista_path, file)
                 dfs.append(pd.read_parquet(file_path))
-        self.consolidado = pd.concat(dfs)
+        self.df_consolidado = pd.concat(dfs)
         del dfs
-        self.consolidado = self.consolidado.reset_index()
-        self.consolidado.to_parquet(self.output_consolidado_path)
-        logging.info(f"self.consolidado.shape: {self.consolidado.shape}")
+        self.df_consolidado = self.df_consolidado.reset_index()
+        self.df_consolidado.to_parquet(self.output_consolidado_path)
+        logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 
     def transform(self):
         logging.info("Start")
-        self.load_tickers()
-        # self.load_data()
+        # self.load_tickers()
+        self.load_data()
 
 
 TransformFundamentalista().transform()
