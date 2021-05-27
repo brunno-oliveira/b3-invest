@@ -1,8 +1,8 @@
 import os
-import json
 import logging
 import pandas as pd
 from typing import List
+from sklearn.preprocessing import MinMaxScaler
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,7 +26,6 @@ class TransformFundamentalista:
         self.output_consolidado_path = os.path.join(
             data_path, "df_fundamentalista.parquet"
         )
-        self.tickers_path = os.path.join(data_path, "tickers.json")
         self.df_consolidado: pd.DataFrame = None
 
     @staticmethod
@@ -44,7 +43,7 @@ class TransformFundamentalista:
             "TotalCapitalization", "NetIncomeFromContinuingAndDiscontinuedOperation",
             "NetIncome", "NetIncomeCommonStockholders", "TaxRateForCalcs",
             "TaxEffectOfUnusualItems", "TotalRevenue", "NetIncomeContinuousOperations",
-            "PretaxIncome", "OrdinarySharesNumber", "OperatingRevenue",
+            "PretaxIncome", "OrdinarySharesNumber", "OperatingRevenue", 
             "NetIncomeFromContinuingOperationNetMinorityInterest", 
             "NetIncomeIncludingNoncontrollingInterests",
             "NormalizedIncome", "DilutedNIAvailtoComStockholders", "ShareIssued",
@@ -54,15 +53,8 @@ class TransformFundamentalista:
         ]
         # fmt: on
 
-    def load_tickers(self):
-        logging.info("Start")
-        with open(self.tickers_path, encoding="utf-8") as json_file:
-            tickers = json.load(json_file)["tickers"]
-        tickers = [ticker[0:4] for ticker in tickers]
-        tickers = set(tickers)
-        logging.info(f"{len(tickers)} unique tickers")
-
     def load_data(self):
+        logging.info("Start")
         dfs = []
         for file in os.listdir(self.data_fundamentalista_path):
             if ".parquet" in file:
@@ -71,21 +63,35 @@ class TransformFundamentalista:
         self.df_consolidado = pd.concat(dfs)
         del dfs
         self.df_consolidado = self.df_consolidado.reset_index()
+        self.df_consolidado = self.df_consolidado[self.get_columns()].copy()
         logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 
     def remove_duplicates(self):
         """Ex: AALR3.SA -> AALR"""
+        logging.info("Start")
         self.df_consolidado["symbol"] = self.df_consolidado["symbol"].str[0:4]
         self.df_consolidado = self.df_consolidado.drop_duplicates()
         logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 
+    def scaler(self):
+        logging.info("Start")
+        scaler = MinMaxScaler()
+        min_max = scaler.fit_transform(self.df_consolidado.iloc[:, 2:])
+        df_scaler = pd.DataFrame(columns=self.get_columns()[2:], data=min_max)
+        df_scaler["symbol"] = self.df_consolidado["symbol"]
+        df_scaler["asOfDate"] = self.df_consolidado["asOfDate"]
+        cols = df_scaler.columns.tolist()
+        cols = cols[-2:] + cols[:-2]
+        self.df_consolidado = df_scaler[cols]
+        del df_scaler
+        logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
+
     def transform(self):
         logging.info("Start")
-        self.load_tickers()
         self.load_data()
         self.remove_duplicates()
+        self.scaler()
         self.df_consolidado.to_parquet(self.output_consolidado_path)
-        logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 
 
 TransformFundamentalista().transform()
