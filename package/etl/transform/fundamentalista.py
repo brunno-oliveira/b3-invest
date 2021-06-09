@@ -86,11 +86,71 @@ class TransformFundamentalista:
         del df_scaler
         logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 
+    def prep_rows(self):
+        """
+        A quantidade de dimensoes por feature/coluna sera sempre sempre 4,
+        oq eh referente a 4 trimestre.
+        Se a quantidade de registro for maior que 4, ira usar as ultimas 4 linhas
+        Se for menor, ira repetir a ultima linha (mais atualizada) ate dar 4
+        """
+        logging.info("Start")
+        self.df_consolidado = self.df_consolidado[self.df_consolidado["symbol"].notna()]
+        self.df_consolidado = self.df_consolidado.sort_values(by=["symbol", "asOfDate"])
+
+        df_fixed_rows = []
+        fixed_rows_size = 4
+        for ticket in self.df_consolidado["symbol"].unique():
+
+            df_temp = self.df_consolidado[
+                self.df_consolidado["symbol"] == ticket
+            ].copy()
+            if len(df_temp) == fixed_rows_size:
+                df_fixed_rows.append(df_temp)
+            elif len(df_temp) > fixed_rows_size:
+                df_fixed_rows.append(df_temp.tail(fixed_rows_size))
+            else:
+                while len(df_temp) < fixed_rows_size:
+                    new_row = df_temp.tail(1).copy()
+                    df_temp = df_temp.append(new_row)
+                df_fixed_rows.append(df_temp)
+
+        self.df_consolidado = pd.concat(df_fixed_rows)
+        self.df_consolidado = self.df_consolidado.sort_values(by=["symbol", "asOfDate"])
+        logging.info(f"df_fixed_rows.shape: {self.df_consolidado.shape}")
+        del df_fixed_rows, df_temp
+
+    def fill_nan(self):
+        """
+        Preenche o NaN com o proximo valor,
+        """
+        df_fixed_nan = []
+        for ticket in self.df_consolidado["symbol"].unique():
+            df_temp = (
+                self.df_consolidado[self.df_consolidado["symbol"] == ticket]
+                .copy()
+                .reset_index()
+            )
+            df_temp.drop(columns=["index"], inplace=True)
+            columns = df_temp.columns[2:]  # Pulando symbol e asOfDate
+            for col in columns:
+                if df_temp[col].isnull().any():
+                    df_temp[col].fillna(method="ffill", inplace=True)
+                    if df_temp[col].isnull().any():
+                        df_temp[col].fillna(method="bfill", inplace=True)
+            df_fixed_nan.append(df_temp)
+
+        self.df_consolidado = pd.concat(df_fixed_nan)
+        self.df_consolidado = self.df_consolidado.sort_values(by=["symbol", "asOfDate"])
+        logging.info(f"df_fixed_rows.shape: {self.df_consolidado.shape}")
+        del df_fixed_nan, df_temp
+
     def transform(self):
         logging.info("Start")
         self.load_data()
         self.remove_duplicates()
         self.scaler()
+        self.prep_rows()
+        self.fill_nan()
         self.df_consolidado.to_parquet(self.output_consolidado_path)
 
 

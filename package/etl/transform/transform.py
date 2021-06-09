@@ -16,9 +16,7 @@ logging.basicConfig(
 
 class Transform:
     def __init__(self):
-        root_path = root_path = os.path.dirname(
-            os.path.dirname(os.path.dirname(__file__))
-        )
+        root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
         data_path = os.path.join(root_path, "data")
         self.history_path = os.path.join(data_path, "history")
         self.ticker_setorial_path = os.path.join(data_path, "b3_setorial.csv")
