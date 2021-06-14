@@ -123,6 +123,7 @@ class TransformFundamentalista:
         """
         Preenche o NaN com o proximo valor,
         """
+        logging.info("Start")
         df_fixed_nan = []
         for ticket in self.df_consolidado["symbol"].unique():
             df_temp = (
@@ -141,8 +142,44 @@ class TransformFundamentalista:
 
         self.df_consolidado = pd.concat(df_fixed_nan)
         self.df_consolidado = self.df_consolidado.sort_values(by=["symbol", "asOfDate"])
-        logging.info(f"df_fixed_rows.shape: {self.df_consolidado.shape}")
+        logging.info(f"self.df_consolidado.shape: {self.df_consolidado.shape}")
         del df_fixed_nan, df_temp
+
+    def fill_no_data(self):
+        """
+        Prenche os NaN que colunas inteiras possuem
+        """
+        logging.info("Start")
+        cols_with_nans = self.df_consolidado.columns[
+            self.df_consolidado.isna().any()
+        ].tolist()
+        for col in cols_with_nans:
+            self.df_consolidado[col].fillna(
+                self.df_consolidado[col].median(), inplace=True
+            )
+        logging.info(f"self.df_consolidado.shape: {self.df_consolidado.shape}")
+
+    def pivot(self):
+        """
+        Transofrm feature rows into columns
+        """
+        logging.info("Start")
+        dfs = []
+        for ticket in self.df_consolidado["symbol"].unique():
+            row = self.df_consolidado[self.df_consolidado["symbol"] == ticket].copy()
+            valid_columns = row.columns[2:]
+            df_ticket = pd.DataFrame()
+            df_ticket["symbol"] = [ticket]
+            for col in valid_columns:
+                values = list(row[col])
+                values = [[v] for v in values]
+                columns = [f"{col}_{index}" for index in range(4)]
+                df_temp = pd.DataFrame(dict(zip(columns, values)))
+                df_ticket = pd.concat((df_ticket, df_temp), axis=1)
+            dfs.append(df_ticket)
+
+        self.df_consolidado = pd.concat(dfs)
+        logging.info(f"self.df_consolidado.shape: {self.df_consolidado.shape}")
 
     def transform(self):
         logging.info("Start")
@@ -151,6 +188,8 @@ class TransformFundamentalista:
         self.scaler()
         self.prep_rows()
         self.fill_nan()
+        self.fill_no_data()
+        self.pivot()
         self.df_consolidado.to_parquet(self.output_consolidado_path)
 
 
