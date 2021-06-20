@@ -28,30 +28,16 @@ class TransformFundamentalista:
         )
         self.df_consolidado: pd.DataFrame = None
 
-    @staticmethod
-    def get_columns() -> List[str]:
-        """Colunas filtradas a partir dos dados fundamentalisa bruto. """
-        # fmt: off
-        return [
-            "symbol", "asOfDate", "NetIncomeFromContinuingOperations", "ReconciledDepreciation",
-            "ChangeInCashSupplementalAsReported", "ChangeInWorkingCapital",
-            "InvestingCashFlow", "BeginningCashPosition", "FinancingCashFlow",
-            "EndCashPosition", "OperatingCashFlow", "LongTermDebtAndCapitalLeaseObligation",
-            "ChangesInCash", "FreeCashFlow", "SellingGeneralAndAdministration",
-            "TotalDebt", "TaxProvision", "NetPPE", "Payables", "NetInterestIncome",
-            "CommonStock", "CapitalStock", "CashAndCashEquivalents", "InvestedCapital",
-            "TotalCapitalization", "NetIncomeFromContinuingAndDiscontinuedOperation",
-            "NetIncome", "NetIncomeCommonStockholders", "TaxRateForCalcs",
-            "TaxEffectOfUnusualItems", "TotalRevenue", "NetIncomeContinuousOperations",
-            "PretaxIncome", "OrdinarySharesNumber", "OperatingRevenue", 
-            "NetIncomeFromContinuingOperationNetMinorityInterest", 
-            "NetIncomeIncludingNoncontrollingInterests",
-            "NormalizedIncome", "DilutedNIAvailtoComStockholders", "ShareIssued",
-            "NetTangibleAssets", "TotalEquityGrossMinorityInterest",
-            "TotalAssets", "TangibleBookValue", "CommonStockEquity",
-            "TotalLiabilitiesNetMinorityInterest", "StockholdersEquity"
-        ]
-        # fmt: on
+    def transform(self):
+        logging.info("Start")
+        self.load_data()
+        self.remove_duplicates()
+        self.scaler()
+        self.prep_rows()
+        self.fill_nan()
+        self.fill_no_data()
+        self.pivot()
+        self.df_consolidado.to_parquet(self.output_consolidado_path)
 
     def load_data(self):
         logging.info("Start")
@@ -181,16 +167,30 @@ class TransformFundamentalista:
         self.df_consolidado = pd.concat(dfs)
         logging.info(f"self.df_consolidado.shape: {self.df_consolidado.shape}")
 
-    def transform(self):
-        logging.info("Start")
-        self.load_data()
-        self.remove_duplicates()
-        self.scaler()
-        self.prep_rows()
-        self.fill_nan()
-        self.fill_no_data()
-        self.pivot()
-        self.df_consolidado.to_parquet(self.output_consolidado_path)
+    @staticmethod
+    def get_columns() -> List[str]:
+        """Colunas filtradas a partir dos dados fundamentalisa bruto. """
+        # fmt: off
+        return [
+            "symbol", "asOfDate", "NetIncomeFromContinuingOperations", "ReconciledDepreciation",
+            "ChangeInCashSupplementalAsReported", "ChangeInWorkingCapital",
+            "InvestingCashFlow", "BeginningCashPosition", "FinancingCashFlow",
+            "EndCashPosition", "OperatingCashFlow", "LongTermDebtAndCapitalLeaseObligation",
+            "ChangesInCash", "FreeCashFlow", "SellingGeneralAndAdministration",
+            "TotalDebt", "TaxProvision", "NetPPE", "Payables", "NetInterestIncome",
+            "CommonStock", "CapitalStock", "CashAndCashEquivalents", "InvestedCapital",
+            "TotalCapitalization", "NetIncomeFromContinuingAndDiscontinuedOperation",
+            "NetIncome", "NetIncomeCommonStockholders", "TaxRateForCalcs",
+            "TaxEffectOfUnusualItems", "TotalRevenue", "NetIncomeContinuousOperations",
+            "PretaxIncome", "OrdinarySharesNumber", "OperatingRevenue", 
+            "NetIncomeFromContinuingOperationNetMinorityInterest", 
+            "NetIncomeIncludingNoncontrollingInterests",
+            "NormalizedIncome", "DilutedNIAvailtoComStockholders", "ShareIssued",
+            "NetTangibleAssets", "TotalEquityGrossMinorityInterest",
+            "TotalAssets", "TangibleBookValue", "CommonStockEquity",
+            "TotalLiabilitiesNetMinorityInterest", "StockholdersEquity"
+        ]
+        # fmt: on
 
 
 TransformFundamentalista().transform()
