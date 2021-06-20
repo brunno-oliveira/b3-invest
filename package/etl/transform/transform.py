@@ -20,7 +20,7 @@ class Transform:
             os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         )
         data_path = os.path.join(root_path, "data")
-        self.history_path = os.path.join(data_path, "history")
+        self.df_history_path = os.path.join(data_path, "df_history.parquet")
         self.df_setor_path = os.path.join(data_path, "df_setor.parquet")
         self.df_fundamentalista_path = os.path.join(
             data_path, "df_fundamentalista.parquet"
@@ -36,60 +36,38 @@ class Transform:
     def transform(self):
         logging.info("Start")
         self.load_data()
-        self.transform_ticker()
-        # self.consolidado.to_parquet(self.output_consolidado_path)
+        self.merge()
+        self.df_consolidado.to_parquet(self.output_consolidado_path)
         logging.info("Finished")
-        # return self.consolidado
+        return self.consolidado
+
+    def merge(self):
+        logging.info("Start")
+        # TODO: Validar os TICKERS que nao batem. Pelo visto sao acoes fora da B3
+        self.df_consolidado = self.df_history.merge(
+            self.df_setor, left_on="symbol", right_on="codigo", how="inner"
+        )
+        self.df_consolidado.drop(columns="codigo", inplace=True)
+        logging.info(f"df_history merge df_setor: {self.df_consolidado.shape}")
+        self.df_consolidado = self.df_consolidado.merge(
+            self.df_fundamentalista, on="symbol", how="inner"
+        )
+        logging.info(
+            f"df_consolidado merge df_fundamentalista: {self.df_consolidado.shape}"
+        )
+        del self.df_setor
+        del self.df_history
+        del self.df_fundamentalista
 
     def load_data(self):
         logging.info("Start")
         self.df_setor = pd.read_parquet(self.df_setor_path)
         self.df_fundamentalista = pd.read_parquet(self.df_fundamentalista_path)
-        self.df_history = self.load_history()
-
-    def load_history(self) -> pd.DataFrame:
-        logging.info("Start")
-        df_list = []
-        for file in os.listdir(self.history_path):
-            if ".parquet" in file:
-                file_path = os.path.join(self.history_path, file)
-                df_list.append(pd.read_parquet(file_path))
-        return pd.concat(df_list)
-
-    def transform_ticker(self, target: str = "close"):
-        """Transforma os dados de historico das acoes
-
-        Args:
-            target (str, optional): Qual sera a coluna predita [close, adj_close]. Defaults to 'close'.
-        """
-        logging.info("Start")
-        self.df_history = self.df_history.reset_index()
-        self.df_history.columns = [
-            "date",
-            "open",
-            "high",
-            "low",
-            "close",
-            "adj_close",
-            "volume",
-            "ticker",
-        ]
-
-        self.df_history["symbol"] = self.df_history["ticker"].str.slice(0, 4)
-        self.df_history = self.df_history[[target, "date", "ticker", "symbol"]].copy()
-        ticker_dummies = pd.get_dummies(
-            self.df_history.ticker, prefix="ticker", prefix_sep="."
-        )
-        self.df_history = pd.concat([self.df_history, ticker_dummies], axis=1)
-
-        # Movendo colunas para primeira posicao
-        symbol = self.df_history.pop("symbol")
-        ticker = self.df_history.pop("ticker")
-        self.df_history.insert(0, "symbol", symbol)
-        self.df_history.insert(0, "ticker", ticker)
+        self.df_history = pd.read_parquet(self.df_history_path)
+        logging.info(f"self.df_setor.shape: {self.df_setor.shape}")
+        logging.info(f"self.df_fundamentalista.shape: {self.df_fundamentalista.shape}")
         logging.info(f"self.df_history.shape: {self.df_history.shape}")
 
 
 if __name__ == "__main__":
     Transform().transform()
-    print("opa")
