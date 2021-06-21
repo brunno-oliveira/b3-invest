@@ -39,7 +39,7 @@ class Transform:
         self.merge()
         self.df_consolidado.to_parquet(self.output_consolidado_path)
         logging.info("Finished")
-        return self.consolidado
+        return self.df_consolidado
 
     def merge(self):
         logging.info("Start")
