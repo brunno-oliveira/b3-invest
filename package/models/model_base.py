@@ -1,5 +1,6 @@
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 import matplotlib.pyplot as plt
+import datetime as dt
 import pandas as pd
 import numpy as np
 import logging
@@ -7,7 +8,7 @@ import os
 
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(process)-5d][%(asctime)s][%(filename)-10s][%(funcName)-25s][%(levelname)-5s] %(message)s",
+    format="[%(process)-5d][%(asctime)s][%(filename)-10s][%(funcName)-20s][%(levelname)-5s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=[logging.StreamHandler(), logging.FileHandler(filename="extract.log")],
 )
@@ -33,8 +34,10 @@ class ModelBase:
             self.df = pd.read_parquet(
                 os.path.join(self.data_path, "df_consolidado.parquet")
             )
-            self.tickers = self.df.iloc[:, -1:]
-            self.df = self.df.iloc[:, :-1].copy()  # Remove ticker column
+
+            # Coluna para facilitar a busca por tickers
+            self.tickers = self.df.iloc[:, 0]
+            self.df = self.df.iloc[:, 2:].copy()  # Remove ticker columns
         else:
             self.df = df
         max_date = self.df["date"].max()
@@ -44,6 +47,8 @@ class ModelBase:
 
         self.X_test = self.df[self.df["date"] == max_date].iloc[:, 1:]
         self.y_test = self.df[self.df["date"] == max_date].iloc[:, 0]
+
+        self.transform_date()
 
     def set_model(self):
         pass
@@ -59,6 +64,11 @@ class ModelBase:
 
     def predict(self):
         pass
+
+    def transform_date(self):
+        """O modelo nao trabalha com o tipo datetime"""
+        self.X_train["date"] = self.X_train["date"].map(dt.datetime.toordinal)
+        self.X_test["date"] = self.X_test["date"].map(dt.datetime.toordinal)
 
     def plot_metrics(self):
         logging.info(f"r2_score : {round(r2_score(self.predicted, self.y_test),4)}")
