@@ -29,6 +29,7 @@ class TransformHistory:
         self.df_history = self.load_history()
         logging.info(f"self.df_history.shape: {self.df_history.shape}")
         self.transform_ticker()
+        self.remove_missing_data()
         self.df_history.to_parquet(self.output_consolidado_path)
 
     def load_history(self) -> pd.DataFrame:
@@ -69,12 +70,24 @@ class TransformHistory:
         )
         self.df_history = pd.concat([self.df_history, ticker_dummies], axis=1)
 
-        # Movendo colunas para primeira posicao
+        # Reorganizando as primeiras colunas
+        # date = self.df_history.pop("date")
         symbol = self.df_history.pop("symbol")
         ticker = self.df_history.pop("ticker")
+        # self.df_history.insert(0, "date", date)
         self.df_history.insert(0, "symbol", symbol)
         self.df_history.insert(0, "ticker", ticker)
         logging.info(f"self.df_history.shape: {self.df_history.shape}")
+
+    def remove_missing_data(self):
+        """As vezes faltam alguns dados diarios"""
+        total_missing_rows = len(self.df_history[self.df_history["close"].isna()])
+        if total_missing_rows > 0:
+            if total_missing_rows > 20:
+                raise Exception("Missing too many data!")
+            else:
+                self.df_history = self.df_history.dropna(subset=["close"])
+        logging.info(f"Dropper {total_missing_rows} missing data!")
 
 
 TransformHistory().transform()
