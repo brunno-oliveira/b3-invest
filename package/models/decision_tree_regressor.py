@@ -2,10 +2,13 @@ from sklearn.tree import DecisionTreeRegressor
 from model_base import ModelBase
 import logging
 
+GROUP_NAME = "DecisionTreeRegressor"
+MODEL_NAME = "1.0"
+
 
 class ModelDecisionTreeRegressor(ModelBase):
     def __init__(self):
-        super().__init__()
+        super().__init__(group_name=GROUP_NAME, model_name=MODEL_NAME)
 
     def set_model(self):
         logging.info("Start")
@@ -24,7 +27,6 @@ class ModelDecisionTreeRegressor(ModelBase):
         return self.model
 
     def predict(self):
-
         logging.info("Start")
         self.predicted = self.model.predict(self.X_test)
         return self.predicted
@@ -36,3 +38,4 @@ if __name__ == "__main__":
     model.load_data()
     model.fit_and_predict()
     model.plot_metrics()
+    model.plot_wandb()

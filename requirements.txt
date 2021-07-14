@@ -6,3 +6,5 @@ unidecode==1.2.0
 requests==2.25.1
 beautifulsoup4==4.9.3
 yahooquery>=2.2.15
+seaborn==0.11.1
+wandb==0.10.32
