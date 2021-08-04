@@ -5,6 +5,9 @@ import logging
 GROUP_NAME = "DecisionTreeRegressor"
 MODEL_NAME = "1.0"
 
+# import os
+# os.environ["WANDB_MODE"] = "dryrun"
+
 
 class ModelDecisionTreeRegressor(ModelBase):
     def __init__(self):
