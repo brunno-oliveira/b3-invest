@@ -1,8 +1,10 @@
-import os
 import json
 import logging
-import yfinance as yf
+import os
+from datetime import datetime
 
+import yfinance as yf
+from dateutil.relativedelta import relativedelta
 
 logging.basicConfig(
     level=logging.INFO,
@@ -39,20 +41,27 @@ class ExtractTickers:
 
     def download(self):
         logging.info("Start")
+        dias_uteis_em_um_ano = 254
         sucessful = []
         failed = []
         low_data = []
+
+        end_date = datetime(2021, 5, 18).date()
+        start_date = end_date - relativedelta(years=2)
+
         with open(self.tikers_path) as json_file:
             tickers = json.load(json_file)["tickers"]
         for ticker in tickers:
             logging.info(f"---- {ticker} ----")
 
-            df_history = yf.download(tickers=f"{ticker}.SA", period="2y")
+            df_history = yf.download(
+                tickers=f"{ticker}.SA", start=str(start_date), end=str(end_date)
+            )
             df_history["ticker"] = ticker
 
             if df_history.shape[0] == 0:
                 failed.append(ticker)
-            elif df_history.shape[0] >= 360:
+            elif df_history.shape[0] >= dias_uteis_em_um_ano:
                 df_history.to_parquet(
                     f"{os.path.join(self.output_path, ticker.lower())}.parquet"
                 )
@@ -62,7 +71,7 @@ class ExtractTickers:
 
         logging.info("----------------------")
         logging.warning("FAILED")
-        logging.warning(failed)
+        logging.error(failed)
         logging.warning("LOW DATA")
         logging.warning(low_data)
 
