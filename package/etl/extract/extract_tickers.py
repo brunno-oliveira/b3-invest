@@ -38,10 +38,8 @@ class ExtractTickers:
             if ".parquet" in file:
                 os.remove(os.path.join(self.output_path, file))
 
-        try:
+        if os.path.exists(self.ticker_low_data):
             os.remove(self.ticker_low_data)
-        except FileNotFoundError:
-            pass
 
     def download(self):
         logging.info("Start")
@@ -78,6 +76,7 @@ class ExtractTickers:
         logging.error(f"FAILED: {failed}")
         logging.warning(f"LOW DATA: {low_data}")
 
+        # Save low_data tickers
         low_data_json = json.dumps({"low_data_tickers": low_data})
         with io.open(self.ticker_low_data, "w") as f:
             f.write(low_data_json)
