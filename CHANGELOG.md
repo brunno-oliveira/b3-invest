@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 * Adicionado modelo random_forest
 * Atualização da lib yfinance para corrigir um erro de Thread
 * Salva em JSON a lista de ticker que não possuirem registros superior a 254 dias
+* Removido os tickers lower data na tranformação do histórico
+* Adicionado a coluna 'volume' na base de histórico
 
 ## [1.1.0]
 * Removido os tickers ['BBAS11', 'BBAS12', 'BEEF11', 'BPAR3', 'DMMO11', 'GOLL11', 'NEMO3', 'NEMO5', 'NEMO6', 'URPR11']

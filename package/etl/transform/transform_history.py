@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 import pandas as pd
 
@@ -20,6 +21,8 @@ class TransformHistory:
             os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         )
         data_path = os.path.join(root_path, "data")
+        ticker_low_data = "tickers_low_data.json"
+        self.ticker_low_data = os.path.join(data_path, ticker_low_data)
         self.history_path = os.path.join(data_path, "history")
         self.df_history: pd.DataFrame = None
         self.output_consolidado_path = os.path.join(data_path, "df_history.parquet")
@@ -34,9 +37,15 @@ class TransformHistory:
 
     def load_history(self) -> pd.DataFrame:
         logging.info("Start")
+        with open(self.ticker_low_data) as json_file:
+            low_data_tickers = json.load(json_file)["low_data_tickers"]
+
         df_list = []
         for file in os.listdir(self.history_path):
-            if ".parquet" in file:
+            # Skip low data
+            if any([x.lower() in file for x in low_data_tickers]):
+                logging.info(f"Skiping {file} due to low data")
+            elif ".parquet" in file:
                 file_path = os.path.join(self.history_path, file)
                 df_list.append(pd.read_parquet(file_path))
         return pd.concat(df_list)
@@ -63,7 +72,7 @@ class TransformHistory:
 
         self.df_history["symbol"] = self.df_history["ticker"].str.slice(0, 4)
         self.df_history = self.df_history[
-            [self.target, "date", "ticker", "symbol"]
+            [self.target, "date", "volume", "ticker", "symbol"]
         ].copy()
         ticker_dummies = pd.get_dummies(
             self.df_history.ticker, prefix="ticker", prefix_sep="."
