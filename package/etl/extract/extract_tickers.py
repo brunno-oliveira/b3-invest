@@ -1,3 +1,4 @@
+import io
 import json
 import logging
 import os
@@ -26,9 +27,10 @@ class ExtractTickers:
         data_path = os.path.join(root_path, "data")
 
         tickers_file_name = "tickers.json"
+        ticker_low_data = "tickers_low_data.json"
         self.tikers_path = os.path.join(data_path, tickers_file_name)
+        self.ticker_low_data = os.path.join(data_path, ticker_low_data)
         self.output_path = os.path.join(data_path, "history")
-        self.output_consolidado_path = os.path.join(data_path, "df_consolidado.parquet")
 
     def clear_data(self):
         logging.info("Start")
@@ -36,8 +38,10 @@ class ExtractTickers:
             if ".parquet" in file:
                 os.remove(os.path.join(self.output_path, file))
 
-        if os.path.exists(self.output_consolidado_path):
-            os.remove(self.output_consolidado_path)
+        try:
+            os.remove(self.ticker_low_data)
+        except FileNotFoundError:
+            pass
 
     def download(self):
         logging.info("Start")
@@ -61,19 +65,22 @@ class ExtractTickers:
 
             if df_history.shape[0] == 0:
                 failed.append(ticker)
-            elif df_history.shape[0] >= dias_uteis_em_um_ano:
+            else:
                 df_history.to_parquet(
                     f"{os.path.join(self.output_path, ticker.lower())}.parquet"
                 )
-                sucessful.append(ticker)
-            else:
-                low_data.append(ticker)
+                if df_history.shape[0] >= dias_uteis_em_um_ano:
+                    sucessful.append(ticker)
+                else:
+                    low_data.append(ticker)
 
         logging.info("----------------------")
-        logging.warning("FAILED")
-        logging.error(failed)
-        logging.warning("LOW DATA")
-        logging.warning(low_data)
+        logging.error(f"FAILED: {failed}")
+        logging.warning(f"LOW DATA: {low_data}")
+
+        low_data_json = json.dumps({"low_data_tickers": low_data})
+        with io.open(self.ticker_low_data, "w") as f:
+            f.write(low_data_json)
 
 
 if __name__ == "__main__":
