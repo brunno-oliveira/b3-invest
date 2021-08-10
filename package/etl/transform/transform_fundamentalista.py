@@ -1,7 +1,9 @@
-import os
+import json
 import logging
-import pandas as pd
+import os
 from typing import List
+
+import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
 logging.basicConfig(
@@ -22,7 +24,11 @@ class TransformFundamentalista:
             os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         )
         data_path = os.path.join(root_path, "data")
+        self.ticker_low_data = os.path.join(data_path, "tickers_low_data.json")
         self.data_fundamentalista_path = os.path.join(data_path, "fundamentalista")
+        self.output_feat_eng = os.path.join(
+            data_path, "df_analise_fundamentalista.parquet"
+        )
         self.output_consolidado_path = os.path.join(
             data_path, "df_fundamentalista.parquet"
         )
@@ -30,26 +36,35 @@ class TransformFundamentalista:
 
     def transform(self):
         logging.info("Start")
-        self.load_data()
+        self.consolidade(self.load_data())
         self.remove_duplicates()
+        self.remove_low_data()
+        self.filter_dates()
+        self.df_consolidado.to_parquet(self.output_feat_eng)
+
+        # Filtrar as colunas apos salvar o df full
+        self.df_consolidado = self.df_consolidado[self.get_columns()].copy()
         self.scaler()
         self.prep_rows()
         self.fill_nan()
         self.fill_no_data()
         self.pivot()
         self.df_consolidado.to_parquet(self.output_consolidado_path)
+        logging.info("Done")
 
-    def load_data(self):
+    def load_data(self) -> List[pd.DataFrame]:
         logging.info("Start")
         dfs = []
         for file in os.listdir(self.data_fundamentalista_path):
             if ".parquet" in file:
                 file_path = os.path.join(self.data_fundamentalista_path, file)
                 dfs.append(pd.read_parquet(file_path))
+        return dfs
+
+    def consolidade(self, dfs: List[pd.DataFrame]):
+        logging.info("Start")
         self.df_consolidado = pd.concat(dfs)
-        del dfs
         self.df_consolidado = self.df_consolidado.reset_index()
-        self.df_consolidado = self.df_consolidado[self.get_columns()].copy()
         logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 
     def remove_duplicates(self):
@@ -58,6 +73,21 @@ class TransformFundamentalista:
         self.df_consolidado["symbol"] = self.df_consolidado["symbol"].str[0:4]
         self.df_consolidado = self.df_consolidado.drop_duplicates()
         logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
+
+    def remove_low_data(self):
+        with open(self.ticker_low_data) as json_file:
+            low_data_tickers = json.load(json_file)["low_data_tickers"]
+
+        low_data_tickers = [x[0:4] for x in low_data_tickers]
+        self.df_consolidado = self.df_consolidado[
+            ~self.df_consolidado["symbol"].isin(low_data_tickers)
+        ]
+
+    def filter_dates(self):
+        max_date = "2021-05-17"
+        self.df_consolidado = self.df_consolidado[
+            self.df_consolidado["asOfDate"] < max_date
+        ]
 
     def scaler(self):
         logging.info("Start")
