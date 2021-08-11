@@ -3,7 +3,7 @@ from model_base import ModelBase
 import logging
 
 GROUP_NAME = "DecisionTreeRegressor"
-MODEL_NAME = "1.0"
+MODEL_NAME = "2.0"
 
 # import os
 # os.environ["WANDB_MODE"] = "dryrun"
