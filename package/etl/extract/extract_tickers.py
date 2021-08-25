@@ -28,8 +28,10 @@ class ExtractTickers:
 
         tickers_file_name = "tickers.json"
         ticker_low_data = "tickers_low_data.json"
+        ticker_failed_data = "tickers_failed_data.json"
         self.tikers_path = os.path.join(data_path, tickers_file_name)
         self.ticker_low_data = os.path.join(data_path, ticker_low_data)
+        self.ticker_failed_data = os.path.join(data_path, ticker_failed_data)
         self.output_path = os.path.join(data_path, "history")
 
     def clear_data(self):
@@ -73,13 +75,18 @@ class ExtractTickers:
                     low_data.append(ticker)
 
         logging.info("----------------------")
-        logging.error(f"FAILED: {failed}")
-        logging.warning(f"LOW DATA: {low_data}")
+        logging.warning(f"{len(failed)} REMOVED DUE TO FAILED: {failed}")
+        logging.warning(f"{len(low_data)} REMOVED DUE TO LOW DATA: {low_data}")
 
         # Save low_data tickers
         low_data_json = json.dumps({"low_data_tickers": low_data})
         with io.open(self.ticker_low_data, "w") as f:
             f.write(low_data_json)
+
+        # Save low_failed tickers
+        failed_data_json = json.dumps({"failed_data_tickers": failed})
+        with io.open(self.ticker_failed_data, "w") as f:
+            f.write(failed_data_json)
 
 
 if __name__ == "__main__":
