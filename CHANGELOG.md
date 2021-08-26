@@ -5,10 +5,13 @@ All notable changes to this project will be documented in this file.
 * Removido modelo de linear_regression
 * Adicionado modelo random_forest
 * Atualização da lib yfinance para corrigir um erro de Thread
-* Salva em JSON a lista de tickers que não possuirem registros superior a 254 dias
-* Removido os tickers lower data na tranformação do histórico
-* Adicionado a coluna 'volume' na base de histórico
-* Salva em JSON a lista de tickers que não foram encontrados dados do financials
+* Salva em JSON a lista de tickers que deram erro na extração do histórico, 
+ações com menos de 254 dias e não encontrados do financeiro
+* Removido os tickers lower e failed data na tranformação do histórico
+* Atualizado lista de tickers
+* Adicionados arquivos de sample utilizado para imagens na documetação
+* Experimento de feature engineering com os dados do financeiro
+* Modelos 2.0
 
 ## [1.1.0]
 * Removido os tickers ['BBAS11', 'BBAS12', 'BEEF11', 'BPAR3', 'DMMO11', 'GOLL11', 'NEMO3', 'NEMO5', 'NEMO6', 'URPR11']
