@@ -1,18 +1,21 @@
-from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 from model_base import ModelBase
 import logging
 
-GROUP_NAME = "LinearRegression"
-MODEL_NAME = "1.0"
+GROUP_NAME = "RandomForestRegressor"
+MODEL_NAME = "2.0"
+
+# import os
+# os.environ["WANDB_MODE"] = "dryrun"
 
 
-class ModelLinearRegression(ModelBase):
+class ModelRandomForestRegressor(ModelBase):
     def __init__(self):
         super().__init__(group_name=GROUP_NAME, model_name=MODEL_NAME)
 
     def set_model(self):
         logging.info("Start")
-        self.model = LinearRegression()
+        self.model = RandomForestRegressor(random_state=42)
         return self.model
 
     def fit_and_predict(self):
@@ -33,7 +36,7 @@ class ModelLinearRegression(ModelBase):
 
 
 if __name__ == "__main__":
-    model = ModelLinearRegression()
+    model = ModelRandomForestRegressor()
     model.set_model()
     model.load_data()
     model.fit_and_predict()
