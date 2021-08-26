@@ -59,6 +59,7 @@ class TransformHistory:
         """
         logging.info("Start")
         self.df_history = self.df_history.reset_index()
+        self.df_history = self.df_history.drop("Volume", axis=1)
         self.df_history.columns = [
             "date",
             "open",
@@ -66,13 +67,12 @@ class TransformHistory:
             "low",
             "close",
             "adj_close",
-            "volume",
             "ticker",
         ]
 
         self.df_history["symbol"] = self.df_history["ticker"].str.slice(0, 4)
         self.df_history = self.df_history[
-            [self.target, "date", "volume", "ticker", "symbol"]
+            [self.target, "date", "ticker", "symbol"]
         ].copy()
         ticker_dummies = pd.get_dummies(
             self.df_history.ticker, prefix="ticker", prefix_sep="."
