@@ -25,6 +25,7 @@ class TransformFundamentalista:
         )
         data_path = os.path.join(root_path, "data")
         self.ticker_low_data = os.path.join(data_path, "tickers_low_data.json")
+        self.ticker_failed_data = os.path.join(data_path, "tickers_failed_data.json")
         self.data_fundamentalista_path = os.path.join(data_path, "fundamentalista")
         self.output_feat_eng = os.path.join(
             data_path, "df_analise_fundamentalista.parquet"
@@ -39,9 +40,11 @@ class TransformFundamentalista:
         self.consolidade(self.load_data())
         self.remove_duplicates()
         self.remove_low_data()
+        self.remove_failed_data()
         self.filter_dates()
         self.df_consolidado.to_parquet(self.output_feat_eng)
 
+        # A documentacao foi até aqui
         # Filtrar as colunas apos salvar o df full
         self.df_consolidado = self.df_consolidado[self.get_columns()].copy()
         self.scaler()
@@ -75,6 +78,9 @@ class TransformFundamentalista:
         logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 
     def remove_low_data(self):
+        """
+        Ações com menos dias que o necessário. Arquivo gerado pela extract/extract_tickers.py
+        """
         with open(self.ticker_low_data) as json_file:
             low_data_tickers = json.load(json_file)["low_data_tickers"]
 
@@ -82,12 +88,27 @@ class TransformFundamentalista:
         self.df_consolidado = self.df_consolidado[
             ~self.df_consolidado["symbol"].isin(low_data_tickers)
         ]
+        logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
+
+    def remove_failed_data(self):
+        """
+        Ações que falharam a extração do histórico. Arquivo gerado pela extract/extract_tickers.py
+        """
+        with open(self.ticker_failed_data) as json_file:
+            failed_data_tickers = json.load(json_file)["failed_data_tickers"]
+
+        failed_data_tickers = [x[0:4] for x in failed_data_tickers]
+        self.df_consolidado = self.df_consolidado[
+            ~self.df_consolidado["symbol"].isin(failed_data_tickers)
+        ]
+        logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 
     def filter_dates(self):
         max_date = "2021-05-17"
         self.df_consolidado = self.df_consolidado[
             self.df_consolidado["asOfDate"] < max_date
         ]
+        logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 
     def scaler(self):
         logging.info("Start")

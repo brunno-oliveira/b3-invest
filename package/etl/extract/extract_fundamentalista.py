@@ -65,6 +65,7 @@ class ExtractFundamentalista:
 
     def run(self):
         logging.info("Start")
+        self.clear_data()
         with open(self.tikers_path) as json_file:
             tickers = json.load(json_file)["tickers"]
         self.get_finantial_data(tickers)
