@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.1.0]
+* Add GridSearch
+* Change model folders
+* New log folders
+
 ## [2.0.0]
 * Removido modelo de linear_regression
 * Adicionado modelo random_forest
