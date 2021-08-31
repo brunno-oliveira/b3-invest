@@ -1,34 +1,43 @@
+from pandas.core.frame import DataFrame
 from sklearn.metrics import (
     mean_absolute_percentage_error,
     mean_absolute_error,
     mean_squared_error,
     r2_score,
 )
+
+import multiprocessing
+
+from sklearn.model_selection import GridSearchCV
 import matplotlib.pyplot as plt
 import datetime as dt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+import json
 import logging
 import wandb
 import os
 
+from typing import Dict
+from abc import abstractmethod
+
 sns.set_theme(style="darkgrid")
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(process)-5d][%(asctime)s][%(filename)-10s][%(funcName)-10s][%(levelname)-5s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-    handlers=[logging.StreamHandler(), logging.FileHandler(filename="extract.log")],
-)
+log = logging.getLogger(__name__)
 
 
 class ModelBase:
-    def __init__(self, group_name: str, model_name: str):
+    def __init__(self, group_name: str, model_name: str, model_folder: str):
+        # Path
         root_path = root_path = os.path.dirname(
             os.path.dirname(os.path.dirname(__file__))
         )
         self.data_path = os.path.join(root_path, "data")
+        self.current_path = os.path.dirname(__file__)
+        self.model_path = os.path.join(self.current_path, model_folder)
+
+        # Models
         self.model = None
         self.df: pd.DataFrame = None
         self.X_train: pd.DataFrame = None
@@ -37,6 +46,11 @@ class ModelBase:
         self.y_test: pd.Series = None
         self.y_data: np.ndarray = None
         self.predicted: np.ndarray = None
+
+        # Grid Search
+        self.gs: GridSearchCV = None
+        self.gs_params: Dict = None
+        self.gs_result: DataFrame = None
 
         # Metrics
         self.mape_score: float = None
@@ -52,7 +66,7 @@ class ModelBase:
         )
 
     def load_data(self):
-        logging.info("Start")
+        log.info("Start")
         self.df = pd.read_parquet(
             os.path.join(self.data_path, "df_consolidado.parquet")
         )
@@ -79,18 +93,45 @@ class ModelBase:
 
         self.transform_date()
 
+    def load_grid(self):
+        # Arquivo utilizado para grid search
+        grid_path = os.path.join(self.model_path, "grid.json")
+        with open(grid_path) as json_file:
+            self.gs_params = json.load(json_file)["params"]
+
+    def grid_search(self):
+        log.info("Start")
+        if self.gs_params is None:
+            self.load_grid()
+        self.gs = GridSearchCV(
+            estimator=self.model,
+            param_grid=self.gs_params,
+            n_jobs=multiprocessing.cpu_count(),
+            verbose=2,
+        )
+
+        self.gs.fit(self.X_train, self.y_train)
+        self.gs_result = pd.DataFrame(self.gs.cv_results_)
+        self.gs_result.to_csv(os.path.join(self.model_path, "gs_results.csv"))
+
+    @property
+    @abstractmethod
     def set_model(self):
         pass
 
     def fit_and_predict(self):
-        logging.info("Start")
+        log.info("Start")
         self.fit()
         self.predict()
         return self.model, self.predicted
 
+    @property
+    @abstractmethod
     def fit(self):
         pass
 
+    @property
+    @abstractmethod
     def predict(self):
         pass
 
@@ -102,7 +143,7 @@ class ModelBase:
             self.r_square_score,
         ]:
             error = "Error: Empty Metrics. Run plot_metrics before plot_wandb"
-            logging.error(error)
+            log.error(error)
             raise Exception(error)
         wandb.log(
             {
@@ -127,10 +168,10 @@ class ModelBase:
         self.mse_score = round(mean_squared_error(self.predicted, self.y_test), 4)
         self.r_square_score = round(r2_score(self.predicted, self.y_test), 4)
 
-        logging.info(f"mape_score : {self.mape_score}")
-        logging.info(f"mae_score : {self.mae_score}")
-        logging.info(f"mse_score : {self.mse_score}")
-        logging.info(f"r2_score : {self.r_square_score}")
+        log.info(f"mape_score : {self.mape_score}")
+        log.info(f"mae_score : {self.mae_score}")
+        log.info(f"mse_score : {self.mse_score}")
+        log.info(f"r2_score : {self.r_square_score}")
 
         if plot_graph:
             fig, ax = plt.subplots(figsize=(30, 6))
