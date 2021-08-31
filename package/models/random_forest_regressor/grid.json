@@ -1,0 +1,5 @@
+{
+    "params": {
+    "n_estimators": [10, 50, 100
+    }
+}
