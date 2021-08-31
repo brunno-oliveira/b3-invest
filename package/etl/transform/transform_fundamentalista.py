@@ -12,7 +12,9 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler(filename="data/log/transform_fundamentalista.log"),
+        logging.FileHandler(
+            filename="data/log/transform/transform_fundamentalista.log"
+        ),
     ],
 )
 
