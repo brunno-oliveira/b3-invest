@@ -3,22 +3,19 @@ import sys
 from sklearn.tree import DecisionTreeRegressor
 import numpy as np
 import random
-import json
 
-currentdir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.dirname(currentdir))
+# currentdir = os.path.dirname(os.path.realpath(__file__))
+# sys.path.append(os.path.dirname(currentdir))
 from model_base import ModelBase
 
 import logging
 
 SEED = 42
 GROUP_NAME = "DecisionTreeRegressor"
-MODEL_NAME = "2.0"
+MODEL_NAME = "2.1"
 
 np.random.seed(SEED)
 random.seed(SEED)
-
-os.environ["WANDB_MODE"] = "dryrun"
 
 logger = logging.getLogger(__name__)
 
@@ -45,17 +42,3 @@ class ModelDecisionTreeRegressor(ModelBase):
     def predict(self):
         logger.info("Start")
         self.predicted = self.model.predict(self.X_test)
-
-
-# if __name__ == "__main__":
-#     model = ModelDecisionTreeRegressor(model_folder="decision_tree_regressor")
-#     model.load_data()
-#     model.set_model()
-#     model.grid_search()
-
-# model.load_data()
-# model.load_grid()
-# model.set_model()
-# model.fit_and_predict()
-# model.plot_metrics()
-# model.plot_wandb()

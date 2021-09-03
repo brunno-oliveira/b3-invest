@@ -7,7 +7,7 @@ requests==2.25.1
 beautifulsoup4==4.9.3
 yahooquery>=2.2.15
 seaborn==0.11.1
-wandb==0.10.32
+wandb==0.12.1
 yfinance>=0.1.63
 pyarrow==5.0.0
 scikit-learn==0.24.2

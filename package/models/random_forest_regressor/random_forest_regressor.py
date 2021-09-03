@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import random
 from sklearn.ensemble import RandomForestRegressor
@@ -7,12 +6,10 @@ import logging
 
 SEED = 42
 GROUP_NAME = "RandomForestRegressor"
-MODEL_NAME = "2.0"
+MODEL_NAME = "2.1"
 
 np.random.seed(SEED)
 random.seed(SEED)
-
-os.environ["WANDB_MODE"] = "dryrun"
 
 logger = logging.getLogger(__name__)
 
@@ -39,12 +36,3 @@ class ModelRandomForestRegressor(ModelBase):
     def predict(self):
         logger.info("Start")
         self.predicted = self.model.predict(self.X_test)
-
-
-# if __name__ == "__main__":
-#     model = ModelRandomForestRegressor()
-#     model.set_model()
-#     model.load_data()
-#     model.fit_and_predict()
-#     model.plot_metrics()
-#     model.plot_wandb()

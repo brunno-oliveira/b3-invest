@@ -7,7 +7,7 @@ from sklearn.metrics import (
 )
 
 import multiprocessing
-
+from data_split import DataSplit
 from sklearn.model_selection import GridSearchCV
 import matplotlib.pyplot as plt
 import datetime as dt
@@ -26,9 +26,14 @@ sns.set_theme(style="darkgrid")
 
 log = logging.getLogger(__name__)
 
+TRAIN_MAX_DATE = "2021-05-18"
 
-class ModelBase:
+
+class ModelBase(DataSplit):
     def __init__(self, group_name: str, model_name: str, model_folder: str):
+        super().__init__()
+        self.group_name = group_name
+        self.model_name = model_name
         # Path
         root_path = root_path = os.path.dirname(
             os.path.dirname(os.path.dirname(__file__))
@@ -40,10 +45,6 @@ class ModelBase:
         # Models
         self.model = None
         self.df: pd.DataFrame = None
-        self.X_train: pd.DataFrame = None
-        self.y_train: pd.Series = None
-        self.X_tes: pd.DataFramet = None
-        self.y_test: pd.Series = None
         self.y_data: np.ndarray = None
         self.predicted: np.ndarray = None
 
@@ -58,13 +59,6 @@ class ModelBase:
         self.mse_score: float = None
         self.r_square_score: float = None
 
-        wandb.init(
-            project="b3-invest",
-            entity="brunno-oliveira",
-            group=group_name,
-            name=model_name,
-        )
-
     def load_data(self):
         log.info("Start")
         self.df = pd.read_parquet(
@@ -75,21 +69,10 @@ class ModelBase:
         tickers = self.df.iloc[:, 0]
         self.df = self.df.iloc[:, 2:].copy()  # Remove ticker columns
 
-        max_date = self.df["date"].max()
-        # Previsao para o ultimo dia valido, removendo a primeira coluna (TARGET)
-        self.X_train = self.df[self.df["date"] < max_date].iloc[:, 1:]
-        self.y_train = self.df[self.df["date"] < max_date].iloc[:, 0]
-
-        self.X_test = self.df[self.df["date"] == max_date].iloc[:, 1:]
-        self.y_test = self.df[self.df["date"] == max_date].iloc[:, 0]
+        self.train_test_split()
 
         # Devolvendo a coluna de ticker
         self.df["ticker"] = tickers
-
-        # DF para facilitar a validacao
-        self.y_data = self.df[self.df["date"] == self.df["date"].max()][
-            ["ticker", "date", "close"]
-        ].tail(len(self.X_test))
 
         self.transform_date()
 
@@ -145,6 +128,14 @@ class ModelBase:
             error = "Error: Empty Metrics. Run plot_metrics before plot_wandb"
             log.error(error)
             raise Exception(error)
+
+        wandb.init(
+            project="b3-invest",
+            entity="brunno-oliveira",
+            group=self.group_name,
+            name=self.model_name,
+        )
+
         wandb.log(
             {
                 "mape_score": self.mape_score,
@@ -153,6 +144,7 @@ class ModelBase:
                 "r2_score": self.r_square_score,
             }
         )
+
         wandb.finish()
 
     def transform_date(self):

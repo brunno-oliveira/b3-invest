@@ -222,7 +222,7 @@ class TransformFundamentalista:
 
     @staticmethod
     def get_columns() -> List[str]:
-        """Colunas filtradas a partir dos dados fundamentalisa bruto. """
+        """Colunas filtradas a partir dos dados fundamentalisa bruto."""
         # fmt: off
         return [
             "symbol", "asOfDate", "NetIncomeFromContinuingOperations", "ReconciledDepreciation",

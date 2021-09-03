@@ -1,8 +1,12 @@
+import os
 from os import stat
 from decision_tree_regressor.decision_tree_regressor import ModelDecisionTreeRegressor
 from random_forest_regressor.random_forest_regressor import ModelRandomForestRegressor
 from typing import List
 import logging
+
+# Flag para executar offline
+# os.environ["WANDB_MODE"] = "dryrun"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -25,14 +29,26 @@ class ModelRunner:
             model_folder="random_forest_regressor"
         )
 
-    def run(self):
-        models = [self.decision_tree, self.random_forest]
-        self.execute_grid_search(models)
+        self.models = [self.decision_tree, self.random_forest]
 
-    @staticmethod
-    def execute_grid_search(models: List):
+    def run(self, grid_search: bool = False):
+        if grid_search:
+            self.execute_grid_search()
+        else:
+            self.train_predict()
+
+    def train_predict(self):
         logging.info("Start")
-        for model in models:
+        for model in self.models:
+            model.set_model()
+            model.load_data()
+            model.fit_and_predict()
+            model.plot_metrics()
+            model.plot_wandb()
+
+    def execute_grid_search(self):
+        logging.info("Start")
+        for model in self.models:
             model.load_data()
             model.set_model()
             model.grid_search()
