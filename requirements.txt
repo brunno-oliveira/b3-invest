@@ -9,3 +9,4 @@ yahooquery>=2.2.15
 seaborn==0.11.1
 wandb==0.10.32
 yfinance>=0.1.63
+pyarrow==5.0.0

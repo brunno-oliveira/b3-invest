@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 * Add GridSearch
 * Change model folders
 * New log folders
+* Fixado a data de ínicio
+* Adicionado mais 28 dias a data final, para usar nos experimentos
 
 ## [2.0.0]
 * Removido modelo de linear_regression
