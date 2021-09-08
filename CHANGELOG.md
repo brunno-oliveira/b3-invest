@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 * New log folders
 * Fixado a data de ínicio
 * Adicionado mais 28 dias a data final, para usar nos experimentos
+* Datasets para cada experimento
+* Novas colunas de data
 
 ## [2.0.0]
 * Removido modelo de linear_regression

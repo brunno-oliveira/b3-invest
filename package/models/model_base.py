@@ -10,7 +10,6 @@ import multiprocessing
 from data_split import DataSplit
 from sklearn.model_selection import GridSearchCV
 import matplotlib.pyplot as plt
-import datetime as dt
 import seaborn as sns
 import pandas as pd
 import numpy as np
@@ -66,17 +65,7 @@ class ModelBase(DataSplit):
         self.df = pd.read_parquet(
             os.path.join(self.data_path, "df_consolidado.parquet")
         )
-
-        # Coluna para facilitar a busca por tickers
-        tickers = self.df.iloc[:, 0]
-        self.df = self.df.iloc[:, 2:].copy()  # Remove ticker columns
-
         self.train_test_split()
-
-        # Devolvendo a coluna de ticker
-        self.df["ticker"] = tickers
-
-        self.transform_date()
 
     def load_grid(self):
         # Arquivo utilizado para grid search
@@ -177,11 +166,6 @@ class ModelBase(DataSplit):
         )
 
         wandb.finish()
-
-    def transform_date(self):
-        """O modelo nao trabalha com o tipo datetime"""
-        self.X_train["date"] = self.X_train["date"].map(dt.datetime.toordinal)
-        self.X_test["date"] = self.X_test["date"].map(dt.datetime.toordinal)
 
     def plot_metrics(self, plot_graph: bool = False):
         self.mape_score = round(
