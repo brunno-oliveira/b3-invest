@@ -18,6 +18,7 @@ import json
 import logging
 import wandb
 import os
+import io
 
 from typing import Dict
 from abc import abstractmethod
@@ -52,6 +53,9 @@ class ModelBase(DataSplit):
         self.gs: GridSearchCV = None
         self.gs_params: Dict = None
         self.gs_result: DataFrame = None
+        self.gs_best_params_path = os.path.join(
+            self.model_path, 'best_params.json')
+
 
         # Metrics
         self.mape_score: float = None
@@ -94,8 +98,16 @@ class ModelBase(DataSplit):
         )
 
         self.gs.fit(self.X_train, self.y_train)
+
+        # Save results
+        log.info('Saving GridSearch results and best params..')
         self.gs_result = pd.DataFrame(self.gs.cv_results_)
         self.gs_result.to_csv(os.path.join(self.model_path, "gs_results.csv"))
+
+        # Save best params
+        gs_best_params = json.dumps(self.gs.best_params_)
+        with io.open(self.gs_best_params_path, "w") as f:
+            f.write(gs_best_params)
 
     @property
     @abstractmethod
