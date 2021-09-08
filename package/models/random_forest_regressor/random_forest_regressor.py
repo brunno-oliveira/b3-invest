@@ -23,16 +23,3 @@ class ModelRandomForestRegressor(ModelBase):
     def set_model(self):
         logger.info("Start")
         self.model = RandomForestRegressor(random_state=SEED)
-
-    def fit_and_predict(self):
-        logger.info("Start")
-        self.fit()
-        self.predict()
-
-    def fit(self):
-        logger.info("Start")
-        self.model.fit(self.X_train, self.y_train)
-
-    def predict(self):
-        logger.info("Start")
-        self.predicted = self.model.predict(self.X_test)

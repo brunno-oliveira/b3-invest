@@ -1,4 +1,3 @@
-from pandas.core.frame import DataFrame
 from sklearn.metrics import (
     mean_absolute_percentage_error,
     mean_absolute_error,
@@ -6,9 +5,8 @@ from sklearn.metrics import (
     r2_score,
 )
 
-import multiprocessing
 from data_split import DataSplit
-from sklearn.model_selection import GridSearchCV
+from model_grid_search import GridSearch
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -17,9 +15,6 @@ import json
 import logging
 import wandb
 import os
-import io
-
-from typing import Dict
 from abc import abstractmethod
 
 sns.set_theme(style="darkgrid")
@@ -29,9 +24,15 @@ log = logging.getLogger(__name__)
 TRAIN_MAX_DATE = "2021-05-18"
 
 
-class ModelBase(DataSplit):
+class ModelBase(GridSearch):
     def __init__(self, group_name: str, model_name: str, model_folder: str):
-        super().__init__()
+        # model_type = model_type.lower()
+
+        # if model_type not in ['best', 'simple']:
+        #     msg = f'Atencao! model_type: {model_type} nao configurado'
+        #     log.error(msg)
+        #     raise Exception(msg)
+
         self.group_name = group_name
         self.model_name = model_name
         # Path
@@ -42,17 +43,13 @@ class ModelBase(DataSplit):
         self.current_path = os.path.dirname(__file__)
         self.model_path = os.path.join(self.current_path, model_folder)
 
+        super().__init__(self.model_path)
+
         # Models
         self.model = None
         self.df: pd.DataFrame = None
         self.y_data: np.ndarray = None
         self.predicted: np.ndarray = None
-
-        # Grid Search
-        self.gs: GridSearchCV = None
-        self.gs_params: Dict = None
-        self.gs_result: DataFrame = None
-        self.gs_best_params_path = os.path.join(self.model_path, "best_params.json")
 
         # Metrics
         self.mape_score: float = None
@@ -67,59 +64,9 @@ class ModelBase(DataSplit):
         )
         self.train_test_split()
 
-    def load_grid(self):
-        # Arquivo utilizado para grid search
-        grid_path = os.path.join(self.model_path, "grid.json")
-        with open(grid_path) as json_file:
-            self.gs_params = json.load(json_file)["params"]
-
-    def grid_search(self):
-        log.info("Start")
-        if self.gs_params is None:
-            self.load_grid()
-        self.gs = GridSearchCV(
-            estimator=self.model,
-            param_grid=self.gs_params,
-            n_jobs=multiprocessing.cpu_count(),
-            verbose=2,
-        )
-
-        self.gs.fit(self.X_train, self.y_train)
-
-        # Save results
-        log.info("Saving GridSearch results and best params..")
-        self.gs_result = pd.DataFrame(self.gs.cv_results_)
-
-        round_columns = [
-            "mean_fit_time",
-            "std_fit_time",
-            "mean_score_time",
-            "std_score_time",
-            "split0_test_score",
-            "split1_test_score",
-            "split2_test_score",
-            "split3_test_score",
-            "split4_test_score",
-            "mean_test_score",
-            "std_test_score",
-        ]
-
-        for col in round_columns:
-            self.gs_result = round(self.gs_result, 4)
-
-        self.gs_result.to_csv(os.path.join(self.model_path, "gs_results.csv"))
-
-        # Save best params
-        gs_best_params = json.dumps(self.gs.best_params_)
-        with io.open(self.gs_best_params_path, "w") as f:
-            f.write(gs_best_params)
-
-    def grid_search_splitter(self):
-        log.info("Start")
-
     @property
     @abstractmethod
-    def set_model(self):
+    def set_model(self, model_type: str = 'best'):
         pass
 
     def fit_and_predict(self):
@@ -128,15 +75,11 @@ class ModelBase(DataSplit):
         self.predict()
         return self.model, self.predicted
 
-    @property
-    @abstractmethod
     def fit(self):
-        pass
+        self.model.fit(self.X_train, self.y_train)
 
-    @property
-    @abstractmethod
     def predict(self):
-        pass
+        self.predicted = self.model.predict(self.X_test)
 
     def plot_wandb(self):
         if None in [
