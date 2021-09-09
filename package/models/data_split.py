@@ -12,6 +12,9 @@ TRAIN_MAX_DATE = "2021-05-18"
 
 class DataSplit:
     def __init__(self):
+        self.X_train_gs: pd.DataFrame = None
+        self.y_train_gs: pd.Series = None
+
         self.X_train: pd.DataFrame = None
         self.y_train: pd.Series = None
 
@@ -41,6 +44,13 @@ class DataSplit:
             # Columns: [ticker, close, date, year, month, day, ticker.AALR3, ...]
             skip_indexes = 3
             close_column_index = 0
+
+        """O dataset do GridSearch precisa ser diferente 
+            pois o objeto PredefinedSplit trabalhar com o index
+            para definir o split
+        """
+        self.X_train_gs = self.df.iloc[:, skip_indexes:]
+        self.y_train_gs = self.df.iloc[:, close_column_index]
 
         # Train set
         self.X_train = self.df[self.df["date"] <= TRAIN_MAX_DATE].iloc[:, skip_indexes:]
@@ -77,7 +87,7 @@ class DataSplit:
     ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         """Gerador de Dataframe com base na quantidade de dias.
         Os dias começam a contar DEPOIS (>) do TRAIN_MAX_DATE"""
-        log.info("Start")
+        log.info(f"Generating test data with {days} days")
         test_data: List[pd.DataFrame] = []
         x_test: List[pd.DataFrame] = []
         y_test: List[pd.DataFrame] = []

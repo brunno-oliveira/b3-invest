@@ -3,11 +3,11 @@ import json
 import logging
 import multiprocessing
 import os
-from typing import Dict
+from typing import Dict, List
 
 import pandas as pd
 from pandas.core.frame import DataFrame
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, PredefinedSplit
 
 from data_split import DataSplit
 from model_type import ModelType
@@ -30,18 +30,38 @@ class GridSearch(DataSplit):
         with open(grid_path) as json_file:
             self.gs_params = json.load(json_file)["params"]
 
+    def test_index(self) -> List[int]:
+        """Funcao que gera a lista de index que da base self.df
+            sue era gerada. 
+            0: Treino
+            1: Test
+            -1: Skip 
+        """
+        index_list = [0 for _ in range(len(self.df))]
+        index_test_list = list(self.df[self.df["date"] > "2021-05-18"].index)            
+
+        for index in index_test_list:
+            index_list[index] = 1  
+
+        return index_list    
+
+
     def grid_search(self):
         log.info("Start")
         if self.gs_params is None:
             self.load_grid()
+
+        cv_split = PredefinedSplit(self.test_index())
+
         self.gs = GridSearchCV(
             estimator=self.model,
             param_grid=self.gs_params,
+            cv=cv_split,
             n_jobs=multiprocessing.cpu_count(),
             verbose=2,
         )
 
-        self.gs.fit(self.X_train, self.y_train)
+        self.gs.fit(self.X_train_gs, self.y_train_gs)
 
         # Save results
         log.info("Saving GridSearch results and best params..")
@@ -61,8 +81,7 @@ class GridSearch(DataSplit):
             "std_test_score",
         ]
 
-        for col in round_columns:
-            self.gs_result = round(self.gs_result, 2)
+        self.gs_result = round(self.gs_result, 2)
 
         # Save results and best params
         if self.model_type == ModelType.WITHOUT_FEATURES:
