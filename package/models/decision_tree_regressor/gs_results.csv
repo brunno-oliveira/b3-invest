@@ -1,3 +1,0 @@
-,mean_fit_time,std_fit_time,mean_score_time,std_score_time,param_splitter,params,split0_test_score,split1_test_score,split2_test_score,split3_test_score,split4_test_score,mean_test_score,std_test_score,rank_test_score
-0,3.9537,0.2789,0.0426,0.0039,best,{'splitter': 'best'},-0.4688,-1.1984,-0.3226,-0.4515,-0.2895,-0.5462,0.3335,1
-1,2.3479,0.8668,0.0381,0.016,random,{'splitter': 'random'},-0.2996,-0.8611,-0.2464,-7.3437,-0.2487,-1.7999,2.7816,2

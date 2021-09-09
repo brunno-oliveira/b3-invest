@@ -52,7 +52,7 @@ class ModelBase(GridSearch):
         self.current_path = os.path.dirname(__file__)
         self.model_path = os.path.join(self.current_path, model_folder)
 
-        super().__init__(self.model_path)
+        super().__init__(self.model_path, self.model_type)
 
         # Models
         self.model = None

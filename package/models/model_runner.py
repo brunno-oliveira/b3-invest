@@ -22,16 +22,32 @@ logging.basicConfig(
 class ModelRunner:
     def __init__(self):
         logging.info("Inicializando modelos...")
-        self.decision_tree = ModelDecisionTreeRegressor(
+        self.decision_tree_wo_features = ModelDecisionTreeRegressor(
             model_folder="decision_tree_regressor",
             model_type=ModelType.WITHOUT_FEATURES,
         )
-        self.random_forest = ModelRandomForestRegressor(
+
+        self.decision_tree = ModelDecisionTreeRegressor(
+            model_folder="decision_tree_regressor",
+            model_type=ModelType.WITH_FEATURES,
+        )
+
+        self.random_forest_wo_features = ModelRandomForestRegressor(
             model_folder="random_forest_regressor",
             model_type=ModelType.WITHOUT_FEATURES,
         )
 
-        self.models = [self.decision_tree, self.random_forest]
+        self.random_forest = ModelRandomForestRegressor(
+            model_folder="random_forest_regressor",
+            model_type=ModelType.WITH_FEATURES,
+        )
+
+        self.models = [
+            self.decision_tree_wo_features,
+            self.decision_tree,
+            self.random_forest_wo_features,
+            self.random_forest,
+        ]
 
     def run(self, grid_search: bool = False):
         if grid_search:

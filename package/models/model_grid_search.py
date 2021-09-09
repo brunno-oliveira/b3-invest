@@ -10,22 +10,23 @@ from pandas.core.frame import DataFrame
 from sklearn.model_selection import GridSearchCV
 
 from data_split import DataSplit
+from model_type import ModelType
 
 log = logging.getLogger(__name__)
 
 
 class GridSearch(DataSplit):
-    def __init__(self, model_path: str):
+    def __init__(self, model_path: str, model_type: ModelType):
         super().__init__()
         self.model_path = model_path
+        self.model_type = model_type
         self.gs: GridSearchCV = None
         self.gs_params: Dict = None
         self.gs_result: DataFrame = None
-        self.gs_best_params_path = os.path.join(self.model_path, "best_params.json")
 
     def load_grid(self):
         # Arquivo utilizado para grid search
-        grid_path = os.path.join(self.model_path, "grid.json")
+        grid_path = os.path.join(self.model_path, "gs_params.json")
         with open(grid_path) as json_file:
             self.gs_params = json.load(json_file)["params"]
 
@@ -61,13 +62,18 @@ class GridSearch(DataSplit):
         ]
 
         for col in round_columns:
-            self.gs_result = round(self.gs_result, 4)
+            self.gs_result = round(self.gs_result, 2)
 
-        self.gs_result.to_csv(os.path.join(self.model_path, "gs_results.csv"))
+        # Save results and best params
+        if self.model_type == ModelType.WITHOUT_FEATURES:
+            gs_path = os.path.join(self.model_path, "wo_features")
+        elif self.model_type == ModelType.WITH_FEATURES:
+            gs_path = os.path.join(self.model_path, "with_features")
 
-        # Save best params
+        self.gs_result.to_csv(os.path.join(gs_path, "gs_results.csv"))
+
         gs_best_params = json.dumps(self.gs.best_params_)
-        with io.open(self.gs_best_params_path, "w") as f:
+        with io.open(os.path.join(gs_path, "best_params.json"), "w") as f:
             f.write(gs_best_params)
 
     def grid_search_splitter(self):
