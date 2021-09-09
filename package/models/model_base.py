@@ -1,21 +1,22 @@
+import json
+import logging
+import os
+from abc import abstractmethod
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import wandb
 from sklearn.metrics import (
-    mean_absolute_percentage_error,
     mean_absolute_error,
+    mean_absolute_percentage_error,
     mean_squared_error,
     r2_score,
 )
 
-from data_split import DataSplit
 from model_grid_search import GridSearch
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
-import numpy as np
-import json
-import logging
-import wandb
-import os
-from abc import abstractmethod
+from model_type import ModelType
 
 sns.set_theme(style="darkgrid")
 
@@ -25,16 +26,24 @@ TRAIN_MAX_DATE = "2021-05-18"
 
 
 class ModelBase(GridSearch):
-    def __init__(self, group_name: str, model_name: str, model_folder: str):
-        # model_type = model_type.lower()
+    def __init__(
+        self, group_name: str, model_name: str, model_folder: str, model_type: ModelType
+    ):
+        """Classe base que todos modelos devem herdar. Contém todas as
+            implementações necessárias.
 
-        # if model_type not in ['best', 'simple']:
-        #     msg = f'Atencao! model_type: {model_type} nao configurado'
-        #     log.error(msg)
-        #     raise Exception(msg)
+        Args:
+            group_name (str): Informação para o wandb
+            model_name (str): Informação para o wandb
+            model_folder (str): Nome da pasta que o modelo se encontra
+            model_type (ModelType): Tipo do modelo que será gerado.
+                ModelType.WITH_FEATURES: Todas as features carregadas.
+                ModelType.WITHOUT_FEATURES: Somente dados de data.
+        """
 
         self.group_name = group_name
         self.model_name = model_name
+        self.model_type = model_type
         # Path
         root_path = root_path = os.path.dirname(
             os.path.dirname(os.path.dirname(__file__))
@@ -62,11 +71,21 @@ class ModelBase(GridSearch):
         self.df = pd.read_parquet(
             os.path.join(self.data_path, "df_consolidado.parquet")
         )
-        self.train_test_split()
+
+        if self.model_type == ModelType.WITHOUT_FEATURES:
+            log.info("Excutando com colunas limitadas")
+            valid_columns = ["close", "ticker", "date", "year", "month", "day"]
+            for col in self.df.columns:
+                if "ticker." in col:
+                    valid_columns.append(col)
+            self.df = self.df[valid_columns]
+        else:
+            log.info("Excutando com todas as colunas")
+        self.train_test_split(self.model_type)
 
     @property
     @abstractmethod
-    def set_model(self, model_type: str = 'best'):
+    def set_model(self):
         pass
 
     def fit_and_predict(self):

@@ -1,9 +1,9 @@
-import os
-from os import stat
-from decision_tree_regressor.decision_tree_regressor import ModelDecisionTreeRegressor
-from random_forest_regressor.random_forest_regressor import ModelRandomForestRegressor
-from typing import List
 import logging
+import os
+
+from decision_tree_regressor.decision_tree_regressor import ModelDecisionTreeRegressor
+from model_type import ModelType
+from random_forest_regressor.random_forest_regressor import ModelRandomForestRegressor
 
 # Flag para executar offline
 # os.environ["WANDB_MODE"] = "dryrun"
@@ -23,10 +23,12 @@ class ModelRunner:
     def __init__(self):
         logging.info("Inicializando modelos...")
         self.decision_tree = ModelDecisionTreeRegressor(
-            model_folder="decision_tree_regressor"
+            model_folder="decision_tree_regressor",
+            model_type=ModelType.WITHOUT_FEATURES,
         )
         self.random_forest = ModelRandomForestRegressor(
-            model_folder="random_forest_regressor"
+            model_folder="random_forest_regressor",
+            model_type=ModelType.WITHOUT_FEATURES,
         )
 
         self.models = [self.decision_tree, self.random_forest]
@@ -54,4 +56,5 @@ class ModelRunner:
             model.grid_search()
 
 
-ModelRunner().run()
+ModelRunner().execute_grid_search()
+# ModelRunner().train_predict()

@@ -1,24 +1,27 @@
-import os
-from data_split import DataSplit
-from sklearn.model_selection import GridSearchCV
-from typing import Dict
-from pandas.core.frame import DataFrame
-import multiprocessing
-import pandas as pd
-import logging
+import io
 import json
-import io 
+import logging
+import multiprocessing
+import os
+from typing import Dict
+
+import pandas as pd
+from pandas.core.frame import DataFrame
+from sklearn.model_selection import GridSearchCV
+
+from data_split import DataSplit
 
 log = logging.getLogger(__name__)
 
+
 class GridSearch(DataSplit):
     def __init__(self, model_path: str):
+        super().__init__()
         self.model_path = model_path
         self.gs: GridSearchCV = None
         self.gs_params: Dict = None
         self.gs_result: DataFrame = None
-        self.gs_best_params_path = os.path.join(self.model_path, "best_params.json")        
-
+        self.gs_best_params_path = os.path.join(self.model_path, "best_params.json")
 
     def load_grid(self):
         # Arquivo utilizado para grid search
@@ -68,4 +71,4 @@ class GridSearch(DataSplit):
             f.write(gs_best_params)
 
     def grid_search_splitter(self):
-        log.info("Start")        
+        log.info("Start")

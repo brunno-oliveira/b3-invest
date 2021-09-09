@@ -99,21 +99,21 @@ class TransformHistory:
 
     def transform_date(self):
         logging.info("Start")
-        self.df_history['year'] = self.df_history['date'].dt.year
-        self.df_history['month'] = self.df_history['date'].dt.month
-        self.df_history['day'] = self.df_history['date'].dt.day
-        self.df_history['dayofyear'] = self.df_history['date'].dt.dayofyear
-        self.df_history['dayofweek'] = self.df_history['date'].dt.dayofweek
-        self.df_history['weekofyear'] = self.df_history['date'].dt.weekofyear
+        self.df_history["year"] = self.df_history["date"].dt.year
+        self.df_history["month"] = self.df_history["date"].dt.month
+        self.df_history["day"] = self.df_history["date"].dt.day
+        self.df_history["dayofyear"] = self.df_history["date"].dt.dayofyear
+        self.df_history["dayofweek"] = self.df_history["date"].dt.dayofweek
+        self.df_history["weekofyear"] = self.df_history["date"].dt.weekofyear
 
         # Df columns: [ticker, symbol, close, date, ticker.AALR3, ...]
         # A reorganizacão é para manter as colunas de datas próximas, no começo do df
-        date_column_index = 4 #Insert after date column
-        date_columns = ['weekofyear', 'dayofweek', 'dayofyear', 'day', 'month', 'year']
-
+        date_column_index = 4  # Insert after date column
+        date_columns = ["weekofyear", "dayofweek", "dayofyear", "day", "month", "year"]
 
         for col in date_columns:
             df_col = self.df_history.pop(col)
             self.df_history.insert(date_column_index, col, df_col)
-    
+
+
 TransformHistory().transform()

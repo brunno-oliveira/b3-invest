@@ -1,11 +1,14 @@
-import pandas as pd
-import datetime as dt
 import logging
 from typing import List, Tuple
+
+import pandas as pd
+
+from model_type import ModelType
 
 log = logging.getLogger(__name__)
 
 TRAIN_MAX_DATE = "2021-05-18"
+
 
 class DataSplit:
     def __init__(self):
@@ -28,16 +31,19 @@ class DataSplit:
         self.X_test_28_days: pd.DataFrame = None
         self.y_test_28_days: pd.Series = None
 
-    def train_test_split(self):
+    def train_test_split(self, model_type: ModelType):
         log.info("Start")
-        # Columns: [ticker, symbol, close, date, year, month, ...]
-        skip_indexes = 4
-        close_column_index = 2
+        if model_type == ModelType.WITH_FEATURES:
+            # Columns: [ticker, symbol, close, date, year, month, ...]
+            skip_indexes = 4
+            close_column_index = 2
+        elif model_type == ModelType.WITHOUT_FEATURES:
+            # Columns: [ticker, close, date, year, month, day, ticker.AALR3, ...]
+            skip_indexes = 3
+            close_column_index = 0
 
         # Train set
-        self.X_train = self.df[self.df["date"] <= TRAIN_MAX_DATE].iloc[
-            :, skip_indexes:
-        ]
+        self.X_train = self.df[self.df["date"] <= TRAIN_MAX_DATE].iloc[:, skip_indexes:]
         self.y_train = self.df[self.df["date"] <= TRAIN_MAX_DATE].iloc[
             :, close_column_index
         ]
@@ -59,7 +65,7 @@ class DataSplit:
             self.test_data_14_days,
             self.X_test_14_days,
             self.y_test_14_days,
-        ) = self.test_generator(14, skip_indexes, close_column_index)                        
+        ) = self.test_generator(14, skip_indexes, close_column_index)
         (
             self.test_data_28_days,
             self.X_test_28_days,
