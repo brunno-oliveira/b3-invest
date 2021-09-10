@@ -1,0 +1,8 @@
+{
+    "params": {
+        "splitter": [
+            "best",
+            "random"
+        ]
+    }
+}

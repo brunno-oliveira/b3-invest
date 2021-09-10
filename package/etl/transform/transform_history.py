@@ -9,7 +9,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler(filename="data/log/transform_history.log"),
+        logging.FileHandler(filename="data/log/transform/transform_history.log"),
     ],
 )
 
@@ -33,6 +33,7 @@ class TransformHistory:
         logging.info(f"self.df_history.shape: {self.df_history.shape}")
         self.transform_ticker()
         self.remove_missing_data()
+        self.transform_date()
         self.df_history.to_parquet(self.output_consolidado_path)
 
     def load_history(self) -> pd.DataFrame:
@@ -80,10 +81,8 @@ class TransformHistory:
         self.df_history = pd.concat([self.df_history, ticker_dummies], axis=1)
 
         # Reorganizando as primeiras colunas
-        # date = self.df_history.pop("date")
         symbol = self.df_history.pop("symbol")
         ticker = self.df_history.pop("ticker")
-        # self.df_history.insert(0, "date", date)
         self.df_history.insert(0, "symbol", symbol)
         self.df_history.insert(0, "ticker", ticker)
         logging.info(f"self.df_history.shape: {self.df_history.shape}")
@@ -97,6 +96,24 @@ class TransformHistory:
             else:
                 self.df_history = self.df_history.dropna(subset=["close"])
         logging.info(f"Dropper {total_missing_rows} missing data!")
+
+    def transform_date(self):
+        logging.info("Start")
+        self.df_history["year"] = self.df_history["date"].dt.year
+        self.df_history["month"] = self.df_history["date"].dt.month
+        self.df_history["day"] = self.df_history["date"].dt.day
+        self.df_history["dayofyear"] = self.df_history["date"].dt.dayofyear
+        self.df_history["dayofweek"] = self.df_history["date"].dt.dayofweek
+        self.df_history["weekofyear"] = self.df_history["date"].dt.weekofyear
+
+        # Df columns: [ticker, symbol, close, date, ticker.AALR3, ...]
+        # A reorganizacão é para manter as colunas de datas próximas, no começo do df
+        date_column_index = 4  # Insert after date column
+        date_columns = ["weekofyear", "dayofweek", "dayofyear", "day", "month", "year"]
+
+        for col in date_columns:
+            df_col = self.df_history.pop(col)
+            self.df_history.insert(date_column_index, col, df_col)
 
 
 TransformHistory().transform()

@@ -13,7 +13,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler(filename="data/log/extract_tickers.log"),
+        logging.FileHandler(filename="data/log/extract/extract_tickers.log"),
     ],
 )
 
@@ -50,8 +50,9 @@ class ExtractTickers:
         failed = []
         low_data = []
 
-        end_date = datetime(2021, 5, 18).date()
-        start_date = end_date - relativedelta(years=2)
+        # Teria 28 dias para testes
+        start_date = datetime(2019, 5, 18).date()
+        end_date = datetime(2021, 6, 30).date()
 
         with open(self.tikers_path) as json_file:
             tickers = json.load(json_file)["tickers"]
@@ -69,7 +70,12 @@ class ExtractTickers:
                 df_history.to_parquet(
                     f"{os.path.join(self.output_path, ticker.lower())}.parquet"
                 )
-                if df_history.shape[0] >= dias_uteis_em_um_ano:
+
+                # A validação de low data deve ser feita contando os dados de treino somente
+                if (
+                    df_history[df_history.index <= "2021-05-18"].shape[0]
+                    >= dias_uteis_em_um_ano
+                ):
                     sucessful.append(ticker)
                 else:
                     low_data.append(ticker)

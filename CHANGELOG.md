@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.1.0]
+* Add GridSearch
+* Change model folders
+* New log folders
+* Fixado a data de ínicio
+* Adicionado mais 28 dias a data final, para usar nos experimentos
+* Datasets para cada experimento
+* Novas colunas de data
+* Tipo de modelos: Com ou Sem Features
+
 ## [2.0.0]
 * Removido modelo de linear_regression
 * Adicionado modelo random_forest

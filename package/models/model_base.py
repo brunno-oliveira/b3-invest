@@ -1,40 +1,62 @@
+import json
+import logging
+import os
+from abc import abstractmethod
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import wandb
 from sklearn.metrics import (
-    mean_absolute_percentage_error,
     mean_absolute_error,
+    mean_absolute_percentage_error,
     mean_squared_error,
     r2_score,
 )
-import matplotlib.pyplot as plt
-import datetime as dt
-import seaborn as sns
-import pandas as pd
-import numpy as np
-import logging
-import wandb
-import os
+
+from model_grid_search import GridSearch
+from model_type import ModelType
 
 sns.set_theme(style="darkgrid")
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(process)-5d][%(asctime)s][%(filename)-10s][%(funcName)-10s][%(levelname)-5s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-    handlers=[logging.StreamHandler(), logging.FileHandler(filename="extract.log")],
-)
+log = logging.getLogger(__name__)
+
+TRAIN_MAX_DATE = "2021-05-18"
 
 
-class ModelBase:
-    def __init__(self, group_name: str, model_name: str):
+class ModelBase(GridSearch):
+    def __init__(
+        self, group_name: str, model_name: str, model_folder: str, model_type: ModelType
+    ):
+        """Classe base que todos modelos devem herdar. Contém todas as
+            implementações necessárias.
+
+        Args:
+            group_name (str): Informação para o wandb
+            model_name (str): Informação para o wandb
+            model_folder (str): Nome da pasta que o modelo se encontra
+            model_type (ModelType): Tipo do modelo que será gerado.
+                ModelType.WITH_FEATURES: Todas as features carregadas.
+                ModelType.WITHOUT_FEATURES: Somente dados de data.
+        """
+
+        self.group_name = group_name
+        self.model_name = model_name
+        self.model_type = model_type
+        # Path
         root_path = root_path = os.path.dirname(
             os.path.dirname(os.path.dirname(__file__))
         )
         self.data_path = os.path.join(root_path, "data")
+        self.current_path = os.path.dirname(__file__)
+        self.model_path = os.path.join(self.current_path, model_folder)
+
+        super().__init__(self.model_path, self.model_type)
+
+        # Models
         self.model = None
         self.df: pd.DataFrame = None
-        self.X_train: pd.DataFrame = None
-        self.y_train: pd.Series = None
-        self.X_tes: pd.DataFramet = None
-        self.y_test: pd.Series = None
         self.y_data: np.ndarray = None
         self.predicted: np.ndarray = None
 
@@ -44,55 +66,39 @@ class ModelBase:
         self.mse_score: float = None
         self.r_square_score: float = None
 
-        wandb.init(
-            project="b3-invest",
-            entity="brunno-oliveira",
-            group=group_name,
-            name=model_name,
-        )
-
     def load_data(self):
-        logging.info("Start")
+        log.info("Start")
         self.df = pd.read_parquet(
             os.path.join(self.data_path, "df_consolidado.parquet")
         )
 
-        # Coluna para facilitar a busca por tickers
-        tickers = self.df.iloc[:, 0]
-        self.df = self.df.iloc[:, 2:].copy()  # Remove ticker columns
+        if self.model_type == ModelType.WITHOUT_FEATURES:
+            log.info("Excutando com colunas limitadas")
+            valid_columns = ["close", "ticker", "date", "year", "month", "day"]
+            for col in self.df.columns:
+                if "ticker." in col:
+                    valid_columns.append(col)
+            self.df = self.df[valid_columns]
+        else:
+            log.info("Excutando com todas as colunas")
+        self.train_test_split(self.model_type)
 
-        max_date = self.df["date"].max()
-        # Previsao para o ultimo dia valido, removendo a primeira coluna (TARGET)
-        self.X_train = self.df[self.df["date"] < max_date].iloc[:, 1:]
-        self.y_train = self.df[self.df["date"] < max_date].iloc[:, 0]
-
-        self.X_test = self.df[self.df["date"] == max_date].iloc[:, 1:]
-        self.y_test = self.df[self.df["date"] == max_date].iloc[:, 0]
-
-        # Devolvendo a coluna de ticker
-        self.df["ticker"] = tickers
-
-        # DF para facilitar a validacao
-        self.y_data = self.df[self.df["date"] == self.df["date"].max()][
-            ["ticker", "date", "close"]
-        ].tail(len(self.X_test))
-
-        self.transform_date()
-
+    @property
+    @abstractmethod
     def set_model(self):
         pass
 
     def fit_and_predict(self):
-        logging.info("Start")
+        log.info("Start")
         self.fit()
         self.predict()
         return self.model, self.predicted
 
     def fit(self):
-        pass
+        self.model.fit(self.X_train, self.y_train)
 
     def predict(self):
-        pass
+        self.predicted = self.model.predict(self.X_test)
 
     def plot_wandb(self):
         if None in [
@@ -102,8 +108,16 @@ class ModelBase:
             self.r_square_score,
         ]:
             error = "Error: Empty Metrics. Run plot_metrics before plot_wandb"
-            logging.error(error)
+            log.error(error)
             raise Exception(error)
+
+        wandb.init(
+            project="b3-invest",
+            entity="brunno-oliveira",
+            group=self.group_name,
+            name=self.model_name,
+        )
+
         wandb.log(
             {
                 "mape_score": self.mape_score,
@@ -112,12 +126,8 @@ class ModelBase:
                 "r2_score": self.r_square_score,
             }
         )
-        wandb.finish()
 
-    def transform_date(self):
-        """O modelo nao trabalha com o tipo datetime"""
-        self.X_train["date"] = self.X_train["date"].map(dt.datetime.toordinal)
-        self.X_test["date"] = self.X_test["date"].map(dt.datetime.toordinal)
+        wandb.finish()
 
     def plot_metrics(self, plot_graph: bool = False):
         self.mape_score = round(
@@ -127,10 +137,10 @@ class ModelBase:
         self.mse_score = round(mean_squared_error(self.predicted, self.y_test), 4)
         self.r_square_score = round(r2_score(self.predicted, self.y_test), 4)
 
-        logging.info(f"mape_score : {self.mape_score}")
-        logging.info(f"mae_score : {self.mae_score}")
-        logging.info(f"mse_score : {self.mse_score}")
-        logging.info(f"r2_score : {self.r_square_score}")
+        log.info(f"mape_score : {self.mape_score}")
+        log.info(f"mae_score : {self.mae_score}")
+        log.info(f"mse_score : {self.mse_score}")
+        log.info(f"r2_score : {self.r_square_score}")
 
         if plot_graph:
             fig, ax = plt.subplots(figsize=(30, 6))
