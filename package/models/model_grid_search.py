@@ -3,11 +3,12 @@ import json
 import logging
 import multiprocessing
 import os
-from typing import Dict, List
+from typing import Dict, List, Tuple
+from pandas.core.indexes.numeric import Int64Index
 
 import pandas as pd
 from pandas.core.frame import DataFrame
-from sklearn.model_selection import GridSearchCV, PredefinedSplit
+from sklearn.model_selection import GridSearchCV
 
 from data_split import DataSplit
 from model_type import ModelType
@@ -25,38 +26,36 @@ class GridSearch(DataSplit):
         self.gs_result: DataFrame = None
 
     def load_grid(self):
-        # Arquivo utilizado para grid search
+        """Carrega o JSON com os parâmetros a serem utilizados
+        no grid search"""
         grid_path = os.path.join(self.model_path, "gs_params.json")
         with open(grid_path) as json_file:
             self.gs_params = json.load(json_file)["params"]
 
-    def test_index(self) -> List[int]:
-        """Funcao que gera a lista de index que da base self.df
-            sue era gerada. 
-            0: Treino
-            1: Test
-            -1: Skip 
-        """
-        index_list = [0 for _ in range(len(self.df))]
-        index_test_list = list(self.df[self.df["date"] > "2021-05-18"].index)            
+    def train_test_index(self) -> Tuple[Int64Index]:
+        """Train e Test set customizados com base nos experimentos.
+        O Train set é sempre o mesmo, o que muda são os tests"""
+        n_experiments = 4
+        train = tuple(self.X_train.index for _ in range(n_experiments))
 
-        for index in index_test_list:
-            index_list[index] = 1  
+        test = (
+            self.y_test_1_day.index,
+            self.y_test_7_days.index,
+            self.y_test_14_days.index,
+            self.y_test_28_days.index,
+        )
 
-        return index_list    
-
+        return zip(train, test)
 
     def grid_search(self):
         log.info("Start")
         if self.gs_params is None:
             self.load_grid()
 
-        cv_split = PredefinedSplit(self.test_index())
-
         self.gs = GridSearchCV(
             estimator=self.model,
             param_grid=self.gs_params,
-            cv=cv_split,
+            cv=self.train_test_index(),
             n_jobs=multiprocessing.cpu_count(),
             verbose=2,
         )
