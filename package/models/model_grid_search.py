@@ -3,11 +3,11 @@ import json
 import logging
 import multiprocessing
 import os
-from typing import Dict, List, Tuple
-from pandas.core.indexes.numeric import Int64Index
+from typing import Dict, Tuple
 
 import pandas as pd
 from pandas.core.frame import DataFrame
+from pandas.core.indexes.numeric import Int64Index
 from sklearn.model_selection import GridSearchCV
 
 from data_split import DataSplit
@@ -57,6 +57,7 @@ class GridSearch(DataSplit):
             param_grid=self.gs_params,
             cv=self.train_test_index(),
             n_jobs=multiprocessing.cpu_count(),
+            scoring='neg_root_mean_squared_error',
             verbose=2,
         )
 
