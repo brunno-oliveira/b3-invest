@@ -57,7 +57,7 @@ class GridSearch(DataSplit):
             param_grid=self.gs_params,
             cv=self.train_test_index(),
             n_jobs=multiprocessing.cpu_count(),
-            scoring='neg_root_mean_squared_error',
+            scoring="neg_root_mean_squared_error",
             verbose=2,
         )
 
@@ -89,7 +89,7 @@ class GridSearch(DataSplit):
         elif self.model_type == ModelType.WITH_FEATURES:
             gs_path = os.path.join(self.model_path, "with_features")
 
-        self.gs_result.to_csv(os.path.join(gs_path, "gs_results.csv"))
+        self.gs_result.to_csv(os.path.join(gs_path, "gs_results.csv"), inedx=False)
 
         gs_best_params = json.dumps(self.gs.best_params_)
         with io.open(os.path.join(gs_path, "best_params.json"), "w") as f:

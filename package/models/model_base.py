@@ -2,6 +2,7 @@ import json
 import logging
 import os
 from abc import abstractmethod
+from typing import Dict
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -46,13 +47,14 @@ class ModelBase(GridSearch):
         self.group_name = group_name
         self.model_name = model_name
         self.model_type = model_type
+        self.model_folder = model_folder
         # Path
-        root_path = root_path = os.path.dirname(
+        self.root_path = root_path = os.path.dirname(
             os.path.dirname(os.path.dirname(__file__))
         )
-        self.data_path = os.path.join(root_path, "data")
+        self.data_path = os.path.join(self.root_path, "data")
         self.current_path = os.path.dirname(__file__)
-        self.model_path = os.path.join(self.current_path, model_folder)
+        self.model_path = os.path.join(self.current_path, self.model_folder)
 
         super().__init__(self.model_path, self.model_type)
 
@@ -60,15 +62,64 @@ class ModelBase(GridSearch):
         self.model = None
         self.df: pd.DataFrame = None
         self.y_data: np.ndarray = None
-        self.predicted: np.ndarray = None
 
-        # Metrics
-        self.mape_score: float = None
-        self.mae_score: float = None
-        self.mse_score: float = None
-        self.rmse_score: float = None
-        self.r_square_score: float = None
-        self.mean_squared_log_error: float = None
+        # Predicted
+        self.predicted_1_day: np.ndarray = None
+        self.predicted_7_days: np.ndarray = None
+        self.predicted_14_days: np.ndarray = None
+        self.predicted_28_days: np.ndarray = None
+
+        # Template de dicionário para as métricas
+        self.model_result: Dict = {
+            "1_day": {
+                "predicted": "",
+                "y_test": "",
+                "metrics": {
+                    "mape": "",
+                    "mae": "",
+                    "mse": "",
+                    "rmse": "",
+                    "r2": "",
+                    "msle": "",
+                },
+            },
+            "7_days": {
+                "predicted": "",
+                "y_test": "",
+                "metrics": {
+                    "mape": "",
+                    "mae": "",
+                    "mse": "",
+                    "rmse": "",
+                    "r2": "",
+                    "msle": "",
+                },
+            },
+            "14_days": {
+                "predicted": "",
+                "y_test": "",
+                "metrics": {
+                    "mape": "",
+                    "mae": "",
+                    "mse": "",
+                    "rmse": "",
+                    "r2": "",
+                    "msle": "",
+                },
+            },
+            "28_days": {
+                "predicted": "",
+                "y_test": "",
+                "metrics": {
+                    "mape": "",
+                    "mae": "",
+                    "mse": "",
+                    "rmse": "",
+                    "r2": "",
+                    "msle": "",
+                },
+            },
+        }
 
     def load_data(self):
         log.info("Start")
@@ -96,22 +147,42 @@ class ModelBase(GridSearch):
         log.info("Start")
         self.fit()
         self.predict()
-        return self.model, self.predicted
 
     def fit(self):
+        log.info("Start")
         self.model.fit(self.X_train, self.y_train)
 
     def predict(self):
-        self.predicted = self.model.predict(self.X_test)
+        log.info("Predict 1 day..")
+        self.model_result["1_day"].update(
+            {"predicted": self.model.predict(self.X_test_1_day)}
+        )
+        self.model_result["1_day"].update({"y_test": self.y_test_1_day})
+        log.info("Predict 7 days..")
+        self.model_result["7_days"].update(
+            {"predicted": self.model.predict(self.X_test_7_days)}
+        )
+        self.model_result["7_days"].update({"y_test": self.y_test_7_days})
+        log.info("Predict 14 days..")
+        self.model_result["14_days"].update(
+            {"predicted": self.model.predict(self.X_test_14_days)}
+        )
+        self.model_result["14_days"].update({"y_test": self.y_test_14_days})
+        log.info("Predict 28 days..")
+        self.model_result["28_days"].update(
+            {"predicted": self.model.predict(self.X_test_28_days)}
+        )
+        self.model_result["28_days"].update({"y_test": self.y_test_28_days})
 
     def plot_wandb(self):
+        log.info("Start")
         if None in [
             self.mape_score,
             self.mae_score,
             self.mse_score,
             self.rmse_score,
             self.r_square_score,
-            self.mean_squared_log_error
+            self.mean_squared_log_error,
         ]:
             error = "Error: Empty Metrics. Run plot_metrics before plot_wandb"
             log.error(error)
@@ -131,34 +202,74 @@ class ModelBase(GridSearch):
                 "mse_score": self.mse_score,
                 "rmse_score": self.rmse_score,
                 "r2_score": self.r_square_score,
-                "msle_score": self.mean_squared_log_error
+                "msle_score": self.mean_squared_log_error,
             }
         )
 
         wandb.finish()
 
-    def plot_metrics(self, plot_graph: bool = False):
-        self.mape_score = round(
-            mean_absolute_percentage_error(self.predicted, self.y_test), 4
-        )
-        self.mae_score = round(mean_absolute_error(self.predicted, self.y_test), 4)
-        self.mse_score = round(mean_squared_error(self.predicted, self.y_test), 4)
-        self.rmse_score = round(mean_squared_error(self.predicted, self.y_test, squared=True), 4)
-        self.r_square_score = round(r2_score(self.predicted, self.y_test), 4)
-        self.self.mean_squared_log_error = round(mean_squared_log_error(self.predicted, self.y_test), 4)
+    def run_metrics(self):
+        log.info("Running Metrics...")
+        self.create_metrics()
+        self.log_metrics()
+        self.plot_graphs()
 
-        log.info(f"mape_score : {self.mape_score}")
-        log.info(f"mae_score : {self.mae_score}")
-        log.info(f"mse_score : {self.mse_score}")
-        log.info(f"rmse_score : {self.rmse_score}")
-        log.info(f"r2_score : {self.r_square_score}")
-        log.info(f"msle_score : {self.mean_squared_log_error}")
+    def log_metrics(self):
+        log.info("Start")
+        for key, _ in self.model_result.items():
+            log.info(f"----- {key} metrics -----")
+            for metric, value in self.model_result[key]["metrics"].items():
+                log.info(f"{metric}: {value}")
 
-        if plot_graph:
+    def plot_graphs(self):
+        def image_path(key: str) -> str:
+            data_path = os.path.join(self.root_path, "data")
+            result_path = os.path.join(data_path, "results")
+            result_path = os.path.join(result_path, self.model_folder)
+
+            if self.model_type == ModelType.WITH_FEATURES:
+                feature_path = "with_features"
+            else:
+                feature_path = "wo_features"
+
+            result_path = os.path.join(result_path, feature_path)
+            return os.path.join(result_path, f"{key}.jpeg")
+
+        log.info("Start")
+
+        for key, _ in self.model_result.items():
             fig, ax = plt.subplots(figsize=(30, 6))
 
-            sns.lineplot(x=list(self.y_data["ticker"]), y=list(self.y_data["close"]))
-            ax.plot(self.predicted)
-            plt.xticks(rotation=90)
+            x = [_ for _ in range(len(self.model_result[key]["predicted"]))]
 
-            plt.show()
+            sns.lineplot(x=x, y=self.model_result[key]["y_test"])
+            ax.plot(self.model_result[key]["predicted"])
+
+            fig.savefig(image_path(key))
+
+    def create_metrics(self):
+        """Carrega todas as métricas para os 4 experimentos em um dicionário"""
+
+        def root_mean_squared_error(predicted, y):
+            return mean_squared_error(predicted, y, squared=False)
+
+        func_metrics = [
+            mean_absolute_percentage_error,
+            mean_absolute_error,
+            mean_squared_error,
+            root_mean_squared_error,
+            r2_score,
+            mean_squared_log_error,
+        ]
+
+        key_metrics = ["mape", "mae", "mse", "rmse", "r2", "msle"]
+
+        for key, _ in self.model_result.items():
+            for func, metric_key in zip(func_metrics, key_metrics):
+                self.model_result[key]["metrics"][metric_key] = round(
+                    func(
+                        self.model_result[key]["predicted"],
+                        self.model_result[key]["y_test"],
+                    ),
+                    4,
+                )

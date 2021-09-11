@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.1.1]
+* Predict com todos os experimentos
+* Adicionado RMSE como scoring do GridSearch
+* Refatoração da métricas
+* 
+
 ## [2.1.0]
 * Add GridSearch
 * Change model folders

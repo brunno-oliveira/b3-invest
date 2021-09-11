@@ -6,7 +6,7 @@ from model_type import ModelType
 from random_forest_regressor.random_forest_regressor import ModelRandomForestRegressor
 
 # Flag para executar offline
-# os.environ["WANDB_MODE"] = "dryrun"
+os.environ["WANDB_MODE"] = "dryrun"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -61,8 +61,9 @@ class ModelRunner:
             model.set_model()
             model.load_data()
             model.fit_and_predict()
-            model.plot_metrics()
-            model.plot_wandb()
+            model.run_metrics()
+            # model.plot_wandb()
+        logging.info("Finished")
 
     def execute_grid_search(self):
         logging.info("Start")
@@ -72,5 +73,5 @@ class ModelRunner:
             model.grid_search()
 
 
-ModelRunner().execute_grid_search()
-# ModelRunner().train_predict()
+# ModelRunner().execute_grid_search()
+ModelRunner().train_predict()
