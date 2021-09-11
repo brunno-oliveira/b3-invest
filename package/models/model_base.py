@@ -5,6 +5,7 @@ from abc import abstractmethod
 
 import matplotlib.pyplot as plt
 import numpy as np
+from numpy.core.numeric import roll
 import pandas as pd
 import seaborn as sns
 import wandb
@@ -12,6 +13,7 @@ from sklearn.metrics import (
     mean_absolute_error,
     mean_absolute_percentage_error,
     mean_squared_error,
+    mean_squared_log_error,
     r2_score,
 )
 
@@ -64,7 +66,9 @@ class ModelBase(GridSearch):
         self.mape_score: float = None
         self.mae_score: float = None
         self.mse_score: float = None
+        self.rmse_score: float = None
         self.r_square_score: float = None
+        self.mean_squared_log_error: float = None
 
     def load_data(self):
         log.info("Start")
@@ -105,7 +109,9 @@ class ModelBase(GridSearch):
             self.mape_score,
             self.mae_score,
             self.mse_score,
+            self.rmse_score,
             self.r_square_score,
+            self.mean_squared_log_error
         ]:
             error = "Error: Empty Metrics. Run plot_metrics before plot_wandb"
             log.error(error)
@@ -123,7 +129,9 @@ class ModelBase(GridSearch):
                 "mape_score": self.mape_score,
                 "mae_score": self.mae_score,
                 "mse_score": self.mse_score,
+                "rmse_score": self.rmse_score,
                 "r2_score": self.r_square_score,
+                "msle_score": self.mean_squared_log_error
             }
         )
 
@@ -135,12 +143,16 @@ class ModelBase(GridSearch):
         )
         self.mae_score = round(mean_absolute_error(self.predicted, self.y_test), 4)
         self.mse_score = round(mean_squared_error(self.predicted, self.y_test), 4)
+        self.rmse_score = round(mean_squared_error(self.predicted, self.y_test, squared=True), 4)
         self.r_square_score = round(r2_score(self.predicted, self.y_test), 4)
+        self.self.mean_squared_log_error = round(mean_squared_log_error(self.predicted, self.y_test), 4)
 
         log.info(f"mape_score : {self.mape_score}")
         log.info(f"mae_score : {self.mae_score}")
         log.info(f"mse_score : {self.mse_score}")
+        log.info(f"rmse_score : {self.rmse_score}")
         log.info(f"r2_score : {self.r_square_score}")
+        log.info(f"msle_score : {self.mean_squared_log_error}")
 
         if plot_graph:
             fig, ax = plt.subplots(figsize=(30, 6))
