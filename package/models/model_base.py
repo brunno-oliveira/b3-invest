@@ -9,7 +9,6 @@ import numpy as np
 from numpy.core.numeric import roll
 import pandas as pd
 import seaborn as sns
-import wandb
 from sklearn.metrics import (
     mean_absolute_error,
     mean_absolute_percentage_error,
@@ -174,45 +173,16 @@ class ModelBase(GridSearch):
         )
         self.model_result["28_days"].update({"y_test": self.y_test_28_days})
 
-    def plot_wandb(self):
-        log.info("Start")
-        if None in [
-            self.mape_score,
-            self.mae_score,
-            self.mse_score,
-            self.rmse_score,
-            self.r_square_score,
-            self.mean_squared_log_error,
-        ]:
-            error = "Error: Empty Metrics. Run plot_metrics before plot_wandb"
-            log.error(error)
-            raise Exception(error)
-
-        wandb.init(
-            project="b3-invest",
-            entity="brunno-oliveira",
-            group=self.group_name,
-            name=self.model_name,
-        )
-
-        wandb.log(
-            {
-                "mape_score": self.mape_score,
-                "mae_score": self.mae_score,
-                "mse_score": self.mse_score,
-                "rmse_score": self.rmse_score,
-                "r2_score": self.r_square_score,
-                "msle_score": self.mean_squared_log_error,
-            }
-        )
-
-        wandb.finish()
-
     def run_metrics(self):
         log.info("Running Metrics...")
         self.create_metrics()
         self.log_metrics()
         self.plot_graphs()
+        self.save_results()
+
+    def save_results(self):
+        log.info("Start")
+
 
     def log_metrics(self):
         log.info("Start")
@@ -221,20 +191,19 @@ class ModelBase(GridSearch):
             for metric, value in self.model_result[key]["metrics"].items():
                 log.info(f"{metric}: {value}")
 
+    def result_path(self) -> str:
+        data_path = os.path.join(self.root_path, "data")
+        result_path = os.path.join(data_path, "results")
+        result_path = os.path.join(result_path, self.model_folder)
+
+        if self.model_type == ModelType.WITH_FEATURES:
+            feature_path = "with_features"
+        else:
+            feature_path = "wo_features"
+
+        return os.path.join(result_path, feature_path)       
+
     def plot_graphs(self):
-        def image_path(key: str) -> str:
-            data_path = os.path.join(self.root_path, "data")
-            result_path = os.path.join(data_path, "results")
-            result_path = os.path.join(result_path, self.model_folder)
-
-            if self.model_type == ModelType.WITH_FEATURES:
-                feature_path = "with_features"
-            else:
-                feature_path = "wo_features"
-
-            result_path = os.path.join(result_path, feature_path)
-            return os.path.join(result_path, f"{key}.jpeg")
-
         log.info("Start")
 
         for key, _ in self.model_result.items():
@@ -245,7 +214,7 @@ class ModelBase(GridSearch):
             sns.lineplot(x=x, y=self.model_result[key]["y_test"])
             ax.plot(self.model_result[key]["predicted"])
 
-            fig.savefig(image_path(key))
+            fig.savefig(os.path.join(self.result_path(), f"{key}.jpeg"))
 
     def create_metrics(self):
         """Carrega todas as métricas para os 4 experimentos em um dicionário"""

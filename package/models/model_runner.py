@@ -5,9 +5,6 @@ from decision_tree_regressor.decision_tree_regressor import ModelDecisionTreeReg
 from model_type import ModelType
 from random_forest_regressor.random_forest_regressor import ModelRandomForestRegressor
 
-# Flag para executar offline
-os.environ["WANDB_MODE"] = "dryrun"
-
 logging.basicConfig(
     level=logging.INFO,
     format="[%(process)-5d][%(asctime)s][%(filename)-10s][%(funcName)-10s][%(levelname)-5s] %(message)s",
@@ -62,7 +59,7 @@ class ModelRunner:
             model.load_data()
             model.fit_and_predict()
             model.run_metrics()
-            # model.plot_wandb()
+
         logging.info("Finished")
 
     def execute_grid_search(self):

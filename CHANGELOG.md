@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 * Predict com todos os experimentos
 * Adicionado RMSE como scoring do GridSearch
 * Refatoração da métricas
-* 
+* Salvar as imagens de predicted x y_test para cada experimento
+* Remove wandb
 
 ## [2.1.0]
 * Add GridSearch

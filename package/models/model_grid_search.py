@@ -94,6 +94,3 @@ class GridSearch(DataSplit):
         gs_best_params = json.dumps(self.gs.best_params_)
         with io.open(os.path.join(gs_path, "best_params.json"), "w") as f:
             f.write(gs_best_params)
-
-    def grid_search_splitter(self):
-        log.info("Start")
