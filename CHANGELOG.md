@@ -1,11 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [2.1.1]
+## [2.2.0]
 * Predict com todos os experimentos
 * Adicionado RMSE como scoring do GridSearch
 * Refatoração da métricas
 * Salvar as imagens de predicted x y_test para cada experimento
+* Persistir os resultados em formato pickle de cada experimento
 * Remove wandb
 
 ## [2.1.0]

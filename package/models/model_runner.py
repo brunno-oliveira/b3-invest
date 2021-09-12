@@ -1,5 +1,6 @@
 import logging
 import os
+import pickle
 
 from decision_tree_regressor.decision_tree_regressor import ModelDecisionTreeRegressor
 from model_type import ModelType
@@ -17,7 +18,7 @@ logging.basicConfig(
 
 
 class ModelRunner:
-    def __init__(self):
+    def init_model(self):
         logging.info("Inicializando modelos...")
         self.decision_tree_wo_features = ModelDecisionTreeRegressor(
             model_folder="decision_tree_regressor",
@@ -47,6 +48,7 @@ class ModelRunner:
         ]
 
     def run(self, grid_search: bool = False):
+        self.init_model()
         if grid_search:
             self.execute_grid_search()
         else:
@@ -59,7 +61,6 @@ class ModelRunner:
             model.load_data()
             model.fit_and_predict()
             model.run_metrics()
-
         logging.info("Finished")
 
     def execute_grid_search(self):
@@ -68,7 +69,33 @@ class ModelRunner:
             model.load_data()
             model.set_model()
             model.grid_search()
+        logging.info("Finished")
+
+    def show_result(self):
+        logging.info("Start")
+        self.consolidate_results()
+        logging.info("Finished")
+
+    def consolidate_results(self):
+        logging.info("Start")
+        results = {}
+        root_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        result_path = os.path.join(root_path, "data", "results")
+        for model in os.listdir(result_path):
+            for model_type in os.listdir(os.path.join(result_path, model)):
+                pickle_path = os.path.join(
+                    result_path, model, model_type, "result.pickle"
+                )
+                with open(pickle_path, "rb") as handle:
+                    result = pickle.load(handle)
+                if not (model in results):
+                    results[model] = {}
+                results[model][model_type] = {}
+                results[model][model_type].update(result)
+
+        logging.info("Finished")
 
 
-# ModelRunner().execute_grid_search()
-ModelRunner().train_predict()
+# ModelRunner().run(grid_search=True)
+# ModelRunner().run(grid_search=False)
+ModelRunner().consolidate_results()

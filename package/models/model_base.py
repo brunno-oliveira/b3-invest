@@ -1,12 +1,11 @@
-import json
 import logging
 import os
+import pickle
 from abc import abstractmethod
 from typing import Dict
 
 import matplotlib.pyplot as plt
 import numpy as np
-from numpy.core.numeric import roll
 import pandas as pd
 import seaborn as sns
 from sklearn.metrics import (
@@ -48,9 +47,7 @@ class ModelBase(GridSearch):
         self.model_type = model_type
         self.model_folder = model_folder
         # Path
-        self.root_path = os.path.dirname(
-            os.path.dirname(os.path.dirname(__file__))
-        )
+        self.root_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         self.data_path = os.path.join(self.root_path, "data")
         self.current_path = os.path.dirname(__file__)
         self.model_path = os.path.join(self.current_path, self.model_folder)
@@ -182,7 +179,9 @@ class ModelBase(GridSearch):
 
     def save_results(self):
         log.info("Start")
-
+        pickle_path = os.path.join(self.result_path(), "result.pickle")
+        with open(pickle_path, "wb") as handle:
+            pickle.dump(self.model_result, handle)
 
     def log_metrics(self):
         log.info("Start")
@@ -201,7 +200,7 @@ class ModelBase(GridSearch):
         else:
             feature_path = "wo_features"
 
-        return os.path.join(result_path, feature_path)       
+        return os.path.join(result_path, feature_path)
 
     def plot_graphs(self):
         log.info("Start")
