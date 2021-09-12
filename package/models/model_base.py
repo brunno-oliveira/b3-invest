@@ -48,7 +48,7 @@ class ModelBase(GridSearch):
         self.model_type = model_type
         self.model_folder = model_folder
         # Path
-        self.root_path = root_path = os.path.dirname(
+        self.root_path = os.path.dirname(
             os.path.dirname(os.path.dirname(__file__))
         )
         self.data_path = os.path.join(self.root_path, "data")
