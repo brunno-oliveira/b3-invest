@@ -98,7 +98,7 @@ class DataSplit:
             test_data.append(
                 self.df[
                     (self.df["ticker"] == ticker) & (self.df["date"] > TRAIN_MAX_DATE)
-                ].head(days)
+                ].head(days)[["ticker", "date", "close"]]
             )
 
             x_test.append(
