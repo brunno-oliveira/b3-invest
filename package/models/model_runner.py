@@ -74,6 +74,7 @@ class ModelRunner:
     def show_result(self):
         logging.info("Start")
         self.consolidate_results()
+        self.plot_results()
         logging.info("Finished")
 
     def consolidate_results(self):
@@ -92,10 +93,12 @@ class ModelRunner:
                     results[model] = {}
                 results[model][model_type] = {}
                 results[model][model_type].update(result)
-
         logging.info("Finished")
+
+    def plot_results(self):
+        logging.info("Start")
 
 
 # ModelRunner().run(grid_search=True)
 # ModelRunner().run(grid_search=False)
-ModelRunner().consolidate_results()
+ModelRunner().show_result()
