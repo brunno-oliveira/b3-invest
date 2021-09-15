@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import pickle
@@ -179,6 +180,17 @@ class ModelBase(GridSearch):
         pickle_path = os.path.join(self.result_path(), "result.pickle")
         with open(pickle_path, "wb") as handle:
             pickle.dump(self.model_result, handle)
+
+        metrics_path = os.path.join(self.result_path(), "rmse")
+        metrics = {
+            "1_day": self.model_result["1_day"]["metrics"],
+            "7_days": self.model_result["7_days"]["metrics"],
+            "14_days": self.model_result["14_days"]["metrics"],
+            "28_days": self.model_result["28_days"]["metrics"],
+        }
+
+        with open(f"{metrics_path}.json", "a") as f:
+            json.dump(metrics, f, indent=4)
 
     def log_metrics(self):
         log.info("Start")
