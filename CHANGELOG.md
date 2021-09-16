@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [2.3.0]
+## [2.2.1]
 * Arredondado close para 2 casas decimais
 * Módulo para consolidar todos os resultados
 * Salvando as métricas em JSON
