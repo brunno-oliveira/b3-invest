@@ -4,6 +4,7 @@ import os
 from typing import List
 
 import pandas as pd
+import yaml
 from sklearn.preprocessing import MinMaxScaler
 
 logging.basicConfig(
@@ -25,6 +26,10 @@ class TransformFundamentalista:
         root_path = root_path = os.path.dirname(
             os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         )
+
+        with open(os.path.join(root_path, "package", "config.yml"), "r") as ymlfile:
+            self.cfg = yaml.safe_load(ymlfile)["transform"]["fundamentalista"]
+
         data_path = os.path.join(root_path, "data")
         self.ticker_low_data = os.path.join(data_path, "tickers_low_data.json")
         self.ticker_failed_data = os.path.join(data_path, "tickers_failed_data.json")
@@ -106,9 +111,8 @@ class TransformFundamentalista:
         logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 
     def filter_dates(self):
-        max_date = "2021-05-17"
         self.df_consolidado = self.df_consolidado[
-            self.df_consolidado["asOfDate"] < max_date
+            self.df_consolidado["asOfDate"] <= str(self.cfg["max_date"])
         ]
         logging.info(f"self.consolidado.shape: {self.df_consolidado.shape}")
 

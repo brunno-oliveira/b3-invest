@@ -36,13 +36,13 @@ class GridSearch(DataSplit):
         """Train e Test set customizados com base nos experimentos.
         O Train set é sempre o mesmo, o que muda são os tests"""
         n_experiments = 4
-        train = tuple(self.X_train.index for _ in range(n_experiments))
+        train = tuple(self.X_gs_train.index for _ in range(n_experiments))
 
         test = (
-            self.y_test_1_day.index,
-            self.y_test_7_days.index,
-            self.y_test_14_days.index,
-            self.y_test_28_days.index,
+            self.y_gs_test_1_day.index,
+            self.y_gs_test_7_days.index,
+            self.y_gs_test_14_days.index,
+            self.y_gs_test_28_days.index,
         )
 
         return zip(train, test)
@@ -61,26 +61,11 @@ class GridSearch(DataSplit):
             verbose=2,
         )
 
-        self.gs.fit(self.X_train_gs, self.y_train_gs)
+        self.gs.fit(self.X_gs_train, self.y_gs_train)
 
         # Save results
         log.info("Saving GridSearch results and best params..")
         self.gs_result = pd.DataFrame(self.gs.cv_results_)
-
-        round_columns = [
-            "mean_fit_time",
-            "std_fit_time",
-            "mean_score_time",
-            "std_score_time",
-            "split0_test_score",
-            "split1_test_score",
-            "split2_test_score",
-            "split3_test_score",
-            "split4_test_score",
-            "mean_test_score",
-            "std_test_score",
-        ]
-
         self.gs_result = round(self.gs_result, 2)
 
         # Save results and best params
