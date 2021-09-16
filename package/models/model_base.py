@@ -172,7 +172,7 @@ class ModelBase(GridSearch):
         log.info("Running Metrics...")
         self.create_metrics()
         self.log_metrics()
-        self.plot_graphs()
+        # self.plot_graphs()
         self.save_results()
 
     def save_results(self):
@@ -181,7 +181,7 @@ class ModelBase(GridSearch):
         with open(pickle_path, "wb") as handle:
             pickle.dump(self.model_result, handle)
 
-        metrics_path = os.path.join(self.result_path(), "rmse")
+        metrics_path = os.path.join(self.result_path(), "metrics")
         metrics = {
             "1_day": self.model_result["1_day"]["metrics"],
             "7_days": self.model_result["7_days"]["metrics"],
@@ -189,7 +189,7 @@ class ModelBase(GridSearch):
             "28_days": self.model_result["28_days"]["metrics"],
         }
 
-        with open(f"{metrics_path}.json", "a") as f:
+        with open(f"{metrics_path}.json", "w") as f:
             json.dump(metrics, f, indent=4)
 
     def log_metrics(self):
