@@ -1,7 +1,7 @@
 extract:
   history:
     start_date: 2019-05-18
-    end_date: 2021-08-09
+    end_date: 2021-07-29
     validation_days_max_date: 2021-05-18
 transform:
   fundamentalista:
@@ -27,14 +27,22 @@ model:
       28_days:
         start_date: 2021-05-19
         end_date: 2021-06-29
-    validation:
-      start_date: 2021-05-19
-      max_date: 2021-06-28
   predict:
     train:
       # O predict incorpora os dados de validação
       # da etapa de GS
       max_date: 2021-06-29
-    teste:
-      start_date: 2021-07-27
+    experiments:
+      1_day:
+        start_date: 2021-06-30
+        end_date: 2021-06-30
+      7_days:
+        start_date: 2021-06-30
+        end_date: 2021-07-08
+      14_days:
+        start_date: 2021-06-30
+        end_date: 2021-07-20
+      28_days:
+        start_date: 2021-06-30
+        end_date: 2021-07-29
 

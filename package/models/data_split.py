@@ -77,7 +77,7 @@ class DataSplit:
             para definir o split
         """
         self.set_gs_data(skip_indexes, close_column_index)
-        # self.set_predict_data(skip_indexes, close_column_index)
+        self.set_predict_data(skip_indexes, close_column_index)
         log.info("Finished")
 
     def set_gs_data(self, skip_indexes: int, close_column_index: int):
@@ -152,37 +152,73 @@ class DataSplit:
 
     def set_predict_data(self, skip_indexes: int, close_column_index: int):
         log.info("Start")
-        max_date = str(self.cfg_predict["train"]["max_date"])
-        # Train set
-        self.X_train = self.df[self.df["date"] <= max_date].iloc[:, skip_indexes:]
-        self.y_train = self.df[self.df["date"] <= max_date].iloc[:, close_column_index]
+        max_train_date = str(self.cfg_predict["train"]["max_date"])
 
-        # Test Sets
+        # Full Train set
+        self.train_data = self.df[self.df["date"] <= max_train_date]
+        self.train_data = self.train_data.reset_index()
+        self.train_data.drop(columns=["index"], inplace=True)
+
+        # Train set
+        self.X_train = self.train_data.iloc[:, skip_indexes:]
+        self.y_train = self.train_data.iloc[:, close_column_index]
+
+        # Test set
+        cfg_exp = self.cfg_predict["experiments"]
+        cfg_exp_1_day = cfg_exp["1_day"]
+        cfg_exp_7_days = cfg_exp["7_days"]
+        cfg_exp_14_days = cfg_exp["14_days"]
+        cfg_exp_28_days = cfg_exp["28_days"]
         (
             self.test_data_1_day,
             self.X_test_1_day,
             self.y_test_1_day,
-        ) = self.test_generator(1, skip_indexes, close_column_index, max_date)
+        ) = self.test_generator(
+            self.df,
+            1,
+            skip_indexes,
+            close_column_index,
+            cfg_exp_1_day["start_date"],
+            cfg_exp_1_day["end_date"],
+        )
 
         (
             self.test_data_7_days,
             self.X_test_7_days,
             self.y_test_7_days,
-        ) = self.test_generator(7, skip_indexes, close_column_index, max_date)
+        ) = self.test_generator(
+            self.df,
+            7,
+            skip_indexes,
+            close_column_index,
+            cfg_exp_7_days["start_date"],
+            cfg_exp_7_days["end_date"],
+        )
 
         (
             self.test_data_14_days,
             self.X_test_14_days,
             self.y_test_14_days,
-        ) = self.test_generator(14, skip_indexes, close_column_index, max_date)
+        ) = self.test_generator(
+            self.df,
+            14,
+            skip_indexes,
+            close_column_index,
+            cfg_exp_14_days["start_date"],
+            cfg_exp_14_days["end_date"],
+        )
         (
             self.test_data_28_days,
             self.X_test_28_days,
             self.y_test_28_days,
-        ) = self.test_generator(28, skip_indexes, close_column_index, max_date)
-
-        # Full Train set
-        self.train_data = self.df[self.df["date"] <= max_date]
+        ) = self.test_generator(
+            self.df,
+            28,
+            skip_indexes,
+            close_column_index,
+            cfg_exp_28_days["start_date"],
+            cfg_exp_28_days["end_date"],
+        )
 
     @staticmethod
     def test_generator(
