@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import date
 from typing import List, Tuple
 
 import pandas as pd
@@ -13,6 +14,7 @@ log = logging.getLogger(__name__)
 class DataSplit:
     def __init__(self):
         # GS Data
+        self.gs_data: pd.DataFrame = None
         self.X_gs_train: pd.DataFrame = None
         self.y_gs_train: pd.Series = None
 
@@ -33,6 +35,7 @@ class DataSplit:
         self.y_gs_test_28_days: pd.Series = None
 
         # Predict Data
+        self.train_data: pd.DataFrame = None
         self.X_train: pd.DataFrame = None
         self.y_train: pd.Series = None
 
@@ -74,41 +77,78 @@ class DataSplit:
             para definir o split
         """
         self.set_gs_data(skip_indexes, close_column_index)
-        self.set_predict_data(skip_indexes, close_column_index)
+        # self.set_predict_data(skip_indexes, close_column_index)
         log.info("Finished")
 
     def set_gs_data(self, skip_indexes: int, close_column_index: int):
         log.info("Start")
-        max_date = str(self.cfg_gs["train"]["max_date"])
+
+        max_train_date = str(self.cfg_gs["train"]["max_date"])
+        # Full GS Set
+        self.gs_data = self.df[self.df["date"] <= max_train_date].copy()
+        self.gs_data = self.gs_data.reset_index()
+        self.gs_data.drop(columns=["index"], inplace=True)
+
         # Train set
-        self.X_train_gs = self.df[self.df["date"] <= max_date].iloc[:, skip_indexes:]
-        self.y_train_gs = self.df[self.df["date"] <= max_date].iloc[
-            :, close_column_index
-        ]
+        self.X_gs_train = self.gs_data.iloc[:, skip_indexes:]
+        self.y_gs_train = self.gs_data.iloc[:, close_column_index]
 
         # Test set
+        cfg_exp = self.cfg_gs["experiments"]
+        cfg_exp_1_day = cfg_exp["1_day"]
+        cfg_exp_7_days = cfg_exp["7_days"]
+        cfg_exp_14_days = cfg_exp["14_days"]
+        cfg_exp_28_days = cfg_exp["28_days"]
         (
             self.test_gs_data_1_day,
             self.X_gs_test_1_day,
             self.y_gs_test_1_day,
-        ) = self.test_generator(1, skip_indexes, close_column_index, max_date)
+        ) = self.test_generator(
+            self.gs_data,
+            1,
+            skip_indexes,
+            close_column_index,
+            cfg_exp_1_day["start_date"],
+            cfg_exp_1_day["end_date"],
+        )
 
         (
             self.test_gs_data_7_days,
             self.X_gs_test_7_days,
             self.y_gs_test_7_days,
-        ) = self.test_generator(7, skip_indexes, close_column_index, max_date)
+        ) = self.test_generator(
+            self.gs_data,
+            7,
+            skip_indexes,
+            close_column_index,
+            cfg_exp_7_days["start_date"],
+            cfg_exp_7_days["end_date"],
+        )
 
         (
             self.test_gs_data_14_days,
             self.X_gs_test_14_days,
             self.y_gs_test_14_days,
-        ) = self.test_generator(14, skip_indexes, close_column_index, max_date)
+        ) = self.test_generator(
+            self.gs_data,
+            14,
+            skip_indexes,
+            close_column_index,
+            cfg_exp_14_days["start_date"],
+            cfg_exp_14_days["end_date"],
+        )
         (
             self.test_gs_data_28_days,
             self.X_gs_test_28_days,
             self.y_gs_test_28_days,
-        ) = self.test_generator(28, skip_indexes, close_column_index, max_date)
+        ) = self.test_generator(
+            self.gs_data,
+            28,
+            skip_indexes,
+            close_column_index,
+            cfg_exp_28_days["start_date"],
+            cfg_exp_28_days["end_date"],
+        )
 
     def set_predict_data(self, skip_indexes: int, close_column_index: int):
         log.info("Start")
@@ -141,35 +181,52 @@ class DataSplit:
             self.y_test_28_days,
         ) = self.test_generator(28, skip_indexes, close_column_index, max_date)
 
+        # Full Train set
+        self.train_data = self.df[self.df["date"] <= max_date]
+
+    @staticmethod
     def test_generator(
-        self, days: int, skip_indexes: int, close_column_index: int, max_date: str
+        df: pd.DataFrame,
+        days: int,
+        skip_indexes: int,
+        close_column_index: int,
+        start_date: date,
+        end_date: date,
     ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         """Gerador de Dataframe com base na quantidade de dias.
         Os dias começam a contar DEPOIS (>) do TRAIN_MAX_DATE"""
         log.info(f"Generating test data with {days} days")
+        start_date = str(start_date)
+        end_date = str(end_date)
         test_data: List[pd.DataFrame] = []
         x_test: List[pd.DataFrame] = []
         y_test: List[pd.DataFrame] = []
 
-        tickers = list(self.df["ticker"].unique())
+        tickers = list(df["ticker"].unique())
 
         for ticker in tickers:
             test_data.append(
-                self.df[
-                    (self.df["ticker"] == ticker) & (self.df["date"] > max_date)
-                ].head(days)[["ticker", "date", "close"]]
+                df[
+                    (df["ticker"] == ticker)
+                    & (df["date"] >= start_date)
+                    & (df["date"] <= end_date)
+                ][["ticker", "date", "close"]]
             )
 
             x_test.append(
-                self.df[(self.df["ticker"] == ticker) & (self.df["date"] > max_date)]
-                .head(days)
-                .iloc[:, skip_indexes:]
+                df[
+                    (df["ticker"] == ticker)
+                    & (df["date"] >= start_date)
+                    & (df["date"] <= end_date)
+                ].iloc[:, skip_indexes:]
             )
 
             y_test.append(
-                self.df[(self.df["ticker"] == ticker) & (self.df["date"] > max_date)]
-                .head(days)
-                .iloc[:, close_column_index]
+                df[
+                    (df["ticker"] == ticker)
+                    & (df["date"] >= start_date)
+                    & (df["date"] <= end_date)
+                ].iloc[:, close_column_index]
             )
 
         return pd.concat(test_data), pd.concat(x_test), pd.concat(y_test)

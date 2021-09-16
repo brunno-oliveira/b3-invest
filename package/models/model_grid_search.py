@@ -36,7 +36,7 @@ class GridSearch(DataSplit):
         """Train e Test set customizados com base nos experimentos.
         O Train set é sempre o mesmo, o que muda são os tests"""
         n_experiments = 4
-        train = tuple(self.X_train.index for _ in range(n_experiments))
+        train = tuple(self.X_gs_train.index for _ in range(n_experiments))
 
         test = (
             self.y_gs_test_1_day.index,
