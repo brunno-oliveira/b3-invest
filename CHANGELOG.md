@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.0.0]
+* Arquivo de configuração
+* Nova data máxima de extração: 2021-06-30 -> 2021-07-30
+
 ## [2.2.1]
 * Arredondado close para 2 casas decimais
 * Módulo para consolidar todos os resultados

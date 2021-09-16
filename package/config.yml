@@ -1,0 +1,9 @@
+extract:
+  history:
+    start_date: 2019-05-18
+    end_date: 2021-07-30
+    validation_days_max_date: 2021-05-18
+transform:
+  fundamentalista:
+    max_date: 2021-05-18
+

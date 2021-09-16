@@ -2,10 +2,10 @@ import io
 import json
 import logging
 import os
-from datetime import datetime
+from time import sleep
 
+import yaml
 import yfinance as yf
-from dateutil.relativedelta import relativedelta
 
 logging.basicConfig(
     level=logging.INFO,
@@ -24,6 +24,10 @@ class ExtractTickers:
         root_path = os.path.dirname(
             os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         )
+
+        with open(os.path.join(root_path, "package", "config.yml"), "r") as ymlfile:
+            self.cfg = yaml.safe_load(ymlfile)["extract"]["history"]
+
         data_path = os.path.join(root_path, "data")
 
         tickers_file_name = "tickers.json"
@@ -50,18 +54,16 @@ class ExtractTickers:
         failed = []
         low_data = []
 
-        # Teria 28 dias para testes
-        start_date = datetime(2019, 5, 18).date()
-        end_date = datetime(2021, 6, 30).date()
-
         with open(self.tikers_path) as json_file:
             tickers = json.load(json_file)["tickers"]
         for ticker in tickers:
             logging.info(f"---- {ticker} ----")
-
             df_history = yf.download(
-                tickers=f"{ticker}.SA", start=str(start_date), end=str(end_date)
+                tickers=f"{ticker}.SA",
+                start=str(self.cfg["start_date"]),
+                end=str(self.cfg["end_date"]),
             )
+            sleep(2)  # não da para configar muito nessa api
             df_history["ticker"] = ticker
 
             if df_history.shape[0] == 0:
@@ -72,13 +74,14 @@ class ExtractTickers:
                 )
 
                 # A validação de low data deve ser feita contando os dados de treino somente
-                if (
-                    df_history[df_history.index <= "2021-05-18"].shape[0]
-                    >= dias_uteis_em_um_ano
-                ):
+                # fmt: off
+                if len(
+                    df_history[df_history.index <= str(self.cfg["validation_days_max_date"])]
+                ) >= dias_uteis_em_um_ano:
                     sucessful.append(ticker)
                 else:
                     low_data.append(ticker)
+                # fmt: on
 
         logging.info("----------------------")
         logging.warning(f"{len(failed)} REMOVED DUE TO FAILED: {failed}")
