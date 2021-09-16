@@ -34,6 +34,7 @@ class TransformHistory:
         self.transform_ticker()
         self.remove_missing_data()
         self.transform_date()
+        self.df_history["close"] = round(self.df_history["close"], 2)
         self.df_history.to_parquet(self.output_consolidado_path)
 
     def load_history(self) -> pd.DataFrame:

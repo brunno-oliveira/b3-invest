@@ -89,7 +89,7 @@ class GridSearch(DataSplit):
         elif self.model_type == ModelType.WITH_FEATURES:
             gs_path = os.path.join(self.model_path, "with_features")
 
-        self.gs_result.to_csv(os.path.join(gs_path, "gs_results.csv"), inedx=False)
+        self.gs_result.to_csv(os.path.join(gs_path, "gs_results.csv"), index=False)
 
         gs_best_params = json.dumps(self.gs.best_params_)
         with io.open(os.path.join(gs_path, "best_params.json"), "w") as f:

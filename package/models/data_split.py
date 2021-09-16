@@ -81,6 +81,7 @@ class DataSplit:
             self.X_test_28_days,
             self.y_test_28_days,
         ) = self.test_generator(28, skip_indexes, close_column_index)
+        log.info("Finished")
 
     def test_generator(
         self, days: int, skip_indexes: int, close_column_index: int
@@ -98,7 +99,7 @@ class DataSplit:
             test_data.append(
                 self.df[
                     (self.df["ticker"] == ticker) & (self.df["date"] > TRAIN_MAX_DATE)
-                ].head(days)
+                ].head(days)[["ticker", "date", "close"]]
             )
 
             x_test.append(

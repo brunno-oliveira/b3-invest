@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import pickle
@@ -68,8 +69,7 @@ class ModelBase(GridSearch):
         # Template de dicionário para as métricas
         self.model_result: Dict = {
             "1_day": {
-                "predicted": "",
-                "y_test": "",
+                "data": "",
                 "metrics": {
                     "mape": "",
                     "mae": "",
@@ -80,8 +80,7 @@ class ModelBase(GridSearch):
                 },
             },
             "7_days": {
-                "predicted": "",
-                "y_test": "",
+                "data": "",
                 "metrics": {
                     "mape": "",
                     "mae": "",
@@ -92,8 +91,7 @@ class ModelBase(GridSearch):
                 },
             },
             "14_days": {
-                "predicted": "",
-                "y_test": "",
+                "data": "",
                 "metrics": {
                     "mape": "",
                     "mae": "",
@@ -104,8 +102,7 @@ class ModelBase(GridSearch):
                 },
             },
             "28_days": {
-                "predicted": "",
-                "y_test": "",
+                "data": "",
                 "metrics": {
                     "mape": "",
                     "mae": "",
@@ -150,25 +147,26 @@ class ModelBase(GridSearch):
 
     def predict(self):
         log.info("Predict 1 day..")
-        self.model_result["1_day"].update(
-            {"predicted": self.model.predict(self.X_test_1_day)}
-        )
-        self.model_result["1_day"].update({"y_test": self.y_test_1_day})
+        self.predicted_1_day = self.model.predict(self.X_test_1_day)
+        self.test_data_1_day["predicted"] = self.predicted_1_day
+        self.model_result["1_day"].update({"data": self.test_data_1_day.to_dict()})
+
         log.info("Predict 7 days..")
-        self.model_result["7_days"].update(
-            {"predicted": self.model.predict(self.X_test_7_days)}
-        )
-        self.model_result["7_days"].update({"y_test": self.y_test_7_days})
+        self.predicted_7_days = self.model.predict(self.X_test_7_days)
+        self.test_data_7_days["predicted"] = self.predicted_7_days
+        self.model_result["7_days"].update({"data": self.test_data_7_days.to_dict()})
+
         log.info("Predict 14 days..")
-        self.model_result["14_days"].update(
-            {"predicted": self.model.predict(self.X_test_14_days)}
-        )
-        self.model_result["14_days"].update({"y_test": self.y_test_14_days})
+        self.predicted_14_days = self.model.predict(self.X_test_14_days)
+        self.test_data_14_days["predicted"] = self.predicted_14_days
+        self.model_result["14_days"].update({"data": self.test_data_14_days.to_dict()})
+
         log.info("Predict 28 days..")
-        self.model_result["28_days"].update(
-            {"predicted": self.model.predict(self.X_test_28_days)}
-        )
-        self.model_result["28_days"].update({"y_test": self.y_test_28_days})
+        self.predicted_28_days = self.model.predict(self.X_test_28_days)
+        self.test_data_28_days["predicted"] = self.predicted_28_days
+        self.model_result["28_days"].update({"data": self.test_data_28_days.to_dict()})
+
+        log.info("Done")
 
     def run_metrics(self):
         log.info("Running Metrics...")
@@ -182,6 +180,17 @@ class ModelBase(GridSearch):
         pickle_path = os.path.join(self.result_path(), "result.pickle")
         with open(pickle_path, "wb") as handle:
             pickle.dump(self.model_result, handle)
+
+        metrics_path = os.path.join(self.result_path(), "rmse")
+        metrics = {
+            "1_day": self.model_result["1_day"]["metrics"],
+            "7_days": self.model_result["7_days"]["metrics"],
+            "14_days": self.model_result["14_days"]["metrics"],
+            "28_days": self.model_result["28_days"]["metrics"],
+        }
+
+        with open(f"{metrics_path}.json", "a") as f:
+            json.dump(metrics, f, indent=4)
 
     def log_metrics(self):
         log.info("Start")
@@ -208,10 +217,10 @@ class ModelBase(GridSearch):
         for key, _ in self.model_result.items():
             fig, ax = plt.subplots(figsize=(30, 6))
 
-            x = [_ for _ in range(len(self.model_result[key]["predicted"]))]
+            x = [_ for _ in range(len(pd.DataFrame(self.model_result[key]["data"])))]
 
-            sns.lineplot(x=x, y=self.model_result[key]["y_test"])
-            ax.plot(self.model_result[key]["predicted"])
+            sns.lineplot(x=x, y=pd.DataFrame(self.model_result[key]["data"])["close"])
+            ax.plot(pd.DataFrame(self.model_result[key]["data"])["predicted"])
 
             fig.savefig(os.path.join(self.result_path(), f"{key}.jpeg"))
 
@@ -236,8 +245,8 @@ class ModelBase(GridSearch):
             for func, metric_key in zip(func_metrics, key_metrics):
                 self.model_result[key]["metrics"][metric_key] = round(
                     func(
-                        self.model_result[key]["predicted"],
-                        self.model_result[key]["y_test"],
+                        pd.DataFrame(self.model_result[key]["data"])["predicted"],
+                        pd.DataFrame(self.model_result[key]["data"])["close"],
                     ),
                     4,
                 )

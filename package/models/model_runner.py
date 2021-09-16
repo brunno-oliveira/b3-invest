@@ -3,12 +3,15 @@ import os
 import pickle
 
 from decision_tree_regressor.decision_tree_regressor import ModelDecisionTreeRegressor
-from model_type import ModelType
 from random_forest_regressor.random_forest_regressor import ModelRandomForestRegressor
+
+from model_type import ModelType
+from plot_result import PlotResults
+
 
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(process)-5d][%(asctime)s][%(filename)-10s][%(funcName)-10s][%(levelname)-5s] %(message)s",
+    format="[%(process)-5d][%(asctime)s][%(filename)-27s][%(funcName)-17s][%(levelname)-5s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=[
         logging.StreamHandler(),
@@ -73,32 +76,9 @@ class ModelRunner:
 
     def show_result(self):
         logging.info("Start")
-        self.consolidate_results()
-        self.plot_results()
-        logging.info("Finished")
-
-    def consolidate_results(self):
-        logging.info("Start")
-        results = {}
-        root_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-        result_path = os.path.join(root_path, "data", "results")
-        for model in os.listdir(result_path):
-            for model_type in os.listdir(os.path.join(result_path, model)):
-                pickle_path = os.path.join(
-                    result_path, model, model_type, "result.pickle"
-                )
-                with open(pickle_path, "rb") as handle:
-                    result = pickle.load(handle)
-                if not (model in results):
-                    results[model] = {}
-                results[model][model_type] = {}
-                results[model][model_type].update(result)
-        logging.info("Finished")
-
-    def plot_results(self):
-        logging.info("Start")
+        PlotResults().show_results()
 
 
 # ModelRunner().run(grid_search=True)
-# ModelRunner().run(grid_search=False)
+ModelRunner().run(grid_search=False)
 ModelRunner().show_result()
