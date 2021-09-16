@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 * Arquivo de configuração
 * Alteração nas datas de validação e predição
 * Fixado a data dos experimentos devido a missing data no hitórico
+* Zipado os data sources
 
 ## [2.2.1]
 * Arredondado close para 2 casas decimais

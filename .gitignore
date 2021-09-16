@@ -129,5 +129,4 @@ dmypy.json
 .pyre/
 *.parquet
 *.7z
-*.zip
 /wandb
