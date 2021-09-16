@@ -49,6 +49,10 @@ class ExtractTickers:
 
     def download(self):
         logging.info("Start")
+        start_date = str(self.cfg["start_date"])
+        end_date = str(self.cfg["end_date"])
+        logging.info(f"Start date: {start_date} end date {end_date}")
+
         dias_uteis_em_um_ano = 254
         sucessful = []
         failed = []
@@ -60,8 +64,8 @@ class ExtractTickers:
             logging.info(f"---- {ticker} ----")
             df_history = yf.download(
                 tickers=f"{ticker}.SA",
-                start=str(self.cfg["start_date"]),
-                end=str(self.cfg["end_date"]),
+                start=start_date,
+                end=end_date,
             )
             sleep(2)  # não da para configar muito nessa api
             df_history["ticker"] = ticker
@@ -100,5 +104,5 @@ class ExtractTickers:
 
 if __name__ == "__main__":
     extract = ExtractTickers()
-    extract.clear_data()
+    # extract.clear_data()
     extract.download()
