@@ -81,6 +81,7 @@ class DataSplit:
             self.X_test_28_days,
             self.y_test_28_days,
         ) = self.test_generator(28, skip_indexes, close_column_index)
+        log.info("Finished")
 
     def test_generator(
         self, days: int, skip_indexes: int, close_column_index: int
