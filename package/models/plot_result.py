@@ -1,11 +1,12 @@
-import os
 import logging
+import os
 import pickle
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
 from typing import Dict
-from model_type import ModelType
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+import yaml
 
 sns.set_theme(style="darkgrid")
 
@@ -18,6 +19,11 @@ class PlotResults:
         self.data_path = os.path.join(self.root_path, "data")
         self.docs_path = os.path.join(self.root_path, "docs")
         self.docs_imagens_path = os.path.join(self.docs_path, "imagens")
+
+        with open(
+            os.path.join(self.root_path, "package", "config.yml"), "r"
+        ) as ymlfile:
+            self.cfg = yaml.safe_load(ymlfile)
 
         self.dict_results: Dict = None
         self.df: pd.DataFrame = None
@@ -51,39 +57,43 @@ class PlotResults:
         df_train_test = df_train_test.reset_index()
         df_train_test.drop(columns="index", inplace=True)
 
-        fig, ax = plt.subplots(figsize=(30, 6))
+        fig, ax = plt.subplots(figsize=(11, 6))
         ax.grid(True)
         sns.lineplot(
             x=df_train_test["date"],
             y=df_train_test["close"],
             label="Valor do fechamento",
         )
-        ax.axvline(205, 0, 1, color="r")
+        # Se não for explicar não plota
+        # ax.axvline(205, 0, 1, color="r")
 
+        cfg_grid = self.cfg["model"]["grid_search"]["experiments"]["28_days"]
+        cfg_test = self.cfg["model"]["predict"]["experiments"]["28_days"]
         ax.axvspan(
-            list(df_train_test["date"].unique()).index("2021-05-19"),
-            list(df_train_test["date"].unique()).index("2021-06-28"),
+            list(df_train_test["date"].unique()).index(str(cfg_grid["start_date"])),
+            list(df_train_test["date"].unique()).index(str(cfg_grid["end_date"])),
             alpha=0.3,
             color="green",
             label="Datas de validação",
         )
 
         ax.axvspan(
-            list(df_train_test["date"].unique()).index("2021-06-29"),
-            list(df_train_test["date"].unique()).index("2021-08-06"),
+            list(df_train_test["date"].unique()).index(str(cfg_test["start_date"])),
+            list(df_train_test["date"].unique()).index(str(cfg_test["end_date"])),
             alpha=0.3,
             color="blue",
             label="Datas de teste",
         )
 
-        ax.xaxis.set_major_locator(plt.MaxNLocator(40))
-        plt.xticks(rotation=75)
+        ax.xaxis.set_major_locator(plt.MaxNLocator(20))
+        plt.xticks(rotation=60)
         plt.ylabel("R$")
         plt.xlabel("Data")
         plt.title("Histórico de fechamento diário")
         plt.legend()
         fig.savefig(
-            os.path.join(self.docs_imagens_path, "train_validation_test_data.jpeg")
+            os.path.join(self.docs_imagens_path, "train_validation_test_data.jpeg"),
+            bbox_inches="tight",
         )
 
     def consolidate_results(self) -> Dict:
