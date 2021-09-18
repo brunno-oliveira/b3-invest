@@ -1,7 +1,9 @@
 extract:
   history:
     start_date: 2019-05-18
-    end_date: 2021-07-29
+    # A API funciona como < end_date.
+    # Por isso é 2021-08-06 +1 dia
+    end_date: 2021-08-07
     validation_days_max_date: 2021-05-18
 transform:
   fundamentalista:
@@ -26,23 +28,23 @@ model:
         end_date: 2021-06-08
       28_days:
         start_date: 2021-05-19
-        end_date: 2021-06-29
+        end_date: 2021-06-28
   predict:
     train:
       # O predict incorpora os dados de validação
       # da etapa de GS
-      max_date: 2021-06-29
+      max_date: 2021-06-28
     experiments:
       1_day:
-        start_date: 2021-06-30
-        end_date: 2021-06-30
+        start_date: 2021-06-29
+        end_date: 2021-06-29
       7_days:
-        start_date: 2021-06-30
+        start_date: 2021-06-29
         end_date: 2021-07-08
       14_days:
-        start_date: 2021-06-30
+        start_date: 2021-06-29
         end_date: 2021-07-20
       28_days:
-        start_date: 2021-06-30
-        end_date: 2021-07-29
+        start_date: 2021-06-29
+        end_date: 2021-08-06
 

@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.1.0]
+* Revisão das datas
+* Persistência de novo history.zip
+
 ## [3.0.0]
 * Arquivo de configuração
 * Alteração nas datas de validação e predição
