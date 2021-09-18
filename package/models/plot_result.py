@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from typing import Dict
+from model_type import ModelType
 
 sns.set_theme(style="darkgrid")
 
@@ -36,11 +37,54 @@ class PlotResults:
         self.dict_results = self.consolidate_results()
         self.df_metric = self.consolidade_metric()
 
+    def plot_test_example(self, ticker: str = "PETR4"):
+        log.info("Start")
+
     def plot_treino_teste_data(self):
         """Histórico de fechamento com marcação para a baixa devido a covid,
         e o período de testes.
         """
         log.info("Start")
+        df_train_test = self.df[["ticker", "close", "date"]].copy()
+        df_train_test["date"] = df_train_test["date"].dt.strftime("%Y-%m-%d")
+        df_train_test = df_train_test.sort_values(by="date")
+        df_train_test = df_train_test.reset_index()
+        df_train_test.drop(columns="index", inplace=True)
+
+        fig, ax = plt.subplots(figsize=(30, 6))
+        ax.grid(True)
+        sns.lineplot(
+            x=df_train_test["date"],
+            y=df_train_test["close"],
+            label="Valor do fechamento",
+        )
+        ax.axvline(205, 0, 1, color="r")
+
+        ax.axvspan(
+            list(df_train_test["date"].unique()).index("2021-05-19"),
+            list(df_train_test["date"].unique()).index("2021-06-28"),
+            alpha=0.3,
+            color="green",
+            label="Datas de validação",
+        )
+
+        ax.axvspan(
+            list(df_train_test["date"].unique()).index("2021-06-29"),
+            list(df_train_test["date"].unique()).index("2021-08-06"),
+            alpha=0.3,
+            color="blue",
+            label="Datas de teste",
+        )
+
+        ax.xaxis.set_major_locator(plt.MaxNLocator(40))
+        plt.xticks(rotation=75)
+        plt.ylabel("R$")
+        plt.xlabel("Data")
+        plt.title("Histórico de fechamento diário")
+        plt.legend()
+        fig.savefig(
+            os.path.join(self.docs_imagens_path, "train_validation_test_data.jpeg")
+        )
 
     def consolidate_results(self) -> Dict:
         log.info("Start")
@@ -61,7 +105,7 @@ class PlotResults:
 
     def consolidade_metric(self):
         log.info("Start")
-        return pd.concat(
+        df = pd.concat(
             [
                 # 1 day
                 pd.DataFrame(
@@ -261,3 +305,6 @@ class PlotResults:
                 ),
             ]
         )
+        df = df.reset_index()
+        df.drop(columns=["index"], inplace=True)
+        return df
