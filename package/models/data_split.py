@@ -231,7 +231,7 @@ class DataSplit:
     ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         """Gerador de Dataframe com base na quantidade de dias.
         Os dias começam a contar DEPOIS (>) do TRAIN_MAX_DATE"""
-        log.info(f"Generating test data with {days} days")
+        log.info(f"Generating validation/test data with {days} days")
         start_date = str(start_date)
         end_date = str(end_date)
         test_data: List[pd.DataFrame] = []
