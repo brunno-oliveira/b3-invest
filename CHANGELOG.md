@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.2.0]
+* Add LSTM
+* Add XGBR
+
 ## [3.1.0]
 * Revisão das datas
 * Persistência de novo history.zip

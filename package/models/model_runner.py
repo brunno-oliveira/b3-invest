@@ -4,6 +4,8 @@ import pickle
 
 from decision_tree_regressor.decision_tree_regressor import ModelDecisionTreeRegressor
 from random_forest_regressor.random_forest_regressor import ModelRandomForestRegressor
+from neural_network.neural_network import NeuralNetwork
+from xgb_regressor.xgb_regressor import ModelXGBRegressor
 
 from model_type import ModelType
 from plot_result import PlotResults
@@ -43,11 +45,35 @@ class ModelRunner:
             model_type=ModelType.WITH_FEATURES,
         )
 
+        self.lstsm_wo_features = NeuralNetwork(
+            model_folder="neural_network",
+            model_type=ModelType.WITHOUT_FEATURES,
+        )
+
+        self.lstm = NeuralNetwork(
+            model_folder="neural_network",
+            model_type=ModelType.WITH_FEATURES,
+        )
+
+        self.xgbr_wo_feature = ModelXGBRegressor(
+            model_folder="xgb_regressor",
+            model_type=ModelType.WITHOUT_FEATURES,
+        )
+
+        self.xgbr = ModelXGBRegressor(
+            model_folder="xgb_regressor",
+            model_type=ModelType.WITH_FEATURES,
+        )
+
         self.models = [
             self.decision_tree_wo_features,
             self.decision_tree,
             self.random_forest_wo_features,
             self.random_forest,
+            self.lstsm_wo_features,
+            self.lstm,
+            self.xgbr_wo_feature,
+            self.xgbr,
         ]
 
     def run(self, grid_search: bool = False):
@@ -60,8 +86,8 @@ class ModelRunner:
     def train_predict(self):
         logging.info("Start")
         for model in self.models:
-            model.set_model()
             model.load_data()
+            model.set_model()
             model.fit_and_predict()
             model.run_metrics()
         logging.info("Finished")
@@ -69,9 +95,12 @@ class ModelRunner:
     def execute_grid_search(self):
         logging.info("Start")
         for model in self.models:
-            model.load_data()
-            model.set_model()
-            model.grid_search()
+            if model.group_name != "LSTM":
+                model.load_data()
+                model.set_model()
+                model.grid_search()
+            else:
+                logging.info("Skipping LSTM..")
         logging.info("Finished")
 
     def show_result(self):
@@ -81,4 +110,4 @@ class ModelRunner:
 
 # ModelRunner().run(grid_search=True)
 ModelRunner().run(grid_search=False)
-ModelRunner().show_result()
+# ModelRunner().show_result()

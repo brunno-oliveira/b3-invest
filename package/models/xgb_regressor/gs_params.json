@@ -1,0 +1,21 @@
+{
+    "params": {
+        "n_estimators": [
+            50,
+            100,
+            125,
+            150
+        ],
+        "learning_rate": [
+            0.01,
+            0.2,
+            0.5,
+            1
+        ],
+        "booster": [
+            "gbtree",
+            "gblinear",
+            "dart"
+        ]
+    }
+}
