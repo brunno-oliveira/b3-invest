@@ -5,6 +5,7 @@ import pickle
 from decision_tree_regressor.decision_tree_regressor import ModelDecisionTreeRegressor
 from random_forest_regressor.random_forest_regressor import ModelRandomForestRegressor
 from neural_network.neural_network import NeuralNetwork
+from xgb_regressor.xgb_regressor import ModelXGBRegressor
 
 from model_type import ModelType
 from plot_result import PlotResults
@@ -54,6 +55,16 @@ class ModelRunner:
             model_type=ModelType.WITH_FEATURES,
         )
 
+        self.xgbr_wo_feature = ModelXGBRegressor(
+            model_folder="xgb_regressor",
+            model_type=ModelType.WITHOUT_FEATURES,
+        )
+
+        self.xgbr = ModelXGBRegressor(
+            model_folder="xgb_regressor",
+            model_type=ModelType.WITH_FEATURES,
+        )
+
         self.models = [
             self.decision_tree_wo_features,
             self.decision_tree,
@@ -61,6 +72,8 @@ class ModelRunner:
             self.random_forest,
             self.lstsm_wo_features,
             self.lstm,
+            self.xgbr_wo_feature,
+            self.xgbr,
         ]
 
     def run(self, grid_search: bool = False):
@@ -95,6 +108,6 @@ class ModelRunner:
         PlotResults().show_results()
 
 
-ModelRunner().run(grid_search=True)
+# ModelRunner().run(grid_search=True)
 ModelRunner().run(grid_search=False)
-ModelRunner().show_result()
+# ModelRunner().show_result()
