@@ -115,206 +115,38 @@ class PlotResults:
 
     def consolidade_metric(self):
         log.info("Start")
-        df = pd.concat(
-            [
-                # 1 day
-                pd.DataFrame(
-                    {
-                        "experiment": "1_day",
-                        "model": ["decision_tree_regressor"],
-                        "model_type": ["with_features"],
-                        "rmse": [
-                            self.dict_results["decision_tree_regressor"][
-                                "with_features"
-                            ]["1_day"]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                pd.DataFrame(
-                    {
-                        "experiment": "1_day",
-                        "model": ["decision_tree_regressor"],
-                        "model_type": ["wo_features"],
-                        "rmse": [
-                            self.dict_results["decision_tree_regressor"]["wo_features"][
-                                "1_day"
-                            ]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                pd.DataFrame(
-                    {
-                        "experiment": "1_day",
-                        "model": ["random_forest_regressor"],
-                        "model_type": ["with_features"],
-                        "rmse": [
-                            self.dict_results["random_forest_regressor"][
-                                "with_features"
-                            ]["1_day"]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                pd.DataFrame(
-                    {
-                        "experiment": "1_day",
-                        "model": ["random_forest_regressor"],
-                        "model_type": ["wo_features"],
-                        "rmse": [
-                            self.dict_results["random_forest_regressor"]["wo_features"][
-                                "1_day"
-                            ]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                # 7 days
-                pd.DataFrame(
-                    {
-                        "experiment": "7_days",
-                        "model": ["decision_tree_regressor"],
-                        "model_type": ["with_features"],
-                        "rmse": [
-                            self.dict_results["decision_tree_regressor"][
-                                "with_features"
-                            ]["7_days"]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                pd.DataFrame(
-                    {
-                        "experiment": "7_days",
-                        "model": ["decision_tree_regressor"],
-                        "model_type": ["wo_features"],
-                        "rmse": [
-                            self.dict_results["decision_tree_regressor"]["wo_features"][
-                                "7_days"
-                            ]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                pd.DataFrame(
-                    {
-                        "experiment": "7_days",
-                        "model": ["random_forest_regressor"],
-                        "model_type": ["with_features"],
-                        "rmse": [
-                            self.dict_results["random_forest_regressor"][
-                                "with_features"
-                            ]["7_days"]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                pd.DataFrame(
-                    {
-                        "experiment": "7_days",
-                        "model": ["random_forest_regressor"],
-                        "model_type": ["wo_features"],
-                        "rmse": [
-                            self.dict_results["random_forest_regressor"]["wo_features"][
-                                "7_days"
-                            ]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                # 14 days
-                pd.DataFrame(
-                    {
-                        "experiment": "14_days",
-                        "model": ["decision_tree_regressor"],
-                        "model_type": ["with_features"],
-                        "rmse": [
-                            self.dict_results["decision_tree_regressor"][
-                                "with_features"
-                            ]["14_days"]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                pd.DataFrame(
-                    {
-                        "experiment": "14_days",
-                        "model": ["decision_tree_regressor"],
-                        "model_type": ["wo_features"],
-                        "rmse": [
-                            self.dict_results["decision_tree_regressor"]["wo_features"][
-                                "14_days"
-                            ]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                pd.DataFrame(
-                    {
-                        "experiment": "14_days",
-                        "model": ["random_forest_regressor"],
-                        "model_type": ["with_features"],
-                        "rmse": [
-                            self.dict_results["random_forest_regressor"][
-                                "with_features"
-                            ]["14_days"]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                pd.DataFrame(
-                    {
-                        "experiment": "14_days",
-                        "model": ["random_forest_regressor"],
-                        "model_type": ["wo_features"],
-                        "rmse": [
-                            self.dict_results["random_forest_regressor"]["wo_features"][
-                                "14_days"
-                            ]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                # 28 days
-                pd.DataFrame(
-                    {
-                        "experiment": "28_days",
-                        "model": ["decision_tree_regressor"],
-                        "model_type": ["with_features"],
-                        "rmse": [
-                            self.dict_results["decision_tree_regressor"][
-                                "with_features"
-                            ]["28_days"]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                pd.DataFrame(
-                    {
-                        "experiment": "28_days",
-                        "model": ["decision_tree_regressor"],
-                        "model_type": ["wo_features"],
-                        "rmse": [
-                            self.dict_results["decision_tree_regressor"]["wo_features"][
-                                "28_days"
-                            ]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                pd.DataFrame(
-                    {
-                        "experiment": "28_days",
-                        "model": ["random_forest_regressor"],
-                        "model_type": ["with_features"],
-                        "rmse": [
-                            self.dict_results["random_forest_regressor"][
-                                "with_features"
-                            ]["28_days"]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-                pd.DataFrame(
-                    {
-                        "experiment": "28_days",
-                        "model": ["random_forest_regressor"],
-                        "model_type": ["wo_features"],
-                        "rmse": [
-                            self.dict_results["random_forest_regressor"]["wo_features"][
-                                "28_days"
-                            ]["metrics"]["rmse"]
-                        ],
-                    }
-                ),
-            ]
-        )
+        models = [
+            "decision_tree_regressor",
+            "random_forest_regressor",
+            "neural_network",
+            "xgb_regressor",
+        ]
+
+        experiments = ["1_day", "7_days", "14_days", "28_days"]
+
+        model_types = ["with_features", "wo_features"]
+
+        dfs = []
+        for model in models:
+            for experiment in experiments:
+                for model_type in model_types:
+
+                    dfs.append(
+                        pd.DataFrame(
+                            {
+                                "experiment": experiment,
+                                "model": [model],
+                                "model_type": [model_type],
+                                "rmse": [
+                                    self.dict_results[model][model_type][experiment][
+                                        "metrics"
+                                    ]["rmse"]
+                                ],
+                            }
+                        )
+                    )
+        df = pd.concat(dfs)
+
         df = df.reset_index()
         df.drop(columns=["index"], inplace=True)
         return df
