@@ -15,7 +15,7 @@ model:
       # pq o grid search funciona com index dos
       # dados de validação. Por isso é carregado
       # todo o X_train
-      max_date: 2021-06-28
+      max_date: 2021-05-18
     experiments:
       1_day:
         start_date: 2021-05-19

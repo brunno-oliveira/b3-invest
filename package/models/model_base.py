@@ -29,7 +29,11 @@ TRAIN_MAX_DATE = "2021-05-18"
 
 class ModelBase(GridSearch):
     def __init__(
-        self, group_name: str, model_name: str, model_folder: str, model_type: ModelType
+        self,
+        group_name: str,
+        model_name: str,
+        model_folder: str,
+        model_type: ModelType,
     ):
         """Classe base que todos modelos devem herdar. Contém todas as
             implementações necessárias.
