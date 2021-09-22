@@ -245,8 +245,8 @@ class ModelBase(GridSearch):
             for func, metric_key in zip(func_metrics, key_metrics):
                 self.model_result[key]["metrics"][metric_key] = round(
                     func(
-                        pd.DataFrame(self.model_result[key]["data"])["predicted"],
                         pd.DataFrame(self.model_result[key]["data"])["close"],
+                        pd.DataFrame(self.model_result[key]["data"])["predicted"],
                     ),
                     4,
                 )
