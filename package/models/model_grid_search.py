@@ -53,7 +53,7 @@ class GridSearch(DataSplit):
             self.load_grid()
 
         self.gs = GridSearchCV(
-            estimator=self.model,
+            estimator=self.model.__class__(),
             param_grid=self.gs_params,
             cv=self.train_test_index(),
             n_jobs=multiprocessing.cpu_count(),
