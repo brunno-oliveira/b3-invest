@@ -4,9 +4,11 @@ import pickle
 from typing import Dict
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
 import yaml
+from jinja2 import Template
 
 sns.set_theme(style="darkgrid")
 
@@ -19,6 +21,7 @@ class PlotResults:
         self.data_path = os.path.join(self.root_path, "data")
         self.docs_path = os.path.join(self.root_path, "docs")
         self.docs_imagens_path = os.path.join(self.docs_path, "imagens")
+        self.experimentos_path = os.path.join(self.docs_imagens_path, "experimentos")
 
         with open(
             os.path.join(self.root_path, "package", "config.yml"), "r"
@@ -32,7 +35,8 @@ class PlotResults:
     def show_results(self):
         log.info("Start")
         self.load_data()
-        self.plot_treino_teste_data()
+        # self.plot_treino_teste_data()
+        self.plot_experiments()
         log.info("Finished")
 
     def load_data(self):
@@ -43,8 +47,33 @@ class PlotResults:
         self.dict_results = self.consolidate_results()
         self.df_metric = self.consolidade_metric()
 
-    def plot_test_example(self, ticker: str = "PETR4"):
+    def plot_experiments(self):
         log.info("Start")
+        for experiment in self.df_metric["experiment"].unique():
+            log.info(f"Ploting {experiment} experiment")
+            df = self.df_metric[self.df_metric["experiment"] == experiment][
+                ["model", "wo_features", "with_features"]
+            ]
+            df.rename(
+                columns={
+                    "model": "Modelo",
+                    "wo_features": "Sem Features",
+                    "with_features": "Com Features",
+                },
+                inplace=True,
+            )
+            title_text = f"Experimentos com {experiment} dias"
+            fig, ax = plt.subplots(figsize=(11, 6))
+            ax.table(cellText=df.values, colLabels=df.columns, loc="center")
+            ax.axis("off")
+            ax.axis("tight")
+            fig.tight_layout()
+            plt.suptitle(title_text)
+
+            fig.savefig(
+                os.path.join(self.experimentos_path, f"{experiment}.jpeg"),
+                bbox_inches="tight",
+            )
 
     def plot_treino_teste_data(self):
         """Histórico de fechamento com marcação para a baixa devido a covid,
@@ -64,8 +93,6 @@ class PlotResults:
             y=df_train_test["close"],
             label="Valor do fechamento",
         )
-        # Se não for explicar não plota
-        # ax.axvline(205, 0, 1, color="r")
 
         cfg_grid = self.cfg["model"]["grid_search"]["experiments"]["28_days"]
         cfg_test = self.cfg["model"]["predict"]["experiments"]["28_days"]
@@ -149,4 +176,16 @@ class PlotResults:
 
         df = df.reset_index()
         df.drop(columns=["index"], inplace=True)
+
+        # Transorm RMSE into two columns, with_features and wo_features
+        df = df.set_index(["experiment", "model", "model_type"])["rmse"].unstack()
+        df = df.reset_index()
+        df["best_model"] = np.where(
+            df["with_features"] > df["wo_features"],
+            "with_features",
+            np.where(df["with_features"] < df["wo_features"], "wo_features", "EMPATE"),
+        )
+
+        df = df.sort_values(["model"])
+
         return df

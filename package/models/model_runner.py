@@ -1,15 +1,11 @@
 import logging
-import os
-import pickle
 
 from decision_tree_regressor.decision_tree_regressor import ModelDecisionTreeRegressor
-from random_forest_regressor.random_forest_regressor import ModelRandomForestRegressor
-from neural_network.neural_network import NeuralNetwork
-from xgb_regressor.xgb_regressor import ModelXGBRegressor
-
 from model_type import ModelType
+from neural_network.neural_network import NeuralNetwork
 from plot_result import PlotResults
-
+from random_forest_regressor.random_forest_regressor import ModelRandomForestRegressor
+from xgb_regressor.xgb_regressor import ModelXGBRegressor
 
 logging.basicConfig(
     level=logging.INFO,
@@ -109,5 +105,5 @@ class ModelRunner:
 
 
 # ModelRunner().run(grid_search=True)
-ModelRunner().run(grid_search=False)
-# ModelRunner().show_result()
+# ModelRunner().run(grid_search=False)
+ModelRunner().show_result()
