@@ -25,7 +25,7 @@ class PlotResults:
         self.data_path = os.path.join(self.root_path, "data")
         self.docs_path = os.path.join(self.root_path, "docs")
         self.docs_imagens_path = os.path.join(self.docs_path, "imagens")
-        self.experimentos_path = os.path.join(self.docs_imagens_path, "experimentos")
+        self.experimentos_path = os.path.join(self.docs_path, "experimentos")
 
         with open(
             os.path.join(self.root_path, "package", "config.yml"), "r"
@@ -39,8 +39,9 @@ class PlotResults:
     def show_results(self):
         log.info("Start")
         self.load_data()
+        # Não é necessário reprocessar esses plots abaixo
         # self.plot_treino_teste_data()
-        self.metrics_example()
+        # self.metrics_example()
         self.plot_experiments()
         log.info("Finished")
 
@@ -100,17 +101,8 @@ class PlotResults:
                 },
                 inplace=True,
             )
-            title_text = f"Experimentos com {experiment} dias"
-            fig, ax = plt.subplots(figsize=(11, 6))
-            ax.table(cellText=df.values, colLabels=df.columns, loc="center")
-            ax.axis("off")
-            ax.axis("tight")
-            fig.tight_layout()
-            plt.suptitle(title_text)
-
-            fig.savefig(
-                os.path.join(self.experimentos_path, f"{experiment}.jpeg"),
-                bbox_inches="tight",
+            df.to_csv(
+                os.path.join(self.experimentos_path, f"{experiment}.csv"), index=False
             )
 
     def plot_treino_teste_data(self):
