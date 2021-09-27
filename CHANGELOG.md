@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.3.0]
+* Gerando exemplo com métricas (CSV)
+* Correção de datas
+* Implementado a execução pelo melhor modelo
+
 ## [3.2.0]
 * Add LSTM
 * Add XGBR
