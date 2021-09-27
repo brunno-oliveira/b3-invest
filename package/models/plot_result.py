@@ -8,7 +8,11 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import yaml
-from jinja2 import Template
+
+from sklearn.metrics import (
+    mean_squared_error,
+    r2_score,
+)
 
 sns.set_theme(style="darkgrid")
 
@@ -36,6 +40,7 @@ class PlotResults:
         log.info("Start")
         self.load_data()
         # self.plot_treino_teste_data()
+        self.metrics_example()
         self.plot_experiments()
         log.info("Finished")
 
@@ -46,6 +51,39 @@ class PlotResults:
         )
         self.dict_results = self.consolidate_results()
         self.df_metric = self.consolidade_metric()
+
+    def metrics_example(self):
+        def root_mean_squared_error(predicted, y):
+            return mean_squared_error(predicted, y, squared=False)
+
+        log.info("Start")
+        df = pd.DataFrame(
+            self.dict_results["decision_tree_regressor"]["with_features"]["14_days"][
+                "data"
+            ]
+        )
+        df = df[df["ticker"] == "INEP3"]
+        df = df.reset_index().drop(columns=["index"]).sort_values(by=["date"])
+        df["date"] = df["date"].dt.date
+        df = round(df, 4)
+
+        r2 = round(r2_score(df["close"], df["predicted"]), 4)
+        mse = round(mean_squared_error(df["close"], df["predicted"]), 4)
+        rmse = round(root_mean_squared_error(df["close"], df["predicted"]), 4)
+        log.info(f"r2: {r2}")
+        log.info(f"mse: {mse}")
+        log.info(f"rmse: {rmse}")
+        df.rename(
+            columns={
+                "ticker": "Código Ação",
+                "date": "Data",
+                "close": "Fechamento",
+                "predicted": "Predito",
+            },
+            inplace=True,
+        )
+
+        df.to_csv(os.path.join(self.docs_path, "exemplo_metricas.csv"), index=False)
 
     def plot_experiments(self):
         log.info("Start")
