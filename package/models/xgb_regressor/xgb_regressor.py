@@ -1,4 +1,6 @@
+import json
 import logging
+import os
 import random
 
 import numpy as np
@@ -27,4 +29,20 @@ class ModelXGBRegressor(ModelBase):
 
     def set_model(self):
         logger.info("Start")
-        self.model = XGBRegressor(random_state=SEED)
+        current_path = os.path.dirname(__file__)
+
+        if self.model_type == ModelType.WITHOUT_FEATURES:
+            model_type_folder = "wo_features"
+        elif self.model_type == ModelType.WITH_FEATURES:
+            model_type_folder = "with_features"
+
+        best_param_path = os.path.join(
+            current_path, model_type_folder, "best_params.json"
+        )
+
+        with open(best_param_path) as json_file:
+            params = json.load(json_file)
+
+        self.model = XGBRegressor(
+            n_estimators=params["n_estimators"], random_state=SEED
+        )

@@ -29,7 +29,11 @@ TRAIN_MAX_DATE = "2021-05-18"
 
 class ModelBase(GridSearch):
     def __init__(
-        self, group_name: str, model_name: str, model_folder: str, model_type: ModelType
+        self,
+        group_name: str,
+        model_name: str,
+        model_folder: str,
+        model_type: ModelType,
     ):
         """Classe base que todos modelos devem herdar. Contém todas as
             implementações necessárias.
@@ -59,12 +63,6 @@ class ModelBase(GridSearch):
         self.model = None
         self.df: pd.DataFrame = None
         self.y_data: np.ndarray = None
-
-        # Predicted
-        self.predicted_1_day: np.ndarray = None
-        self.predicted_7_days: np.ndarray = None
-        self.predicted_14_days: np.ndarray = None
-        self.predicted_28_days: np.ndarray = None
 
         # Template de dicionário para as métricas
         self.model_result: Dict = {
@@ -147,23 +145,19 @@ class ModelBase(GridSearch):
 
     def predict(self):
         log.info("Predict 1 day..")
-        self.predicted_1_day = self.model.predict(self.X_test_1_day)
-        self.test_data_1_day["predicted"] = self.predicted_1_day
+        self.test_data_1_day["predicted"] = self.model.predict(self.X_test_1_day)
         self.model_result["1_day"].update({"data": self.test_data_1_day.to_dict()})
 
         log.info("Predict 7 days..")
-        self.predicted_7_days = self.model.predict(self.X_test_7_days)
-        self.test_data_7_days["predicted"] = self.predicted_7_days
+        self.test_data_7_days["predicted"] = self.model.predict(self.X_test_7_days)
         self.model_result["7_days"].update({"data": self.test_data_7_days.to_dict()})
 
         log.info("Predict 14 days..")
-        self.predicted_14_days = self.model.predict(self.X_test_14_days)
-        self.test_data_14_days["predicted"] = self.predicted_14_days
+        self.test_data_14_days["predicted"] = self.model.predict(self.X_test_14_days)
         self.model_result["14_days"].update({"data": self.test_data_14_days.to_dict()})
 
         log.info("Predict 28 days..")
-        self.predicted_28_days = self.model.predict(self.X_test_28_days)
-        self.test_data_28_days["predicted"] = self.predicted_28_days
+        self.test_data_28_days["predicted"] = self.model.predict(self.X_test_28_days)
         self.model_result["28_days"].update({"data": self.test_data_28_days.to_dict()})
 
         log.info("Done")
@@ -245,8 +239,8 @@ class ModelBase(GridSearch):
             for func, metric_key in zip(func_metrics, key_metrics):
                 self.model_result[key]["metrics"][metric_key] = round(
                     func(
-                        pd.DataFrame(self.model_result[key]["data"])["predicted"],
                         pd.DataFrame(self.model_result[key]["data"])["close"],
+                        pd.DataFrame(self.model_result[key]["data"])["predicted"],
                     ),
                     4,
                 )

@@ -40,10 +40,10 @@ model:
         end_date: 2021-06-29
       7_days:
         start_date: 2021-06-29
-        end_date: 2021-07-08
+        end_date: 2021-07-07
       14_days:
         start_date: 2021-06-29
-        end_date: 2021-07-20
+        end_date: 2021-07-19
       28_days:
         start_date: 2021-06-29
         end_date: 2021-08-06
