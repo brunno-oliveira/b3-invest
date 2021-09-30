@@ -104,6 +104,6 @@ class ModelRunner:
         PlotResults().show_results()
 
 
-ModelRunner().run(grid_search=True)
-# ModelRunner().run(grid_search=False)
+#ModelRunner().run(grid_search=True)
+ModelRunner().run(grid_search=False)
 # ModelRunner().show_result()
