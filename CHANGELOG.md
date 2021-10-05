@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.3.1]
+* Corrigido input da LSTM
+
 ## [3.3.0]
 * Gerando exemplo com métricas (CSV)
 * Gerando resultados com métrocas (CSV)
