@@ -2,7 +2,7 @@ import logging
 import random
 
 import numpy as np
-from keras.layers import LSTM, Dense, Dropout
+from keras.layers import LSTM, Dense, Dropout, Input
 from keras.models import Sequential
 from model_base import ModelBase
 from model_type import ModelType
@@ -32,27 +32,19 @@ class NeuralNetwork(ModelBase):
         logger.info("Start")
         self.model = Sequential()
 
-        self.model.add(
-            LSTM(
-                units=50,
-                return_sequences=True,
-                input_shape=(self.X_train.shape[0], self.X_train.shape[1]),
-            )
-        )
+        self.model.add(Input(shape=(None, self.X_train.shape[1])))
+        self.model.add(LSTM(units=255, return_sequences=True, activation="relu"))
         self.model.add(Dropout(0.2))
 
-        self.model.add(LSTM(units=50, return_sequences=True))
-        self.model.add(Dropout(0.2))
-
-        self.model.add(LSTM(units=50, return_sequences=True))
-        self.model.add(Dropout(0.2))
-
-        self.model.add(LSTM(units=50))
-        self.model.add(Dropout(0.2))
+        self.model.add(LSTM(units=255, activation="relu"))
 
         self.model.add(Dense(units=1))
 
-        self.model.compile(optimizer="adam", loss="mean_squared_error")
+        self.model.compile(
+            optimizer="adam",
+            loss="mean_squared_error",
+            metrics=tf.keras.metrics.RootMeanSquaredError(),
+        )
         self.model.summary()
 
     def fit_and_predict(self):
@@ -64,7 +56,7 @@ class NeuralNetwork(ModelBase):
     def fit(self):
         logger.info("Start")
 
-        self.model.fit(self.X_train, self.y_train, epochs=100, verbose=2)
+        self.model.fit(self.X_train, self.y_train, epochs=10)
         logger.info("Done")
 
     def predict(self):
@@ -120,4 +112,4 @@ class NeuralNetwork(ModelBase):
     @staticmethod
     def reshape_y(y):
         """Retorna o y no formato que o Keras espera"""
-        return np.array(y).reshape(y.shape[0], 1)
+        return np.array(y)
