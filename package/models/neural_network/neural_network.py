@@ -36,9 +36,10 @@ class NeuralNetwork(ModelBase):
 
         self.model.add(Input(shape=(None, self.X_train.shape[1])))
         self.model.add(LSTM(units=self.neurons(), return_sequences=True, activation="relu"))
-        self.model.add(Dropout(0.2))
+        self.model.add(Dropout(0.1))
 
-        #self.model.add(LSTM(units=255, activation="relu"))
+        self.model.add(LSTM(units=self.neurons(alpha=1.4), return_sequences=True, activation="relu"))
+        self.model.add(Dropout(0.1))
 
         self.model.add(Dense(units=1))
 
