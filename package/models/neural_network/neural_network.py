@@ -8,6 +8,7 @@ from model_base import ModelBase
 from model_type import ModelType
 
 import tensorflow as tf
+from tensorflow.python.client import device_lib
 
 SEED = 42
 GROUP_NAME = "LSTM"
@@ -27,16 +28,17 @@ class NeuralNetwork(ModelBase):
             model_folder=model_folder,
             model_type=model_type,
         )
+        logger.info(device_lib.list_local_devices())
 
     def set_model(self):
         logger.info("Start")
         self.model = Sequential()
 
         self.model.add(Input(shape=(None, self.X_train.shape[1])))
-        self.model.add(LSTM(units=255, return_sequences=True, activation="relu"))
+        self.model.add(LSTM(units=self.neurons(), return_sequences=True, activation="relu"))
         self.model.add(Dropout(0.2))
 
-        self.model.add(LSTM(units=255, activation="relu"))
+        #self.model.add(LSTM(units=255, activation="relu"))
 
         self.model.add(Dense(units=1))
 
@@ -62,22 +64,25 @@ class NeuralNetwork(ModelBase):
     def predict(self):
         logger.info("Predict 1 day..")
         self.predicted_1_day = self.model.predict(self.X_test_1_day)
-        self.test_data_1_day["predicted"] = self.predicted_1_day
+        self.test_data_1_day["predicted"] = self.predicted_1_day.reshape(-1)
+        logger.info('')
+        logger.info(self.test_data_1_day["predicted"])
+        logger.info('')
         self.model_result["1_day"].update({"data": self.test_data_1_day.to_dict()})
 
         logger.info("Predict 7 days..")
         self.predicted_7_days = self.model.predict(self.X_test_7_days)
-        self.test_data_7_days["predicted"] = self.predicted_7_days
+        self.test_data_7_days["predicted"] = self.predicted_7_days.reshape(-1)
         self.model_result["7_days"].update({"data": self.test_data_7_days.to_dict()})
 
         logger.info("Predict 14 days..")
         self.predicted_14_days = self.model.predict(self.X_test_14_days)
-        self.test_data_14_days["predicted"] = self.predicted_14_days
+        self.test_data_14_days["predicted"] = self.predicted_14_days.reshape(-1)
         self.model_result["14_days"].update({"data": self.test_data_14_days.to_dict()})
 
         logger.info("Predict 28 days..")
         self.predicted_28_days = self.model.predict(self.X_test_28_days)
-        self.test_data_28_days["predicted"] = self.predicted_28_days
+        self.test_data_28_days["predicted"] = self.predicted_28_days.reshape(-1)
         self.model_result["28_days"].update({"data": self.test_data_28_days.to_dict()})
 
         logger.info("Done")
@@ -104,6 +109,11 @@ class NeuralNetwork(ModelBase):
         self.X_test_28_days = self.reshape_x(self.X_test_28_days)
         self.y_test_28_days = self.reshape_y(self.y_test_28_days)
 
+    def neurons(self, alpha=1.5) -> int:
+        n = int(round(self.X_train.shape[0] / (alpha * (self.X_train.shape[1] + 1))))
+        logger.info(f"{n} neurons")
+        return n
+        
     @staticmethod
     def reshape_x(x):
         """Retorna o X no formato que o Keras espera"""
