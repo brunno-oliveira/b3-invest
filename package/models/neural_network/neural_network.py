@@ -16,7 +16,7 @@ MODEL_NAME = "2.1"
 
 np.random.seed(SEED)
 random.seed(SEED)
-
+tf.random.set_seed(SEED)
 logger = logging.getLogger(__name__)
 
 
@@ -33,21 +33,37 @@ class NeuralNetwork(ModelBase):
     def set_model(self):
         logger.info("Start")
         self.model = Sequential()
+        if self.model_type == ModelType.WITHOUT_FEATURES:
+            self.model.add(Input(shape=(None, self.X_train.shape[1])))
+            self.model.add(LSTM(units=self.neurons(), return_sequences=True, activation="relu"))
+            self.model.add(Dropout(0.1))
 
-        self.model.add(Input(shape=(None, self.X_train.shape[1])))
-        self.model.add(LSTM(units=self.neurons(), return_sequences=True, activation="relu"))
-        self.model.add(Dropout(0.1))
+            self.model.add(LSTM(units=self.neurons(alpha=1.4), return_sequences=True, activation="relu"))
+            self.model.add(Dropout(0.1))
 
-        self.model.add(LSTM(units=self.neurons(alpha=1.4), return_sequences=True, activation="relu"))
-        self.model.add(Dropout(0.1))
+            self.model.add(Dense(units=1))
 
-        self.model.add(Dense(units=1))
+            self.model.compile(
+                optimizer="adam",
+                loss="mean_squared_error",
+                metrics=tf.keras.metrics.RootMeanSquaredError(),
+            )
+        elif self.model_type == ModelType.WITH_FEATURES:
+            self.model.add(Input(shape=(None, self.X_train.shape[1])))
+            self.model.add(LSTM(units=self.neurons(), return_sequences=True, activation="relu"))
+            self.model.add(Dropout(0.1))
 
-        self.model.compile(
-            optimizer="adam",
-            loss="mean_squared_error",
-            metrics=tf.keras.metrics.RootMeanSquaredError(),
-        )
+            self.model.add(LSTM(units=self.neurons(alpha=1.4), return_sequences=True, activation="relu"))
+            self.model.add(Dropout(0.1))
+
+            self.model.add(Dense(units=1))
+
+            self.model.compile(
+                optimizer="adam",
+                loss="mean_squared_error",
+                metrics=tf.keras.metrics.RootMeanSquaredError(),
+            )
+        
         self.model.summary()
 
     def fit_and_predict(self):
