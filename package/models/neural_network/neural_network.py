@@ -75,7 +75,7 @@ class NeuralNetwork(ModelBase):
     def fit(self):
         logger.info("Start")
 
-        self.model.fit(self.X_train, self.y_train, epochs=20)
+        self.model.fit(self.X_train, self.y_train, epochs=100)
         logger.info("Done")
 
     def predict(self):
