@@ -38,7 +38,7 @@ class NeuralNetwork(ModelBase):
             self.model.add(LSTM(units=self.neurons(), return_sequences=True, activation="relu"))
             self.model.add(Dropout(0.1))
 
-            self.model.add(LSTM(units=self.neurons(alpha=1.4), return_sequences=True, activation="relu"))
+            self.model.add(LSTM(units=self.neurons(alpha=1.4), activation="relu"))
             self.model.add(Dropout(0.1))
 
             self.model.add(Dense(units=1))
@@ -53,7 +53,7 @@ class NeuralNetwork(ModelBase):
             self.model.add(LSTM(units=self.neurons(), return_sequences=True, activation="relu"))
             self.model.add(Dropout(0.1))
 
-            self.model.add(LSTM(units=self.neurons(alpha=1.4), return_sequences=True, activation="relu"))
+            self.model.add(LSTM(units=self.neurons(alpha=1.4), activation="relu"))
             self.model.add(Dropout(0.1))
 
             self.model.add(Dense(units=1))
@@ -75,7 +75,7 @@ class NeuralNetwork(ModelBase):
     def fit(self):
         logger.info("Start")
 
-        self.model.fit(self.X_train, self.y_train, epochs=10)
+        self.model.fit(self.X_train, self.y_train, epochs=100)
         logger.info("Done")
 
     def predict(self):
