@@ -1,5 +1,5 @@
 Modelo,Sem Features,Com Features
-decision_tree_regressor,1.0477,1.1018
-neural_network,38.2044,38.2172
-random_forest_regressor,1.221,1.1838
+decision_tree_regressor,1.0546,1.2198
+neural_network,22.3005,19.4946
+random_forest_regressor,1.1947,1.1984
 xgb_regressor,2.5545,2.1454
