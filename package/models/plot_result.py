@@ -211,7 +211,7 @@ class PlotResults:
         df = df.set_index(["experiment", "model", "model_type"])["rmse"].unstack()
         df = df.reset_index()
         df["best_model"] = np.where(
-            df["with_features"] > df["wo_features"],
+            df["with_features"] < df["wo_features"],
             "with_features",
             np.where(df["with_features"] < df["wo_features"], "wo_features", "EMPATE"),
         )
