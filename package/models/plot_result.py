@@ -9,6 +9,8 @@ import pandas as pd
 import seaborn as sns
 import yaml
 
+from typing import List
+
 from sklearn.metrics import (
     mean_squared_error,
     r2_score,
@@ -35,6 +37,7 @@ class PlotResults:
         self.dict_results: Dict = None
         self.df: pd.DataFrame = None
         self.df_metric: pd.DataFrame = None
+        self.df_experiments: pd.DataFrame = None
 
     def show_results(self):
         log.info("Start")
@@ -50,8 +53,8 @@ class PlotResults:
         self.df = pd.read_parquet(
             os.path.join(self.data_path, "df_consolidado.parquet")
         )
-        self.dict_results = self.consolidate_results()
-        self.df_metric = self.consolidade_metric()
+        self.dict_results = self.consolidate_result_file()
+        self.df_metric, self.df_experiments = self.consolidade_data()
 
     def metrics_example(self):
         def root_mean_squared_error(predicted, y):
@@ -153,7 +156,7 @@ class PlotResults:
             bbox_inches="tight",
         )
 
-    def consolidate_results(self) -> Dict:
+    def consolidate_result_file(self) -> Dict:
         log.info("Start")
         results = {}
         result_path = os.path.join(self.root_path, "data", "results")
@@ -170,7 +173,13 @@ class PlotResults:
                 results[model][model_type].update(result)
         return results
 
-    def consolidade_metric(self):
+    def consolidade_data(self) -> pd.DataFrame:
+        """[summary]
+
+        Returns:
+            pd.DataFrame: Dataframe com as métricas
+        """
+
         log.info("Start")
         models = [
             "decision_tree_regressor",
@@ -183,12 +192,13 @@ class PlotResults:
 
         model_types = ["with_features", "wo_features"]
 
-        dfs = []
+        dfs_metrica = []
+        dfs_data = []
         for model in models:
             for experiment in experiments:
                 for model_type in model_types:
 
-                    dfs.append(
+                    dfs_metrica.append(
                         pd.DataFrame(
                             {
                                 "experiment": experiment,
@@ -202,20 +212,55 @@ class PlotResults:
                             }
                         )
                     )
-        df = pd.concat(dfs)
 
-        df = df.reset_index()
-        df.drop(columns=["index"], inplace=True)
+                    df_tmp_data = pd.DataFrame(
+                        self.dict_results[model][model_type][experiment]["data"]
+                    )
+                    df_tmp_data["experiment"] = experiment
+                    df_tmp_data["model"] = model
+                    df_tmp_data["model_type"] = model_type
+                    dfs_data.append(df_tmp_data.copy())
+
+        return self.generate_metrics(dfs_metrica), self.generate_experiments(dfs_data)
+
+    def generate_metrics(self, dfs_metrica: List[pd.DataFrame]) -> pd.DataFrame:
+        df_metrica = pd.concat(dfs_metrica)
+
+        df_metrica = df_metrica.reset_index()
+        df_metrica.drop(columns=["index"], inplace=True)
 
         # Transorm RMSE into two columns, with_features and wo_features
-        df = df.set_index(["experiment", "model", "model_type"])["rmse"].unstack()
-        df = df.reset_index()
-        df["best_model"] = np.where(
-            df["with_features"] > df["wo_features"],
+        df_metrica = df_metrica.set_index(["experiment", "model", "model_type"])[
+            "rmse"
+        ].unstack()
+        df_metrica = df_metrica.reset_index()
+        df_metrica["best_model"] = np.where(
+            df_metrica["with_features"] < df_metrica["wo_features"],
             "with_features",
-            np.where(df["with_features"] < df["wo_features"], "wo_features", "EMPATE"),
+            np.where(
+                df_metrica["with_features"] < df_metrica["wo_features"],
+                "wo_features",
+                "EMPATE",
+            ),
         )
 
-        df = df.sort_values(["model"])
+        df_metrica = df_metrica.sort_values(["model"])
 
-        return df
+        return df_metrica
+
+    def generate_experiments(self, dfs_data: List[pd.DataFrame]) -> pd.DataFrame:
+        log.info("Start")
+        df_data = pd.concat(dfs_data)
+        df_data = df_data[
+            [
+                "experiment",
+                "model",
+                "model_type",
+                "ticker",
+                "date",
+                "close",
+                "predicted",
+            ]
+        ]
+        df_data["predicted"] = round(df_data["predicted"], 2)
+        return df_data

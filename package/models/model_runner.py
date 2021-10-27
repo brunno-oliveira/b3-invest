@@ -1,11 +1,7 @@
 import logging
 
-from decision_tree_regressor.decision_tree_regressor import ModelDecisionTreeRegressor
 from model_type import ModelType
-from neural_network.neural_network import NeuralNetwork
 from plot_result import PlotResults
-from random_forest_regressor.random_forest_regressor import ModelRandomForestRegressor
-from xgb_regressor.xgb_regressor import ModelXGBRegressor
 
 logging.basicConfig(
     level=logging.INFO,
@@ -21,6 +17,15 @@ logging.basicConfig(
 class ModelRunner:
     def init_model(self):
         logging.info("Inicializando modelos...")
+        from random_forest_regressor.random_forest_regressor import (
+            ModelRandomForestRegressor,
+        )
+        from decision_tree_regressor.decision_tree_regressor import (
+            ModelDecisionTreeRegressor,
+        )
+        from xgb_regressor.xgb_regressor import ModelXGBRegressor
+        from neural_network.neural_network import NeuralNetwork
+
         self.decision_tree_wo_features = ModelDecisionTreeRegressor(
             model_folder="decision_tree_regressor",
             model_type=ModelType.WITHOUT_FEATURES,
@@ -104,6 +109,6 @@ class ModelRunner:
         PlotResults().show_results()
 
 
-#ModelRunner().run(grid_search=True)
-ModelRunner().run(grid_search=False)
-# ModelRunner().show_result()
+# ModelRunner().run(grid_search=True)
+# ModelRunner().run(grid_search=False)
+ModelRunner().show_result()
