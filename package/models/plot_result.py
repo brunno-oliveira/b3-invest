@@ -10,6 +10,7 @@ import seaborn as sns
 import yaml
 
 from typing import List
+from tqdm import tqdm
 
 from sklearn.metrics import (
     mean_squared_error,
@@ -42,6 +43,7 @@ class PlotResults:
     def show_results(self):
         log.info("Start")
         self.load_data()
+        self.df_experiments.to_parquet('df_experiments.parquet')
         # Não é necessário reprocessar esses plots abaixo
         # self.plot_treino_teste_data()
         # self.metrics_example()
@@ -55,11 +57,44 @@ class PlotResults:
         )
         self.dict_results = self.consolidate_result_file()
         self.df_metric, self.df_experiments = self.consolidade_data()
+        self.metrics_by_ticker()
+
+    def metrics_by_ticker(self) -> None:
+        log.info("Start")
+        df_rmse: List[pd.DataFrame] = []
+        for experiment in self.df_experiments["experiment"].unique():
+            log.info(f"experiment: {experiment}")
+            for model in self.df_experiments["model"].unique():
+                log.info(f"model: {model}")
+                for model_type in self.df_experiments["model_type"].unique():
+                    log.info(f"model_type: {model_type}")
+                    for ticker in tqdm(list(self.df_experiments["ticker"].unique())):
+                        df_close_predicted = self.df_experiments[
+                            (self.df_experiments["experiment"] == experiment)
+                            & (self.df_experiments["model"] == model)
+                            & (self.df_experiments["model_type"] == model_type)
+                            & (self.df_experiments["ticker"] == ticker)
+                        ].copy()
+
+                        if df_close_predicted.empty:
+                            log.warning(
+                                f"Sem dados para: {experiment} | {model} | {model_type} | {ticker}"
+                            )
+                            break
+
+                        df_close_predicted["ticker_rmse"] = round(
+                            self.root_mean_squared_error(
+                                df_close_predicted["close"],
+                                df_close_predicted["predicted"],
+                            ),
+                            4,
+                        )
+                        df_rmse.append(df_close_predicted.copy())
+                        del df_close_predicted
+
+        self.df_experiments = pd.concat(df_rmse)
 
     def metrics_example(self):
-        def root_mean_squared_error(predicted, y):
-            return mean_squared_error(predicted, y, squared=False)
-
         log.info("Start")
         df = pd.DataFrame(
             self.dict_results["decision_tree_regressor"]["with_features"]["14_days"][
@@ -73,7 +108,7 @@ class PlotResults:
 
         r2 = round(r2_score(df["close"], df["predicted"]), 4)
         mse = round(mean_squared_error(df["close"], df["predicted"]), 4)
-        rmse = round(root_mean_squared_error(df["close"], df["predicted"]), 4)
+        rmse = round(self.root_mean_squared_error(df["close"], df["predicted"]), 4)
         log.info(f"r2: {r2}")
         log.info(f"mse: {mse}")
         log.info(f"rmse: {rmse}")
@@ -264,3 +299,7 @@ class PlotResults:
         ]
         df_data["predicted"] = round(df_data["predicted"], 2)
         return df_data
+
+    @staticmethod
+    def root_mean_squared_error(y_true, y_pred) -> float:
+        return mean_squared_error(y_true, y_pred, squared=False)
