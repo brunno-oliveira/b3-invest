@@ -111,6 +111,6 @@ class ModelRunner:
         PlotResults().show_results()
 
 
-ModelRunner(model=["decision_tree_regressor"]).run(grid_search=True)
+ModelRunner(model=["random_forest_regressor"]).run(grid_search=True)
 # ModelRunner().run(grid_search=False)
 # ModelRunner().show_result()
