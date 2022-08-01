@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.3.2]
+* Corrigido hiperparâmetros da Decision Tree Regressor
+
 ## [3.3.1]
 * Corrigido input da LSTM
 
