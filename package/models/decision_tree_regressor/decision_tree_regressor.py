@@ -46,5 +46,8 @@ class ModelDecisionTreeRegressor(ModelBase):
             params = json.load(json_file)
 
         self.model = DecisionTreeRegressor(
-            splitter=params["splitter"], random_state=SEED
+            min_samples_leaf=params["min_samples_leaf"],
+            min_samples_split=params["min_samples_split"],
+            splitter=params["splitter"],
+            random_state=SEED,
         )
