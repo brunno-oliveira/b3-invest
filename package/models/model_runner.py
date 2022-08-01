@@ -15,70 +15,72 @@ logging.basicConfig(
 
 
 class ModelRunner:
-    def init_model(self):
+    def __init__(self, model: list):
         logging.info("Inicializando modelos...")
-        from random_forest_regressor.random_forest_regressor import (
-            ModelRandomForestRegressor,
-        )
-        from decision_tree_regressor.decision_tree_regressor import (
-            ModelDecisionTreeRegressor,
-        )
-        from xgb_regressor.xgb_regressor import ModelXGBRegressor
-        from neural_network.neural_network import NeuralNetwork
+        self.models = []
+        if "decision_tree_regressor" in model:
+            from decision_tree_regressor.decision_tree_regressor import (
+                ModelDecisionTreeRegressor,
+            )
 
-        self.decision_tree_wo_features = ModelDecisionTreeRegressor(
-            model_folder="decision_tree_regressor",
-            model_type=ModelType.WITHOUT_FEATURES,
-        )
+            self.decision_tree_wo_features = ModelDecisionTreeRegressor(
+                model_folder="decision_tree_regressor",
+                model_type=ModelType.WITHOUT_FEATURES,
+            )
 
-        self.decision_tree = ModelDecisionTreeRegressor(
-            model_folder="decision_tree_regressor",
-            model_type=ModelType.WITH_FEATURES,
-        )
+            self.decision_tree = ModelDecisionTreeRegressor(
+                model_folder="decision_tree_regressor",
+                model_type=ModelType.WITH_FEATURES,
+            )
 
-        self.random_forest_wo_features = ModelRandomForestRegressor(
-            model_folder="random_forest_regressor",
-            model_type=ModelType.WITHOUT_FEATURES,
-        )
+            self.models.append(self.decision_tree_wo_features)
+            self.models.append(self.decision_tree)
+        elif "random_forest_regressor" in model:
+            from random_forest_regressor.random_forest_regressor import (
+                ModelRandomForestRegressor,
+            )
 
-        self.random_forest = ModelRandomForestRegressor(
-            model_folder="random_forest_regressor",
-            model_type=ModelType.WITH_FEATURES,
-        )
+            self.random_forest_wo_features = ModelRandomForestRegressor(
+                model_folder="random_forest_regressor",
+                model_type=ModelType.WITHOUT_FEATURES,
+            )
 
-        self.lstsm_wo_features = NeuralNetwork(
-            model_folder="neural_network",
-            model_type=ModelType.WITHOUT_FEATURES,
-        )
+            self.random_forest = ModelRandomForestRegressor(
+                model_folder="random_forest_regressor",
+                model_type=ModelType.WITH_FEATURES,
+            )
+            self.models.append(self.random_forest_wo_features)
+            self.models.append(self.random_forest)
+        elif "xgb_regressor" in model:
+            from xgb_regressor.xgb_regressor import ModelXGBRegressor
 
-        self.lstm = NeuralNetwork(
-            model_folder="neural_network",
-            model_type=ModelType.WITH_FEATURES,
-        )
+            self.xgbr_wo_feature = ModelXGBRegressor(
+                model_folder="xgb_regressor",
+                model_type=ModelType.WITHOUT_FEATURES,
+            )
 
-        self.xgbr_wo_feature = ModelXGBRegressor(
-            model_folder="xgb_regressor",
-            model_type=ModelType.WITHOUT_FEATURES,
-        )
+            self.xgbr = ModelXGBRegressor(
+                model_folder="xgb_regressor",
+                model_type=ModelType.WITH_FEATURES,
+            )
+            self.models.append(self.xgbr_wo_feature)
+            self.models.append(self.xgbr)
+        elif "neural_network" in model:
+            from neural_network.neural_network import NeuralNetwork
 
-        self.xgbr = ModelXGBRegressor(
-            model_folder="xgb_regressor",
-            model_type=ModelType.WITH_FEATURES,
-        )
+            self.lstsm_wo_features = NeuralNetwork(
+                model_folder="neural_network",
+                model_type=ModelType.WITHOUT_FEATURES,
+            )
 
-        self.models = [
-            self.decision_tree_wo_features,
-            self.decision_tree,
-            self.random_forest_wo_features,
-            self.random_forest,
-            self.lstsm_wo_features,
-            self.lstm,
-            self.xgbr_wo_feature,
-            self.xgbr,
-        ]
+            self.lstm = NeuralNetwork(
+                model_folder="neural_network",
+                model_type=ModelType.WITH_FEATURES,
+            )
+            self.models.append(self.lstsm_wo_features)
+            self.models.append(self.lstm)
 
     def run(self, grid_search: bool = False):
-        self.init_model()
         if grid_search:
             self.execute_grid_search()
         else:
@@ -109,6 +111,6 @@ class ModelRunner:
         PlotResults().show_results()
 
 
-# ModelRunner().run(grid_search=True)
+ModelRunner(model=["decision_tree_regressor"]).run(grid_search=True)
 # ModelRunner().run(grid_search=False)
-ModelRunner().show_result()
+# ModelRunner().show_result()
