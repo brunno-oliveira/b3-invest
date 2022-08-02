@@ -55,7 +55,8 @@ class GridSearch(DataSplit):
             estimator=self.model.__class__(),
             param_grid=self.gs_params,
             cv=self.train_test_index(),
-            n_jobs=-1,
+            n_jobs=-2,
+            pre_dispatch=8,
             scoring="neg_root_mean_squared_error",
             verbose=2,
         )
@@ -69,9 +70,9 @@ class GridSearch(DataSplit):
 
         # Save results and best params
         if self.model_type == ModelType.WITHOUT_FEATURES:
-            gs_path = os.path.join(self.model_path, "wo_features")
+            gs_path = os.path.join(self.model_path, "wo_features_500")
         elif self.model_type == ModelType.WITH_FEATURES:
-            gs_path = os.path.join(self.model_path, "with_features")
+            gs_path = os.path.join(self.model_path, "with_features_500")
 
         self.gs_result.to_csv(os.path.join(gs_path, "gs_results.csv"), index=False)
 

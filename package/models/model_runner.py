@@ -98,6 +98,7 @@ class ModelRunner:
     def execute_grid_search(self):
         logging.info("Start")
         for model in self.models:
+            logging.info(f"GS for {model.group_name} {str(model.model_type)}")
             if model.group_name != "LSTM":
                 model.load_data()
                 model.set_model()
