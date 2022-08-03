@@ -56,7 +56,7 @@ class GridSearch(DataSplit):
             param_grid=self.gs_params,
             cv=self.train_test_index(),
             n_jobs=-2,
-            pre_dispatch=8,
+            pre_dispatch=12,
             scoring="neg_root_mean_squared_error",
             verbose=2,
         )
