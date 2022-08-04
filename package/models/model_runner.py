@@ -23,10 +23,10 @@ class ModelRunner:
                 ModelDecisionTreeRegressor,
             )
 
-            # self.decision_tree_wo_features = ModelDecisionTreeRegressor(
-            #     model_folder="decision_tree_regressor",
-            #     model_type=ModelType.WITHOUT_FEATURES,
-            # )
+            self.decision_tree_wo_features = ModelDecisionTreeRegressor(
+                model_folder="decision_tree_regressor",
+                model_type=ModelType.WITHOUT_FEATURES,
+            )
 
             self.decision_tree = ModelDecisionTreeRegressor(
                 model_folder="decision_tree_regressor",
@@ -40,10 +40,10 @@ class ModelRunner:
                 ModelRandomForestRegressor,
             )
 
-            self.random_forest_wo_features = ModelRandomForestRegressor(
-                model_folder="random_forest_regressor",
-                model_type=ModelType.WITHOUT_FEATURES,
-            )
+#             self.random_forest_wo_features = ModelRandomForestRegressor(
+#                 model_folder="random_forest_regressor",
+#                 model_type=ModelType.WITHOUT_FEATURES,
+#             )
 
             self.random_forest = ModelRandomForestRegressor(
                 model_folder="random_forest_regressor",
