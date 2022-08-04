@@ -49,7 +49,7 @@ class ModelRunner:
                 model_folder="random_forest_regressor",
                 model_type=ModelType.WITH_FEATURES,
             )
-            self.models.append(self.random_forest_wo_features)
+            # self.models.append(self.random_forest_wo_features)
             self.models.append(self.random_forest)
         elif "xgb_regressor" in model:
             from xgb_regressor.xgb_regressor import ModelXGBRegressor
