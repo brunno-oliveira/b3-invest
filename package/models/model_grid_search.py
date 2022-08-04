@@ -55,7 +55,7 @@ class GridSearch(DataSplit):
             estimator=self.model.__class__(),
             param_grid=self.gs_params,
             cv=self.train_test_index(),
-            n_jobs=-1,
+            n_jobs=-2,
             pre_dispatch=8,
             scoring="neg_root_mean_squared_error",
             verbose=2,

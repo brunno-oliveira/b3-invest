@@ -23,10 +23,10 @@ class ModelRunner:
                 ModelDecisionTreeRegressor,
             )
 
-            self.decision_tree_wo_features = ModelDecisionTreeRegressor(
-                model_folder="decision_tree_regressor",
-                model_type=ModelType.WITHOUT_FEATURES,
-            )
+            # self.decision_tree_wo_features = ModelDecisionTreeRegressor(
+            #     model_folder="decision_tree_regressor",
+            #     model_type=ModelType.WITHOUT_FEATURES,
+            # )
 
             self.decision_tree = ModelDecisionTreeRegressor(
                 model_folder="decision_tree_regressor",
