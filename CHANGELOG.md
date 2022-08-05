@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.3.3]
+* Corrigido hiperparâmetros da Random Forest
+* Adicionado no GS as árevores 500, 1000 e 1500
+
 ## [3.3.2]
 * Corrigido hiperparâmetros da Decision Tree Regressor
 
