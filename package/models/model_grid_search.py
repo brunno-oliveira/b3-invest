@@ -70,9 +70,9 @@ class GridSearch(DataSplit):
 
         # Save results and best params
         if self.model_type == ModelType.WITHOUT_FEATURES:
-            gs_path = os.path.join(self.model_path, "wo_features")
+            gs_path = os.path.join(self.model_path, "wo_features_500")
         elif self.model_type == ModelType.WITH_FEATURES:
-            gs_path = os.path.join(self.model_path, "with_features")
+            gs_path = os.path.join(self.model_path, "with_features_500")
 
         self.gs_result.to_csv(os.path.join(gs_path, "gs_results.csv"), index=False)
 
