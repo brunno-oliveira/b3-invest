@@ -1,7 +1,6 @@
 import io
 import json
 import logging
-import multiprocessing
 import os
 from typing import Dict, Tuple
 
@@ -56,7 +55,8 @@ class GridSearch(DataSplit):
             estimator=self.model.__class__(),
             param_grid=self.gs_params,
             cv=self.train_test_index(),
-            n_jobs=multiprocessing.cpu_count(),
+            n_jobs=-1,
+            pre_dispatch=4,
             scoring="neg_root_mean_squared_error",
             verbose=2,
         )

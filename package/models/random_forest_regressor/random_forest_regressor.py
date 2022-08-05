@@ -44,5 +44,8 @@ class ModelRandomForestRegressor(ModelBase):
             params = json.load(json_file)
 
         self.model = RandomForestRegressor(
-            n_estimators=params["n_estimators"], random_state=SEED
+            n_estimators=params["n_estimators"],
+            min_samples_split=params["min_samples_split"],
+            min_samples_leaf=params["min_samples_leaf"],
+            random_state=SEED,
         )

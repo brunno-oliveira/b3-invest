@@ -40,16 +40,16 @@ class ModelRunner:
                 ModelRandomForestRegressor,
             )
 
-            self.random_forest_wo_features = ModelRandomForestRegressor(
-                model_folder="random_forest_regressor",
-                model_type=ModelType.WITHOUT_FEATURES,
-            )
+#             self.random_forest_wo_features = ModelRandomForestRegressor(
+#                 model_folder="random_forest_regressor",
+#                 model_type=ModelType.WITHOUT_FEATURES,
+#             )
 
             self.random_forest = ModelRandomForestRegressor(
                 model_folder="random_forest_regressor",
                 model_type=ModelType.WITH_FEATURES,
             )
-            self.models.append(self.random_forest_wo_features)
+            # self.models.append(self.random_forest_wo_features)
             self.models.append(self.random_forest)
         elif "xgb_regressor" in model:
             from xgb_regressor.xgb_regressor import ModelXGBRegressor
@@ -98,6 +98,7 @@ class ModelRunner:
     def execute_grid_search(self):
         logging.info("Start")
         for model in self.models:
+            logging.info(f"GS for {model.group_name} {str(model.model_type)}")
             if model.group_name != "LSTM":
                 model.load_data()
                 model.set_model()
@@ -111,6 +112,6 @@ class ModelRunner:
         PlotResults().show_results()
 
 
-ModelRunner(model=["decision_tree_regressor"]).run(grid_search=True)
+ModelRunner(model=["random_forest_regressor"]).run(grid_search=True)
 # ModelRunner().run(grid_search=False)
 # ModelRunner().show_result()
