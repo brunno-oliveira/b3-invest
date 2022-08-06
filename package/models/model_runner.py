@@ -54,16 +54,16 @@ class ModelRunner:
         elif "xgb_regressor" in model:
             from xgb_regressor.xgb_regressor import ModelXGBRegressor
 
-            self.xgbr_wo_feature = ModelXGBRegressor(
-                model_folder="xgb_regressor",
-                model_type=ModelType.WITHOUT_FEATURES,
-            )
+            # self.xgbr_wo_feature = ModelXGBRegressor(
+            #     model_folder="xgb_regressor",
+            #     model_type=ModelType.WITHOUT_FEATURES,
+            # )
 
             self.xgbr = ModelXGBRegressor(
                 model_folder="xgb_regressor",
                 model_type=ModelType.WITH_FEATURES,
             )
-            self.models.append(self.xgbr_wo_feature)
+            # self.models.append(self.xgbr_wo_feature)
             self.models.append(self.xgbr)
         elif "neural_network" in model:
             from neural_network.neural_network import NeuralNetwork
