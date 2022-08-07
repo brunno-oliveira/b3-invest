@@ -11,7 +11,8 @@
         ],
         "booster": [
             "gbtree",
-            "gblinear"
+            "gblinear",
+            "dart"
         ]
     }
 }
