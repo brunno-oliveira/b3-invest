@@ -10,8 +10,7 @@
             1
         ],
         "booster": [
-            "gbtree",
-            "gblinear"
+            "dart"
         ]
     }
 }
