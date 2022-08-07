@@ -59,10 +59,10 @@ class ModelRunner:
                 model_type=ModelType.WITHOUT_FEATURES,
             )
 
-            self.xgbr = ModelXGBRegressor(
-                model_folder="xgb_regressor",
-                model_type=ModelType.WITH_FEATURES,
-            )
+            # self.xgbr = ModelXGBRegressor(
+            #     model_folder="xgb_regressor",
+            #     model_type=ModelType.WITH_FEATURES,
+            # )
             self.models.append(self.xgbr_wo_feature)
             # self.models.append(self.xgbr)
         elif "neural_network" in model:
