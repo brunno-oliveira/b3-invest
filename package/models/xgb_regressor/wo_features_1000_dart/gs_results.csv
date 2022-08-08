@@ -1,0 +1,5 @@
+mean_fit_time,std_fit_time,mean_score_time,std_score_time,param_booster,param_learning_rate,param_n_estimators,params,split0_test_score,split1_test_score,split2_test_score,split3_test_score,mean_test_score,std_test_score,rank_test_score
+2419.79,3.73,0.57,0.36,dart,0.01,1000,"{'booster': 'dart', 'learning_rate': 0.01, 'n_estimators': 1000}",-8.27,-8.54,-8.64,-8.77,-8.56,0.18,4
+2418.11,0.62,0.59,0.36,dart,0.2,1000,"{'booster': 'dart', 'learning_rate': 0.2, 'n_estimators': 1000}",-0.89,-0.86,-0.74,-0.67,-0.79,0.09,3
+2417.52,1.43,0.59,0.36,dart,0.5,1000,"{'booster': 'dart', 'learning_rate': 0.5, 'n_estimators': 1000}",-0.45,-0.42,-0.37,-0.35,-0.4,0.04,2
+2416.42,0.29,0.59,0.36,dart,1,1000,"{'booster': 'dart', 'learning_rate': 1, 'n_estimators': 1000}",-0.31,-0.29,-0.25,-0.25,-0.28,0.02,1
