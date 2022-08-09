@@ -1,2 +1,0 @@
-mean_fit_time,std_fit_time,mean_score_time,std_score_time,param_booster,param_learning_rate,param_n_estimators,params,split0_test_score,split1_test_score,split2_test_score,split3_test_score,mean_test_score,std_test_score,rank_test_score
-10650.81,99.83,4.2,2.93,dart,1,1000,"{'booster': 'dart', 'learning_rate': 1, 'n_estimators': 1000}",-0.18,-0.17,-0.15,-0.16,-0.16,0.01,1
