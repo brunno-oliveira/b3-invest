@@ -115,4 +115,4 @@ class ModelRunner:
 
 # ModelRunner(model=["random_forest_regressor"]).run(grid_search=False)
 # ModelRunner().run(grid_search=False)
-ModelRunner().show_result()
+# ModelRunner().show_result()
