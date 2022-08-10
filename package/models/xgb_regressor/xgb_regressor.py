@@ -44,5 +44,8 @@ class ModelXGBRegressor(ModelBase):
             params = json.load(json_file)
 
         self.model = XGBRegressor(
-            n_estimators=params["n_estimators"], random_state=SEED
+            n_estimators=params["n_estimators"],
+            booster=params["booster"],
+            learning_rate=params["learning_rate"],
+            random_state=SEED,
         )
