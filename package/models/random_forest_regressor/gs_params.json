@@ -1,6 +1,12 @@
 {
     "params": {
         "n_estimators": [
+            50,
+            100,
+            125,
+            150,
+            500,
+            1000,
             1500
         ],
         "min_samples_split" : [
