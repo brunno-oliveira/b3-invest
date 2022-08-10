@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [3.3.4]
+* Resultados para Random Forest
+
+## [3.3.4]
 * Corrigido hiperparâmetros de Gradient Boosting
 * Adicionado no GS as árvores 500, 1000, 1500, 2000, 2500, 5000, 10000, 15000
 

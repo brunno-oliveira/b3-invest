@@ -48,4 +48,5 @@ class ModelRandomForestRegressor(ModelBase):
             min_samples_split=params["min_samples_split"],
             min_samples_leaf=params["min_samples_leaf"],
             random_state=SEED,
+            n_jobs=-1,
         )
