@@ -1,1 +1,1 @@
-{"booster": "dart", "learning_rate": 1, "n_estimators": 150}
+{"booster": "gbtree", "learning_rate": 1, "n_estimators": 10000}
