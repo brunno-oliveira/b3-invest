@@ -1,9 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.3.4]
+* Corrigido hiperparâmetros de Gradient Boosting
+* Adicionado no GS as árvores 500, 1000, 1500, 2000, 2500, 5000, 10000, 15000
+
 ## [3.3.3]
 * Corrigido hiperparâmetros da Random Forest
-* Adicionado no GS as árevores 500, 1000 e 1500
+* Adicionado no GS as árvores 500, 1000 e 1500
 
 ## [3.3.2]
 * Corrigido hiperparâmetros da Decision Tree Regressor
