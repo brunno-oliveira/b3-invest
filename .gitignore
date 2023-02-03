@@ -134,3 +134,4 @@ data/history/*.parquet
 
 # Excel
 *.xlsx
+notebook/import_b3_posicao/data/*.pdf
