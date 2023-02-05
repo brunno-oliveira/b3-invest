@@ -131,3 +131,7 @@ data/fundamentalista/*.parquet
 data/history/*.parquet
 *.7z
 /wandb
+
+# Excel
+*.xlsx
+notebook/import_b3_posicao/data/*.pdf
